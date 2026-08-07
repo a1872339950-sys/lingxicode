@@ -1,0 +1,40 @@
+/* 工具预显示样式 */
+.tool-call-card.pending {
+  opacity: 1;
+}
+
+.tool-card-icon.loading {
+  animation: none;
+}
+
+@keyframes tool-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.tool-card-spinner {
+  display: none;
+}
+
+.spinner-svg {
+  animation: spinner-rotate 1s linear infinite;
+}
+
+@keyframes spinner-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.op-pending {
+  color: var(--accent-primary);
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.tool-pending-text {
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 8px;
+  background: var(--accent-glow);
+  border-radius: var(--radius-xs);
+}

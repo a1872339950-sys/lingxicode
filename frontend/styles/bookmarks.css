@@ -1,0 +1,255 @@
+/* 书签功能样式 */
+
+/* 输入框 wrapper 改造，给内嵌星标按钮留位置 */
+.webview-browser-nav-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.webview-browser-nav-input-wrap .webview-browser-nav-input {
+  width: 100%;
+  padding-right: 32px; /* 给星标按钮留位置 */
+}
+
+/* 输入框内的星标按钮 */
+.webview-browser-nav-input-bookmark {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  padding: 0;
+  border-radius: 6px;
+  transition: color .15s, background .15s;
+}
+
+.webview-browser-nav-input-bookmark:hover:not(:disabled) {
+  color: #2563eb;
+  background: rgba(37, 99, 235, .08);
+}
+
+.webview-browser-nav-input-bookmark:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+/* 默认显示空心星，已收藏显示实心星 */
+.webview-browser-nav-input-bookmark .icon-star-filled { display: none; }
+.webview-browser-nav-input-bookmark .icon-star-empty { display: inline; }
+
+.webview-browser-nav-input-bookmark.is-bookmarked {
+  color: #f59e0b;
+}
+.webview-browser-nav-input-bookmark.is-bookmarked:hover {
+  color: #d97706;
+  background: rgba(245, 158, 11, .1);
+}
+.webview-browser-nav-input-bookmark.is-bookmarked .icon-star-filled { display: inline; }
+.webview-browser-nav-input-bookmark.is-bookmarked .icon-star-empty { display: none; }
+
+/* 书签列表面板浮层 */
+.bookmark-list-panel {
+  position: fixed;
+  z-index: 99998;
+  width: 360px;
+  max-width: 90vw;
+  max-height: 440px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, .22), 0 0 0 1px rgba(15, 23, 42, .05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: inherit;
+}
+
+.bookmark-list-panel-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bookmark-list-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.bookmark-list-panel-count {
+  font-size: 11px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.bookmark-list-panel-search {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.bookmark-list-panel-search input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #0f172a;
+  background: #f8fafc;
+  outline: none;
+  transition: border-color .15s, background .15s;
+  font-family: inherit;
+}
+
+.bookmark-list-panel-search input:focus {
+  border-color: #2563eb;
+  background: #fff;
+}
+
+.bookmark-list-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 8px;
+}
+
+.bookmark-list-panel-body::-webkit-scrollbar {
+  width: 6px;
+}
+.bookmark-list-panel-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.bookmark-list-panel-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.bookmark-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .12s;
+}
+
+.bookmark-item:hover {
+  background: #f1f5f9;
+}
+
+.bookmark-item-favicon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: #e2e8f0;
+  object-fit: contain;
+}
+
+.bookmark-item-favicon-placeholder {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.bookmark-item-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookmark-item-title {
+  font-size: 12px;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookmark-item-url {
+  font-size: 10px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.bookmark-item-delete {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #cbd5e1;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity .12s, color .12s, background .12s;
+}
+
+.bookmark-item:hover .bookmark-item-delete {
+  opacity: 1;
+}
+
+.bookmark-item-delete:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, .1);
+}
+
+.bookmark-list-panel-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.bookmark-list-panel-empty svg {
+  margin: 0 auto 8px;
+  display: block;
+  color: #cbd5e1;
+}
+
+.bookmark-list-panel-footer {
+  padding: 8px 12px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bookmark-list-panel-footer button {
+  padding: 6px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+  cursor: pointer;
+  font-size: 12px;
+  color: #475569;
+  font-family: inherit;
+  transition: background .12s;
+}
+
+.bookmark-list-panel-footer button:hover {
+  background: #f1f5f9;
+}

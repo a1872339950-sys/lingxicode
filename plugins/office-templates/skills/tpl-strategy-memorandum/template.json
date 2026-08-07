@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "strategy-memorandum",
+  "kind": "document",
+  "title": "战略备忘录",
+  "reference": "../../templates/strategy-memorandum.docx",
+  "defaultOutput": "assets/office/strategy-memorandum"
+}

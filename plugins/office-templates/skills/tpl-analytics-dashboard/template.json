@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "analytics-dashboard",
+  "kind": "spreadsheet",
+  "title": "分析看板",
+  "reference": "../../templates/analytics-dashboard.xlsx",
+  "defaultOutput": "assets/office/analytics-dashboard"
+}

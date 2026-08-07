@@ -1,0 +1,40 @@
+{
+  "name": "engineering-workflow",
+  "version": "1.0.0",
+  "description": "工程交付工作流：澄清需求、写计划、实现、系统化排错、TDD、完成前验证与会话交接。",
+  "author": {
+    "name": "Lingxi"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "engineering",
+    "workflow",
+    "tdd",
+    "debug",
+    "plan",
+    "verify",
+    "工程",
+    "交付"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "工程交付工作流",
+    "shortDescription": "计划、实现、排错与验收的完整工程流程",
+    "longDescription": "把常见工程技能收成一个可安装能力包：需求澄清与计划、功能实现路由、系统化排错、TDD、完成前验证、会话交接。安装后在输入框选用「工程交付工作流」即可按任务阶段自动走对流程。适合功能开发、修缺陷、重构与交付收口。",
+    "developerName": "灵犀",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "我想加一个功能，帮我按工程流程推进",
+      "这个 bug 怎么系统性排查再修",
+      "功能差不多了，帮我做完成前验证再收口"
+    ],
+    "logo": "./assets/logo.svg",
+    "brandColor": "#0EA5E9",
+    "screenshots": []
+  }
+}

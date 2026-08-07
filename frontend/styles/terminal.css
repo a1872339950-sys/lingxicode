@@ -1,0 +1,505 @@
+/* ================================================================
+   灵犀 LingXi — 终端面板 (Terminal Panel)
+   Teal/Cyan 科技渐变 · 玻璃态 · 2026 AI 产品风格
+   ================================================================ */
+
+/* ────────────────────────────────────────────
+   Terminal Panel Container
+   ──────────────────────────────────────────── */
+.terminal-panel {
+  width: auto;
+  margin: 0 16px 4px auto;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.terminal-panel:not(.expanded) {
+  position: relative;
+  height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  z-index: 40;
+}
+
+.terminal-panel:not(.expanded) .terminal-head {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+}
+
+/* ────────────────────────────────────────────
+   Terminal Head (mini bar + toggle)
+   ──────────────────────────────────────────── */
+.terminal-head {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  pointer-events: auto;
+}
+/* DOM 顺序: toggle-btn → mini-status，视觉顺序: mini-status(左) → toggle-btn(右) */
+.terminal-head .terminal-toggle-btn { order: 2; }
+.terminal-head .terminal-mini-status { order: 1; }
+
+/* 无任务且未展开时：toggle按钮和mini-status均隐藏，仅保留head作为hover热区 */
+.terminal-panel:not(.has-session):not(.expanded) .terminal-head {
+  min-height: 32px;
+  min-width: 32px;
+  cursor: default;
+}
+.terminal-panel:not(.has-session):not(.expanded) .terminal-toggle-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+  transition: all var(--dur-normal) var(--ease);
+}
+.terminal-panel:not(.has-session):not(.expanded) .terminal-mini-status {
+  opacity: 0;
+  pointer-events: none;
+  max-width: 0;
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+  gap: 0;
+  overflow: hidden;
+  transition: all var(--dur-normal) var(--ease);
+}
+/* hover head区域时：显示toggle按钮 */
+.terminal-panel:not(.has-session):not(.expanded) .terminal-head:hover .terminal-toggle-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+/* hover head区域时：通过兄弟选择器显示mini-status */
+.terminal-panel:not(.has-session):not(.expanded) .terminal-head:hover .terminal-mini-status,
+.terminal-panel:not(.has-session):not(.expanded).peek .terminal-mini-status {
+  opacity: 1;
+  pointer-events: auto;
+  max-width: min(460px, calc(100vw - 220px));
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
+  box-shadow: var(--shadow-sm), var(--shadow-inset);
+  gap: var(--space-2);
+  background: color-mix(in srgb, var(--bg-primary) 62%, transparent);
+}
+
+/* ────────────────────────────────────────────
+   Mini Pill Status
+   ──────────────────────────────────────────── */
+.terminal-mini-status {
+  min-width: 0;
+  max-width: min(460px, calc(100vw - 220px));
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--bg-primary) 62%, transparent);
+  color: var(--accent-primary);
+  box-shadow: var(--shadow-sm), var(--shadow-inset);
+  backdrop-filter: blur(16px) saturate(1.16);
+  -webkit-backdrop-filter: blur(16px) saturate(1.16);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--dur-normal) var(--ease);
+}
+.terminal-mini-status span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ────────────────────────────────────────────
+   Terminal Dot
+   ──────────────────────────────────────────── */
+.terminal-dot {
+  width: 8px; height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--text-disabled);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--text-disabled) 16%, transparent);
+  flex-shrink: 0;
+  transition: all var(--dur-normal) var(--ease);
+}
+.terminal-panel.running .terminal-dot {
+  background: var(--accent-light);
+  box-shadow: 0 0 0 4px var(--accent-glow), 0 0 16px color-mix(in srgb, var(--accent-primary) 55%, transparent);
+  animation: terminalPulse 1.4s ease-in-out infinite;
+}
+
+/* ────────────────────────────────────────────
+   Toggle Button
+   ──────────────────────────────────────────── */
+.terminal-toggle-btn {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--bg-primary) 62%, transparent);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm), var(--shadow-inset);
+  backdrop-filter: blur(16px) saturate(1.16);
+  -webkit-backdrop-filter: blur(16px) saturate(1.16);
+  cursor: pointer;
+  transition: all var(--dur-normal) var(--ease);
+}
+.terminal-toggle-btn svg {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+/* Hover glow on mini pill & toggle */
+.terminal-toggle-btn:hover,
+.terminal-mini-status:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-light);
+  background: color-mix(in srgb, var(--accent-glow) 52%, var(--bg-primary));
+  box-shadow: var(--glow-accent), var(--shadow-inset);
+}
+
+/* ────────────────────────────────────────────
+   Expanded Terminal Panel
+   ──────────────────────────────────────────── */
+.terminal-panel.expanded {
+  width: min(900px, calc(100% - 56px));
+  height: auto;
+  margin-top: 0;
+  margin-bottom: 4px;
+  margin-left: 40px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 80%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  box-shadow: var(--shadow-lg), var(--shadow-inset);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  overflow: hidden;
+}
+.terminal-panel.expanded .terminal-head {
+  padding: 7px 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+.terminal-panel.expanded .terminal-mini-status {
+  flex: 1;
+  max-width: none;
+  justify-content: flex-start;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.terminal-panel.expanded .terminal-toggle-btn svg {
+  transform: rotate(180deg);
+}
+
+/* ────────────────────────────────────────────
+   Terminal Body
+   ──────────────────────────────────────────── */
+.terminal-body {
+  display: none;
+  background: color-mix(in srgb, var(--bg-base) 78%, transparent);
+}
+.terminal-panel.expanded .terminal-body { display: block; }
+
+/* ────────────────────────────────────────────
+   Toolbar
+   ──────────────────────────────────────────── */
+.terminal-toolbar {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.terminal-tabs-wrap {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+}
+
+.terminal-window-title {
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.terminal-new-tab-btn {
+  width: 22px; height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  transition: all var(--dur-fast) var(--ease);
+}
+.terminal-new-tab-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-light);
+  background: var(--accent-glow);
+}
+
+/* ────────────────────────────────────────────
+   Tabs
+   ──────────────────────────────────────────── */
+.terminal-tabs {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.terminal-tabs::-webkit-scrollbar { display: none; }
+
+.terminal-tab {
+  max-width: 170px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2) 0 9px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  flex: 0 0 auto;
+  transition: all var(--dur-fast) var(--ease);
+  position: relative;
+}
+.terminal-tab:hover {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+/* Active tab: accent-glow bg + bottom accent line */
+.terminal-tab.active {
+  border-color: var(--border-accent);
+  background: var(--accent-glow);
+  color: var(--accent-light);
+  box-shadow: 0 0 12px rgba(6,182,212,0.08);
+}
+.terminal-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-full);
+}
+
+.terminal-tab-dot {
+  width: 6px; height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--text-disabled);
+  flex-shrink: 0;
+}
+.terminal-tab-dot.running {
+  background: var(--accent-light);
+  animation: terminalPulse 1.4s ease-in-out infinite;
+}
+
+.terminal-tab-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terminal-tab-close {
+  width: 16px; height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  opacity: 0.45;
+  font-size: 13px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all var(--dur-fast) var(--ease);
+}
+.terminal-tab:hover .terminal-tab-close,
+.terminal-tab.active .terminal-tab-close { opacity: 1; }
+.terminal-tab-close:hover {
+  background: color-mix(in srgb, var(--error, #ef4444) 16%, transparent);
+  color: var(--error, #ef4444);
+}
+
+/* ────────────────────────────────────────────
+   Terminal Actions
+   ──────────────────────────────────────────── */
+.terminal-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.terminal-action {
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 82%, transparent);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--bg-secondary) 62%, transparent);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease);
+}
+.terminal-action:hover {
+  border-color: var(--border-accent);
+  color: var(--text-primary);
+  background: var(--accent-glow);
+}
+.terminal-action.danger { color: var(--error, #ef4444); }
+.terminal-action.danger:hover {
+  background: var(--error-muted);
+  border-color: var(--error);
+}
+.terminal-action:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+/* ────────────────────────────────────────────
+   Terminal Output
+   ──────────────────────────────────────────── */
+.terminal-output {
+  height: 210px;
+  margin: 0;
+  padding: var(--space-3);
+  overflow: auto;
+  color: var(--text-secondary);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ────────────────────────────────────────────
+   Command Input Row
+   ──────────────────────────────────────────── */
+.terminal-input-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.terminal-prompt {
+  max-width: 42%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--accent-light);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: var(--text-sm);
+}
+
+/* Focus accent border + glow */
+.terminal-command-input {
+  min-width: 0;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  outline: none;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  transition: all var(--dur-fast) var(--ease);
+}
+.terminal-command-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 0 12px rgba(6,182,212,0.1);
+}
+
+/* Run button: accent gradient bg */
+.terminal-run-btn {
+  height: 30px;
+  padding: 0 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--accent-gradient);
+  color: white;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: all var(--dur-normal) var(--ease);
+  box-shadow: 0 2px 8px rgba(6,182,212,0.2);
+}
+.terminal-run-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: var(--glow-accent);
+}
+
+/* ────────────────────────────────────────────
+   Animations
+   ──────────────────────────────────────────── */
+@keyframes terminalPulse {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1; }
+}
+/* ────────────────────────────────────────────
+   Terminal Status Label (in toolbar button)
+   ──────────────────────────────────────────── */
+.terminal-status-label {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-right: 0;
+  transition: max-width var(--dur-normal) var(--ease),
+              opacity var(--dur-normal) var(--ease),
+              margin-right var(--dur-normal) var(--ease);
+  pointer-events: none;
+}
+.terminal-status-label.visible {
+  max-width: 400px;
+  opacity: 1;
+  margin-right: 6px;
+}
+#toolbarTerminalBtn:has(.terminal-status-label.visible) {
+  width: auto;
+  padding: 0 8px;
+}
+#toolbarTerminalBtn.running .terminal-status-label {
+  color: var(--accent-light);
+}
+

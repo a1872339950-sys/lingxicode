@@ -1,0 +1,38 @@
+{
+  "name": "character-animation",
+  "version": "0.2.0",
+  "description": "在用户项目内制作 2D 角色动画帧与可选精灵图集。按动作生成帧序列、抽帧、拼 sheet、做 contact sheet / 预览，输出到项目 assets，不绑定灵犀/Codex 桌宠。",
+  "author": {
+    "name": "Lingxi"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "2d",
+    "animation",
+    "spritesheet",
+    "frames",
+    "character",
+    "game-art",
+    "角色动画"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "角色动画",
+    "shortDescription": "项目内 2D 角色动画帧制作",
+    "longDescription": "供用户在当前工程里制作 2D 角色动画：定动作 → 生成帧 → 导出到项目 assets。做完后用桌面悬浮预览窗直接播动画（类似桌宠，模型可 open/close），不必先开网页。适用于游戏/网页/演示角色。",
+    "developerName": "Lingxi",
+    "category": "Creativity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "在当前项目做角色动画帧并弹窗预览",
+      "打开 fengfeng 角色动画预览",
+      "关掉角色动画预览窗口"
+    ],
+    "brandColor": "#7C3AED",
+    "screenshots": []
+  }
+}

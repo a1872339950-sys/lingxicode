@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title data-i18n="auto.l5">灵犀LingXiCode</title>
+  <link rel="icon" type="image/png" href="assets/brand/lingxi-logo-transparent.png">
+  <!-- 模块化 CSS -->
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/titlebar.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/sidebar.css?v=20260719-session-activity">
+  <link rel="stylesheet" href="styles/git-panel.css">
+  <link rel="stylesheet" href="styles/context-menu.css">
+  <link rel="stylesheet" href="styles/skill-panel.css">
+  <link rel="stylesheet" href="styles/integration-panel.css">
+  <link rel="stylesheet" href="styles/resource-center.css">
+  <link rel="stylesheet" href="styles/local-apps-panel.css">
+  <link rel="stylesheet" href="styles/remote-bridge.css">
+  <link rel="stylesheet" href="styles/settings.css?v=20260722-card-reorder-v2">
+  <link rel="stylesheet" href="styles/storage-dashboard.css?v=20260722-disk-space-v7">
+  <link rel="stylesheet" href="styles/desktop-control.css?v=20260721-live-status">
+  <link rel="stylesheet" href="styles/cloud-token-usage.css?v=20260719-restore">
+  <link rel="stylesheet" href="styles/input-area.css">
+  <link rel="stylesheet" href="styles/modals.css">
+  <link rel="stylesheet" href="styles/chat.css?v=20260722-media-collapse-v1">
+  <link rel="stylesheet" href="styles/ai-change-pill.css">
+  <link rel="stylesheet" href="styles/terminal.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/bookmarks.css">
+  <link rel="stylesheet" href="styles/media-preview.css">
+  <link rel="stylesheet" href="styles/agent-ui.css">
+  <link rel="stylesheet" href="styles/agent-collaboration.css">
+  <link rel="stylesheet" href="styles/ai-operation-memo.css">
+  <link rel="stylesheet" href="styles/message-copy.css">
+  <link rel="stylesheet" href="styles/context-memory-ruler.css">
+  <link rel="stylesheet" href="styles/stateless-sessions.css">
+  <link rel="stylesheet" href="styles/message-queue.css">
+  <link rel="stylesheet" href="styles/canvas-view.css">
+  <link rel="stylesheet" href="styles/canvas-workflow.css">
+  <link rel="stylesheet" href="styles/startup-access-gateway.css?v=20260722-lingxi-shards-v6">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../node_modules/three/build/three.module.js",
+        "three/addons/": "../node_modules/three/examples/jsm/"
+      }
+    }
+  </script>
+  <!-- Monaco Editor CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+</head>
+<body>
+  <section class="startup-access-gateway" id="startupAccessGateway" aria-label="进入灵犀" aria-hidden="false">
+    <canvas class="startup-access-topology" id="startupAccessTopology" aria-hidden="true"></canvas>
+    <canvas class="startup-access-canvas" id="startupAccessCanvas" aria-hidden="true"></canvas>
+    <div class="startup-access-video-stage" id="startupAccessVideoStage" aria-hidden="true">
+      <video class="startup-access-video" id="startupAccessVideo" muted loop playsinline preload="auto" poster="assets/startup/lingxi-access-poster.png">
+        <source src="assets/startup/lingxi-access.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="startup-access-shade" aria-hidden="true"></div>
+
+    <div class="startup-access-brand" aria-hidden="true">
+      <img class="startup-access-brand-mark" src="assets/brand/lingxi-logo-transparent.png" alt="">
+      <span>灵犀 LingXiCode</span>
+    </div>
+
+    <div class="startup-access-window-actions">
+      <button class="startup-access-icon-btn" id="startupWindowMinimize" type="button" title="最小化" aria-label="最小化">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12h12"/></svg>
+      </button>
+      <button class="startup-access-icon-btn startup-access-close" id="startupWindowClose" type="button" title="关闭" aria-label="关闭">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m7 7 10 10M17 7 7 17"/></svg>
+      </button>
+    </div>
+
+    <div class="startup-access-content" id="startupAccessContent">
+      <div class="startup-access-kicker"><span></span> LINGXI INTERFACE</div>
+      <h1><span>进入</span><strong>灵犀</strong></h1>
+      <p class="startup-access-intro">选择你的接入方式，唤醒专属智能工作空间</p>
+      <div class="startup-access-actions">
+        <button class="startup-access-primary" id="startupWorkspaceAccess" type="button" data-startup-magnetic data-access-focus="workspace">
+          <span class="startup-access-button-copy">
+            <small>OPEN SOURCE</small>
+            <span>进入本地工作区</span>
+            <em>项目、技能与数据保存在本机</em>
+          </span>
+          <span class="startup-access-button-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </button>
+        <button class="startup-access-secondary" id="startupApiAccess" type="button" data-startup-magnetic data-access-focus="api">
+          <span class="startup-access-button-copy">
+            <small>API CONSOLE</small>
+            <span>配置模型 API</span>
+            <em>连接你的模型服务</em>
+          </span>
+          <span class="startup-access-button-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l3 3-3 3M13 15h3"/><rect x="3" y="4" width="18" height="16" rx="3"/></svg>
+          </span>
+        </button>
+      </div>
+      <div class="startup-access-status" id="startupAccessStatus" role="status" aria-live="polite">正在检查模型配置</div>
+    </div>
+  </section>
+  <div id="app">
+    <!-- 自定义标题栏 -->
+    <div class="titlebar">
+      <button class="titlebar-sidebar-toggle" id="sidebarToggle" type="button" title="折叠/展开侧栏" data-i18n-title="auto.l820.title">
+        <svg class="titlebar-sidebar-icon titlebar-sidebar-icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.95" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="5" width="16" height="14" rx="2.4"/>
+          <path d="M9 5v14"/>
+        </svg>
+      </button>
+      <div class="titlebar-brand" id="menuBrand">
+        <span class="titlebar-brand-name" data-i18n="auto.l5">灵犀LingXiCode</span>
+        <span class="titlebar-brand-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        <div class="titlebar-dropdown" id="dropdownBrand">
+          <div class="titlebar-dropdown-item" data-menu-action="app:about" data-i18n="menu.app.about" data-i18n="auto.l20">关于灵犀LingXiCode</div>
+          <div class="titlebar-dropdown-item danger" id="menuExit" data-menu-action="app:exit" data-i18n="menu.app.exit" data-i18n="auto.l22">退出</div>
+        </div>
+      </div>
+      <div class="titlebar-menu">
+        <div class="titlebar-menu-item" id="menuFile">
+          <span data-i18n="menu.file">文件</span>
+          <div class="titlebar-dropdown" id="dropdownFile">
+            <div class="titlebar-dropdown-item" data-menu-action="file:open-project" data-i18n="menu.file.openProject" data-i18n="auto.l30">打开项目...</div>
+            <div class="titlebar-dropdown-item" data-menu-action="file:import-history" data-i18n="menu.file.importHistory">导入聊天记录</div>
+            <div class="titlebar-dropdown-item" data-menu-action="file:export-history" data-i18n="menu.file.exportHistory" data-i18n="auto.l31">导出聊天记录</div>
+          </div>
+        </div>
+        <div class="titlebar-menu-item" id="menuEdit">
+          <span data-i18n="menu.edit">编辑</span>
+          <div class="titlebar-dropdown" id="dropdownEdit">
+            <div class="titlebar-dropdown-item" data-menu-action="edit:clear-chat" data-i18n="menu.edit.clearChat" data-i18n="auto.l37">清空聊天</div>
+            <div class="titlebar-dropdown-item" data-menu-action="edit:clear-context" data-i18n="menu.edit.clearContext" data-i18n="auto.l38">清空上下文</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="titlebar-controls">
+        <button class="titlebar-view-toggle" id="rightViewToggle" type="button" title="显示/隐藏右侧视图" aria-label="toggle right panel">
+          <svg class="right-view-icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.95" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="5" width="16" height="14" rx="2.4"/>
+            <path d="M15 5v14"/>
+          </svg>
+          <span class="right-view-badge" id="rightViewBadge" hidden></span>
+        </button>
+        <div class="titlebar-ctrl minimize" id="ctrlMinimize">
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="titlebar-ctrl maximize" id="ctrlMaximize">
+          <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+        </div>
+        <div class="titlebar-ctrl close" id="ctrlClose">
+          <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </div>
+      </div>
+    </div>
+    <!-- 主内容区域 -->
+    <div class="main-content">
+    <!-- 上下文状态管理弹窗 -->
+    <div class="context-panel" id="contextPanel">
+      <div class="context-panel-header">
+        <span class="context-panel-title" data-i18n="context.title" data-i18n="auto.l82">上下文状态</span>
+        <span class="context-panel-close" id="contextPanelClose">×</span>
+      </div>
+      <div class="context-stat-group">
+        <div class="context-stat-label" data-i18n="context.tokenUsage" data-i18n="auto.l86">Token 使用量</div>
+        <div class="context-stat-value" id="contextTokenValue">0 / 128000</div>
+        <div class="context-stat-bar">
+          <div class="context-stat-fill normal" id="contextTokenFill" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="context-stat-group">
+        <div class="context-stat-row">
+          <div class="context-stat-item">
+            <div class="context-stat-item-label" data-i18n="context.turnCount" data-i18n="auto.l95">对话轮数</div>
+            <div class="context-stat-item-value" id="contextTurnCount">0</div>
+          </div>
+          <div class="context-stat-item">
+            <div class="context-stat-item-label" data-i18n="context.summaryCount" data-i18n="auto.l99">摘要数</div>
+            <div class="context-stat-item-value" id="contextSummaryCount">0</div>
+          </div>
+          <div class="context-stat-item">
+            <div class="context-stat-item-label" data-i18n="context.indexSize" data-i18n="auto.l103">关键词</div>
+            <div class="context-stat-item-value" id="contextIndexSize">0</div>
+          </div>
+        </div>
+      </div>
+      <div class="context-stat-group">
+        <div class="context-stat-label" data-i18n="context.strategy" data-i18n="auto.l109">压缩策略</div>
+        <div class="context-stat-value" id="contextStrategy" data-i18n="context.strategyValue" data-i18n="auto.l110">工具结果已压缩</div>
+      </div>
+      <div class="context-actions">
+        <button class="context-btn context-btn-summary" id="contextBtnSummary" data-i18n="context.generateSummary" data-i18n="auto.l113">生成摘要</button>
+        <button class="context-btn context-btn-clear" id="contextBtnClear" data-i18n="context.clearHistory" data-i18n="auto.l114">清空历史</button>
+      </div>
+    </div>
+    <!-- 设置面板 -->
+    <div class="settings-panel" id="settingsPanel">
+      <div class="settings-title"><span data-i18n="settings.tab.newModel" data-i18n="auto.l121">新增模型</span><span class="settings-close" id="settingsClose">×</span></div>
+      <!-- 新增模型 -->
+      <div class="settings-content show" id="contentNew">
+        <div class="settings-group">
+          <label class="settings-label" data-i18n="model.displayName" data-i18n="auto.l127">显示名称 <span style="color: var(--text-muted); font-size: 11px;">（可选）</span></label>
+          <input type="text" class="settings-input" id="modelName" data-i18n-placeholder="model.displayName.placeholder" placeholder="不填则使用模型 ID" data-i18n-placeholder="auto.l128.placeholder">
+          <div class="settings-hint" data-i18n="model.hint.displayName" data-i18n="auto.l129">用于界面显示的名称</div>
+        </div>
+        <div class="settings-group">
+          <label class="settings-label" data-i18n="model.modelId" data-i18n="auto.l132">模型 ID</label>
+          <input type="text" class="settings-input" id="modelId" data-i18n-placeholder="model.modelId.placeholder" placeholder="如 gpt-5.2、claude-sonnet-5" data-i18n-placeholder="auto.l133.placeholder">
+          <div class="settings-hint" data-i18n="model.hint.modelId" data-i18n="auto.l134">API 请求使用的实际模型 ID</div>
+        </div>
+        <div class="settings-group">
+          <label class="settings-label" data-i18n="model.url">URL</label>
+          <input type="text" class="settings-input" id="apiUrl" data-i18n-placeholder="model.url.placeholder" placeholder="OpenAI: https://api.openai.com/v1；Anthropic: https://api.anthropic.com/v1" data-i18n-placeholder="auto.l138.placeholder">
+          <label class="model-url-mode-option"><input type="checkbox" id="apiUrlFullMode"><span>完整 URL（不自动拼接路径）</span></label>
+          <div class="settings-hint" data-i18n="model.hint.url" data-i18n="auto.l139">未勾选时自动按模型能力拼接默认路径；勾选后严格使用上方 URL。</div>
+        </div>
+        <div class="settings-group">
+          <label class="settings-label" data-i18n="model.apiKey">API Key</label>
+          <div class="key-wrapper">
+            <input type="password" class="settings-input key-input" id="apiKey" placeholder="sk-...">
+            <span class="key-toggle" id="keyToggle" data-i18n="model.showKey" data-i18n="auto.l145">显示</span>
+          </div>
+        </div>
+        <div class="settings-group">
+          <label class="settings-label" data-i18n="model.capability" data-i18n="auto.l149">模型能力</label>
+          <div class="model-capability-grid">
+            <label class="model-capability-option"><input type="checkbox" id="capabilityText" checked><span data-i18n="model.capability.text" data-i18n="auto.l151">文本</span></label>
+            <label class="model-capability-option"><input type="checkbox" id="capabilityVision"><span data-i18n="model.capability.vision" data-i18n="auto.l152">视觉理解</span></label>
+            <label class="model-capability-option"><input type="checkbox" id="capabilityImageGeneration"><span data-i18n="model.capability.imageGen" data-i18n="auto.l153">图片生成</span></label>
+            <label class="model-capability-option"><input type="checkbox" id="capabilityMusicGeneration"><span data-i18n="model.capability.musicGen" data-i18n="auto.l154">音乐生成</span></label>
+            <label class="model-capability-option"><input type="checkbox" id="capabilityVideoGeneration"><span data-i18n="model.capability.videoGen" data-i18n="auto.l155">视频生成</span></label>
+            <label class="model-capability-option"><input type="checkbox" id="capabilitySpeechSynthesis"><span>语音合成</span></label>
+            <label class="model-capability-option"><input type="checkbox" id="capabilityToolCalling" checked><span data-i18n="model.capability.toolCall" data-i18n="auto.l156">工具调用</span></label>
+          </div>
+          <div class="settings-hint" data-i18n="model.hint.capability" data-i18n="auto.l158">请按模型真实能力标注；当前模型不支持视觉时，发送图片会先询问是否调用视觉模型。</div>
+        </div>
+        <button class="settings-btn" id="saveBtn" data-i18n="model.save" data-i18n="auto.l160">保存</button>
+      </div>
+      <div class="settings-status" id="settingsStatus"></div>
+    </div>
+    <!-- 关于弹窗 -->
+    <div class="about-panel" id="aboutPanel">
+      <span class="about-close" id="aboutClose">×</span>
+      <div class="about-logo">
+        <img class="about-logo-image" src="assets/brand/lingxi-logo-transparent.png" alt="灵犀 LingXiCode">
+      </div>
+      <div class="about-name" data-i18n="auto.l239">灵犀 LingXiCode</div>
+      <div class="about-version" id="aboutVersion">v1.0.0</div>
+      <div class="about-desc" data-i18n="auto.l241">AI智能编程助手</div>
+      <div class="about-update-row">
+        <button type="button" class="about-update-btn" id="aboutCheckUpdateBtn" data-i18n="menu.app.checkUpdate">检查更新</button>
+        <span class="about-update-status" id="aboutUpdateStatus"></span>
+      </div>
+      <div class="about-divider"></div>
+      <div class="about-team" data-i18n="auto.l253">开发者：阿烈</div>
+      <div class="about-copyright" data-i18n="auto.l254">© 2026 灵犀agent</div>
+    </div>
+    <div class="webview-panel" id="webviewPanel">
+      <div class="webview-panel-header">
+        <span class="header-title" data-i18n="auto.l258">多窗口管理</span>
+        <span class="header-count" id="tabCount" data-i18n="auto.l259">0个窗口</span>
+        <span class="header-hint" data-i18n="auto.l260">点击链接可在此处打开</span>
+        <button type="button" class="webview-panel-expand" id="webviewPanelExpand" aria-label="expand" data-i18n-title="auto.l261.title" title="向左扩展（隐藏聊天区域）">
+          <svg class="icon-expand" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13 L13 3"/>
+            <path d="M3 10 L3 13 L6 13"/>
+            <path d="M10 3 L13 3 L13 6"/>
+          </svg>
+          <svg class="icon-collapse" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3 L13 13"/>
+            <path d="M3 6 L3 3 L6 3"/>
+            <path d="M10 13 L13 13 L13 10"/>
+          </svg>
+        </button>
+      </div>
+      <div class="webview-panel-tabs" id="webviewTabs"></div>
+      <div class="webview-browser-nav" id="webviewBrowserNav" hidden>
+        <button type="button" class="webview-browser-nav-btn" id="webviewNavBack" title="后退" aria-label="后退" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button type="button" class="webview-browser-nav-btn" id="webviewNavForward" title="前进" aria-label="前进" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button type="button" class="webview-browser-nav-btn" id="webviewNavBookmarkList" title="书签管理" aria-label="书签管理" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button type="button" class="webview-browser-nav-btn" id="webviewNavReload" title="刷新" aria-label="刷新" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+        <button type="button" class="webview-browser-nav-btn webview-browser-nav-btn-wide" id="webviewNavImportChrome" title="从本机浏览器导入 Google 登录状态" aria-label="导入浏览器登录">
+          <span class="webview-browser-nav-btn-label">导入登录</span>
+        </button>
+
+        <form class="webview-browser-nav-form" id="webviewNavForm" action="javascript:void(0)" autocomplete="off">
+          <div class="webview-browser-nav-input-wrap">
+            <input class="webview-browser-nav-input" id="webviewNavInput" type="text" spellcheck="false" autocomplete="off" placeholder="输入网址或搜索词，回车前往" />
+            <button type="button" class="webview-browser-nav-input-bookmark" id="webviewNavInputBookmark" title="收藏当前页" aria-label="收藏当前页" disabled>
+              <svg class="icon-star-empty" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon-star-filled" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+          </div>
+        </form>
+        <button type="button" class="webview-browser-nav-btn" id="webviewNavOpenExternal" title="在外部浏览器中打开" aria-label="在外部浏览器中打开" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </button>
+      </div>
+      <div class="webview-panel-empty" id="webviewEmpty" data-i18n="auto.l263">暂无打开的页面</div>
+      <div class="webview-container" id="webviewContainer"></div>
+    </div>
+    <div class="divider hidden" id="divider1"></div>
+    <div class="center full" id="center">
+      <!-- 历史聊天按钮（转角半圆设计） -->
+            <!-- 聊天区域顶部功能栏 -->
+      <div class="chat-toolbar" id="chatToolbar">
+        <div class="chat-toolbar-left">
+          <span class="chat-toolbar-tab active" data-tab="work">画布</span>
+        </div>
+        <div class="chat-toolbar-canvas-title" id="canvasToolbarTitle" aria-live="polite"></div>
+        <div class="chat-toolbar-right">
+          <button class="chat-toolbar-btn" id="toolbarTerminalBtn" title="终端">
+            <span class="terminal-status-label" id="terminalStatusLabel"></span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </button>
+          <button class="chat-toolbar-btn" id="toolbarBrowserBtn" type="button" title="浏览器（百度）" aria-label="打开浏览器">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </button>
+          <div class="stateless-sessions-anchor">
+            <button class="chat-toolbar-btn" id="statelessSessionsBtn" title="临时会话" aria-haspopup="dialog" aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+                <path d="M8 9h8M8 13h5"/>
+              </svg>
+              <span class="stateless-sessions-badge" id="statelessSessionsBadge" hidden></span>
+            </button>
+            <section class="stateless-sessions-popover" id="statelessSessionsPopover" aria-label="临时会话" hidden>
+              <header class="stateless-sessions-header">
+                <div>
+                  <strong>临时会话</strong>
+                  <span id="statelessSessionsCount">0 个会话</span>
+                </div>
+                <button class="stateless-sessions-close" id="statelessSessionsClose" title="关闭" aria-label="关闭">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+              </header>
+              <div class="stateless-sessions-toolbar">
+                <label class="stateless-sessions-search" for="statelessSessionsSearch">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+                  </svg>
+                  <input id="statelessSessionsSearch" type="search" placeholder="搜索临时会话" autocomplete="off" spellcheck="false" />
+                </label>
+              </div>
+              <div class="stateless-sessions-list" id="statelessSessionsList"></div>
+            </section>
+          </div>
+          <button class="chat-toolbar-btn" id="chatHistoryBtn" title="历史消息">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- 历史聊天弹窗 -->
+      <div class="chat-history-modal" id="chatHistoryModal">
+        <div class="chat-history-header">
+          <span class="chat-history-title" data-i18n="chat.history" data-i18n="auto.l277">历史消息</span>
+          <span class="chat-history-close" id="chatHistoryClose">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </span>
+        </div>
+        <div class="chat-history-search">
+          <input type="text" id="chatHistorySearchInput" data-i18n-placeholder="chat.search.placeholder" placeholder="搜索消息..." data-i18n-placeholder="auto.l283.placeholder">
+        </div>
+        <div class="chat-history-list" id="chatHistoryList"></div>
+      </div>
+      <div class="temp-agents-dock" id="tempAgentsDock"></div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <!-- 画布视图（ComfyUI 风格节点编辑器） -->
+      <div class="canvas-view-container" id="canvasViewContainer"></div>
+
+      <!-- 能力面板：入口 Skill | 插件，再进各自界面 -->
+      <div class="skill-panel" id="skillPanel">
+        <div class="skill-panel-header">
+          <div>
+            <div class="skill-panel-title" id="skillPanelTitle">能力</div>
+            <div class="skill-panel-subtitle" id="skillPanelSubtitle">选择 Skill 或插件进行管理</div>
+          </div>
+          <span class="skill-panel-back" id="skillPanelBack" title="返回" data-i18n-title="auto.l295.title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </span>
+        </div>
+        <div class="skill-panel-body">
+          <!-- 能力首页：Skill / 插件 两个入口 -->
+          <div class="capability-home" id="capabilityHome"></div>
+          <!-- Skill / 插件 子界面 -->
+          <div class="capability-section" id="capabilitySection" hidden>
+            <div class="skill-capability-tabs" id="skillCapabilityTabs"></div>
+            <div class="skill-panel-toolbar">
+              <button class="skill-refresh-btn" id="skillRefreshBtn" type="button" title="刷新">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/></svg>
+                <span>刷新</span>
+              </button>
+              <div class="skill-search-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input class="skill-search-input" id="skillSearchInput" type="text" placeholder="搜索">
+              </div>
+              <div class="skill-upload-btn" id="skillUploadBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                <span>上传技能</span>
+              </div>
+            </div>
+            <div class="skill-category-tabs" id="skillCategoryTabs"></div>
+            <div id="skillMarketplaceMount" hidden></div>
+            <div class="skill-list" id="skillList"></div>
+          </div>
+        </div>
+        <!-- 技能详情 -->
+        <div class="skill-detail-modal" id="skillDetailModal">
+          <div class="skill-detail-content">
+            <div class="skill-detail-header">
+              <div class="skill-detail-icon">
+                <svg id="skillDetailIconSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></svg>
+              </div>
+              <div class="skill-detail-title-area">
+                <div class="skill-detail-title" id="skillDetailTitle" data-i18n="auto.l327">技能名称</div>
+                <div class="skill-detail-desc" id="skillDetailDesc" data-i18n="auto.l328">技能描述</div>
+              </div>
+              <span class="skill-detail-close" id="skillDetailClose">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </span>
+            </div>
+            <div class="skill-detail-status-bar">
+              <span class="skill-detail-status" id="skillDetailStatus" data-i18n="auto.l335">状态</span>
+              <span class="skill-detail-type" id="skillDetailType" data-i18n="auto.l336">类型</span>
+            </div>
+            <div class="skill-detail-meta">
+              <div class="skill-detail-meta-item">
+                <span class="skill-detail-meta-label" data-i18n="auto.l340">作用范围</span>
+                <span class="skill-detail-meta-value" data-i18n="auto.l341">当前项目</span>
+              </div>
+              <div class="skill-detail-meta-item">
+                <span class="skill-detail-meta-label" data-i18n="auto.l344">调用方式</span>
+                <span class="skill-detail-meta-value" data-i18n="auto.l345">随对话自动注入</span>
+              </div>
+            </div>
+            <div class="skill-detail-body" id="skillDetailBody">
+              <div class="skill-detail-section">
+                <div class="skill-detail-section-title" data-i18n="auto.l350">技能提示词</div>
+                <div class="skill-detail-content-text" id="skillDetailContent" data-i18n="auto.l351">暂无内容</div>
+              </div>
+            </div>
+            <div class="skill-detail-footer">
+              <div class="skill-detail-toggle-btn" id="skillDetailToggle">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                <span data-i18n="auto.l357">启用技能</span>
+              </div>
+              <div class="skill-detail-delete-btn" id="skillDetailDelete">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                <span data-i18n="auto.l361">删除技能</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 资源中心面板 -->
+      <div class="integration-panel" id="integrationPanel">
+        <div class="integration-panel-header">
+          <div class="integration-panel-brand">
+            <div class="integration-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h7v7H4z"/><path d="M13 4h7v7h-7z"/><path d="M4 13h7v7H4z"/><path d="M13 13h7v7h-7z"/></svg>
+              <span data-i18n="auto.1">资源中心</span>
+            </div>
+            <div class="integration-panel-subtitle" data-i18n="auto.l376">统一管理可供用户和 Agent 使用的生态工具入口</div>
+          </div>
+          <div class="integration-toolbar">
+            <div class="integration-tabs" id="integrationTabs">
+              <button class="integration-tab active" type="button" data-integration-tab="capabilities">能力</button>
+              <button class="integration-tab" type="button" data-integration-tab="mcp">MCP</button>
+            </div>
+            <div class="integration-search-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input class="integration-search-input" id="integrationSearchInput" placeholder="搜索集成工具" data-i18n-placeholder="auto.l386.placeholder">
+            </div>
+            <button class="integration-add-mcp-btn" id="integrationAddMcpBtn" type="button" hidden>添加外部 MCP</button>
+          </div>
+          <span class="integration-panel-back" id="integrationPanelBack" title="返回" data-i18n-title="auto.l295.title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </span>
+        </div>
+        <div class="integration-panel-body">
+          <div class="integration-list" id="integrationList"></div>
+        </div>
+        <div class="integration-detail-modal" id="integrationDetailModal">
+          <div class="integration-detail-drawer">
+            <div class="integration-detail-header">
+              <div>
+                <div class="integration-detail-title" id="integrationDetailTitle" data-i18n="auto.l395">集成工具</div>
+                <div class="integration-detail-subtitle" id="integrationDetailSubtitle" data-i18n="auto.l396">工具详情</div>
+              </div>
+              <span class="integration-detail-close" id="integrationDetailClose">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </span>
+            </div>
+            <div class="integration-detail-body" id="integrationDetailBody"></div>
+            <div class="integration-detail-footer">
+              <button class="integration-detail-btn secondary" id="integrationDetailCancel" data-i18n="auto.l404">关闭</button>
+              <button class="integration-detail-btn primary" id="integrationDetailUse" data-i18n="auto.l405">使用</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 本地应用面板 -->
+      <div class="local-apps-panel" id="localAppsPanel">
+        <div class="local-apps-panel-header">
+          <div>
+            <div class="local-apps-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+              <span>本地应用</span>
+            </div>
+            <div class="local-apps-panel-subtitle">自动发现并快速启动系统已安装的应用</div>
+          </div>
+          <span class="local-apps-panel-back" id="localAppsPanelBack" title="返回">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </span>
+        </div>
+        <div class="local-apps-panel-body">
+          <div class="local-apps-toolbar">
+            <div class="local-apps-tabs" id="localAppsTabs">
+              <button class="local-apps-tab active" data-category="all">全部应用</button>
+              <button class="local-apps-tab" data-category="office">办公学习</button>
+              <button class="local-apps-tab" data-category="media">影音娱乐</button>
+              <button class="local-apps-tab" data-category="system">系统应用</button>
+            </div>
+            <div class="local-apps-toolbar-right">
+              <div class="local-apps-search-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input class="local-apps-search-input" id="localAppsSearchInput" placeholder="搜索应用...">
+              </div>
+              <button class="local-apps-refresh-btn" id="localAppsRefreshBtn" title="重新扫描">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.22-8.56"/><path d="M21 3v6h-6"/></svg>
+                <span>扫描</span>
+              </button>
+              <button class="local-apps-refresh-btn" id="localAppsAddBtn" title="添加本地应用">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                <span>添加</span>
+              </button>
+            </div>
+          </div>
+          <div class="local-apps-grid" id="localAppsGrid"></div>
+          <div class="local-apps-empty" id="localAppsEmpty" style="display:none;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            <p>未发现应用，点击“扫描”按钮自动发现系统已安装的应用</p>
+          </div>
+        </div>
+      </div>
+      <!-- 远程遥控面板 -->
+      <div class="remote-bridge-panel" id="remoteBridgePanel">
+        <div class="remote-bridge-panel-header">
+          <div>
+            <div class="remote-bridge-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M8 14v.5a4 4 0 0 0 8 0V14"/><path d="M12 18v4"/><path d="M8 22h8"/></svg>
+              <span>远程遥控</span>
+            </div>
+            <div class="remote-bridge-panel-subtitle">用手机浏览器远程操控桌面端</div>
+          </div>
+          <span class="remote-bridge-panel-back" id="remoteBridgePanelBack" title="返回">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </span>
+        </div>
+        <div class="remote-bridge-panel-body">
+          <!-- 服务状态 -->
+          <div class="rb-status-bar" id="rbStatusBar">
+            <span class="rb-status-dot" id="rbStatusDot"></span>
+            <span class="rb-status-text" id="rbStatusText">检测中...</span>
+          </div>
+
+          <!-- 二维码扫描区 -->
+          <div class="rb-section rb-qr-section" id="rbQrSection" style="display:none">
+            <div class="rb-qr-container">
+              <canvas id="rbQrCanvas" width="200" height="200"></canvas>
+            </div>
+            <div class="rb-qr-hint">用手机摄像头扫描二维码，直接打开遥控页面</div>
+          </div>
+
+          <!-- 局域网地址 -->
+          <div class="rb-section">
+            <div class="rb-section-title">局域网地址</div>
+            <div class="rb-ip-row" id="rbIpList">
+              <span class="rb-ip-placeholder">启动服务后显示</span>
+            </div>
+          </div>
+
+          <!-- 配对码 -->
+          <div class="rb-section">
+            <div class="rb-section-title">配对码</div>
+            <button class="rb-btn-primary" id="rbGeneratePinBtn" type="button">生成配对码</button>
+            <div class="rb-pin-display hidden" id="rbPinDisplay">
+              <div class="rb-pin-code" id="rbPinCode"></div>
+              <div class="rb-pin-hint">5 分钟内有效，在手机浏览器输入上方地址后使用此码配对</div>
+              <div class="rb-pin-countdown" id="rbPinCountdown"></div>
+            </div>
+          </div>
+
+          <!-- 已配对设备 -->
+          <div class="rb-section">
+            <div class="rb-section-title">已配对设备</div>
+            <div class="rb-device-list" id="rbDeviceList">
+              <div class="rb-device-empty">暂无已配对设备</div>
+            </div>
+          </div>
+
+          <!-- 服务控制 -->
+          <div class="rb-section rb-section-actions">
+            <button class="rb-btn-secondary" id="rbStartBtn" type="button">启动服务</button>
+            <button class="rb-btn-secondary danger" id="rbStopBtn" type="button">停止服务</button>
+          </div>
+        </div>
+      </div>
+      <!-- 项目归档面板 -->
+      <div class="archive-panel" id="archivePanel">
+        <div class="archive-panel-header">
+          <div>
+            <div class="archive-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/><path d="M3 8l2-5h14l2 5"/><path d="M3 8h18"/><path d="M10 12h4"/></svg>
+              <span data-i18n="auto.2">项目归档</span>
+            </div>
+            <div class="archive-panel-subtitle" data-i18n="auto.l418">临时收起不常用项目，项目数据仍完整保留</div>
+          </div>
+          <span class="archive-panel-back" id="archivePanelBack" title="返回" data-i18n-title="auto.l295.title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </span>
+        </div>
+        <div class="archive-panel-body">
+          <div class="archive-toolbar">
+            <div class="archive-search-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input class="archive-search-input" id="archiveSearchInput" placeholder="搜索项目名或路径" data-i18n-placeholder="auto.l428.placeholder">
+            </div>
+          </div>
+          <div class="archive-list" id="archiveProjectList"></div>
+        </div>
+      </div>
+      <!-- AI 安全快照面板 -->
+      <div class="git-panel" id="gitPanel">
+        <div class="git-panel-header">
+          <span class="git-panel-title">
+            <span class="git-panel-title-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v5c0 5-3 9-7 11-4-2-7-6-7-11V6l7-4z"/><path d="M9 12h6M10 9l-1 6M14 9l1 6"/></svg>
+            </span>
+            <span class="git-panel-title-text">AI 安全快照</span>
+          </span>
+          <span class="git-panel-back" id="gitPanelBack">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </span>
+        </div>
+        <div class="git-panel-body">
+          <div class="git-subnav" id="gitSubnav" aria-label="AI 安全快照导航">
+            <div class="git-subnav-brand" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M12 8 6 16M12 8l6 8"/></svg>
+            </div>
+            <button class="git-subnav-btn active" type="button" data-git-view="overview">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v5c0 5-3 9-7 11-4-2-7-6-7-11V6l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+              <span>保护状态</span>
+            </button>
+            <button class="git-subnav-btn" type="button" data-git-view="changes">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+              <span>待快照改动</span>
+              <span class="git-subnav-count" id="gitSubnavChangeCount">0</span>
+            </button>
+            <button class="git-subnav-btn" type="button" data-git-view="create">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="9"/></svg>
+              <span>创建恢复点</span>
+            </button>
+            <button class="git-subnav-btn" type="button" data-git-view="history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/><path d="M12 7v5l3 2"/></svg>
+              <span>恢复点历史</span>
+            </button>
+            <button class="git-subnav-btn" type="button" data-git-view="errors">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              <span>错误扫描</span>
+              <span class="git-subnav-count" id="gitSubnavErrorCount">0</span>
+            </button>
+            <button class="git-subnav-btn" type="button" data-git-view="policy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v5c0 5-3 9-7 11-4-2-7-6-7-11V6l7-4z"/><path d="M10 9h4"/><path d="M9 13h6"/><path d="M11 17h2"/></svg>
+              <span>自动策略</span>
+            </button>
+            <button class="git-subnav-btn" type="button" data-git-view="advanced">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><circle cx="6" cy="7" r="2"/><circle cx="18" cy="17" r="2"/><path d="M12 7H8M12 17h4"/></svg>
+              <span>高级 Git</span>
+            </button>
+          </div>
+
+          <div class="git-view-section active" data-git-section="overview">
+            <div class="git-overview-page-header">
+              <div class="git-overview-page-header-copy">
+                <h1>AI 安全快照</h1>
+                <p>智能检测变更，保护您的数据安全与稳定</p>
+              </div>
+              <button class="git-refresh-btn" type="button" id="gitRefreshBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+                <span>刷新数据</span>
+              </button>
+            </div>
+            <div class="git-overview-dashboard" id="gitOverviewDashboard">
+              <div class="git-overview-visual">
+                <div class="git-safety-orb" id="gitSafetyOrb">
+                  <div class="git-safety-ring"></div>
+                  <div class="git-safety-ring inner"></div>
+                  <svg class="git-safety-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 2l7 4v5c0 5-3 9-7 11-4-2-7-6-7-11V6l7-4z"/>
+                    <path d="M9 12l2 2 4-5"/>
+                  </svg>
+                </div>
+                <div class="git-safety-state" id="gitSafetyState" data-i18n="auto.l546">检查中</div>
+                <div class="git-overview-copy">
+                  <div class="git-overview-title">AI 安全中控台</div>
+                  <div class="git-overview-message" id="gitOverviewMessage">正在检查当前项目的恢复能力...</div>
+                </div>
+                <div class="git-overview-actions">
+                  <button class="git-action-btn primary" type="button" data-git-jump="changes">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+                    <span>查看快照改动</span>
+                  </button>
+                  <button class="git-action-btn success" type="button" data-git-jump="create">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    <span>创建恢复点</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="git-overview-metrics">
+                <div class="git-overview-metric">
+                  <span class="git-overview-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v5c0 5-3 9-7 11-4-2-7-6-7-11V6l7-4z"/><path d="M9 12l2 2 4-5"/></svg></span>
+                  <span class="git-overview-metric-copy"><span class="git-overview-metric-label">当前状态</span><span class="git-status-badge clean" id="gitStatusBadge" data-i18n="auto.l555">已保护</span></span>
+                </div>
+                <div class="git-overview-metric">
+                  <span class="git-overview-metric-icon tone-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3h8M8 21h8M9 3v4l3 4 3-4V3M9 21v-4l3-4 3 4v4"/></svg></span>
+                  <span class="git-overview-metric-copy"><span class="git-overview-metric-label">待快照改动</span><strong id="gitOverviewPendingCount">0</strong></span>
+                </div>
+                <div class="git-overview-metric">
+                  <span class="git-overview-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span>
+                  <span class="git-overview-metric-copy"><span class="git-overview-metric-label">最新恢复点</span><strong id="gitOverviewLatestPoint">-</strong></span>
+                </div>
+                <div class="git-overview-metric">
+                  <span class="git-overview-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+                  <span class="git-overview-metric-copy"><span class="git-overview-metric-label">恢复点数量</span><strong id="gitOverviewRecoveryCount">0</strong></span>
+                </div>
+                <div class="git-overview-metric git-overview-metric-wide git-overview-storage-card">
+                  <span class="git-overview-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 2a10 10 0 0 1 10 10H12z"/></svg></span>
+                  <span class="git-overview-metric-copy"><span class="git-overview-metric-label">快照占用</span><strong id="gitOverviewStorageSize">-</strong></span>
+                  <div class="git-storage-progress" aria-label="快照存储占用"><span id="gitOverviewStorageProgress"></span></div>
+                  <span class="git-storage-percent" id="gitOverviewStoragePercent">0%</span>
+                  <small class="git-storage-detail" id="gitOverviewStorageDetail">已用 0 B / 总计 512 MB</small>
+                </div>
+                <div class="git-overview-metric git-overview-metric-wide git-overview-branch-card">
+                  <div class="git-overview-branch-head">
+                    <span class="git-overview-metric-label">版本分线情况</span>
+                    <button class="git-overview-mini-btn" type="button" data-git-open-branches>查看版本分线</button>
+                  </div>
+                  <div class="git-overview-branch-grid">
+                    <span class="git-overview-branch-cell">
+                      <span class="git-overview-branch-label">当前分线</span>
+                      <strong class="git-branch-name-text" id="gitBranch">-</strong>
+                    </span>
+                    <span class="git-overview-branch-cell">
+                      <span class="git-overview-branch-label">改动状态</span>
+                      <span class="git-status-indicator">
+                        <span class="git-status-dot" id="gitStatusDot"></span>
+                        <span class="git-status-text" id="gitStatusText" data-i18n="auto.l564">暂无待快照改动</span>
+                      </span>
+                    </span>
+                    <span class="git-overview-branch-cell">
+                      <span class="git-overview-branch-label">远程位置</span>
+                      <span class="git-remote-value" id="gitRemote">-</span>
+                    </span>
+                    <span class="git-overview-branch-cell">
+                      <span class="git-overview-branch-label">同步状态</span>
+                      <span class="git-sync-value" id="gitSyncStatus" data-i18n="auto.l570">本地</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="git-flow-card">
+              <div class="git-flow-header">
+                <span>安全流程</span>
+                <small>一眼判断当前项目能不能放心回退</small>
+              </div>
+              <div class="git-flow-steps">
+                <div class="git-flow-step" id="gitStepProject">
+                  <span class="git-flow-dot">1</span>
+                  <strong>检测项目</strong>
+                  <small>识别当前项目<br>扫描文件变更与风险</small>
+                </div>
+                <div class="git-flow-step" id="gitStepChanges">
+                  <span class="git-flow-dot">2</span>
+                  <strong>记录改动</strong>
+                  <small>发现待快照文件<br>统计并记录改动内容</small>
+                </div>
+                <div class="git-flow-step" id="gitStepSnapshot">
+                  <span class="git-flow-dot">3</span>
+                  <strong>创建恢复点</strong>
+                  <small>保存可回退状态<br>创建安全的恢复点</small>
+                </div>
+                <div class="git-flow-step" id="gitStepRollback">
+                  <span class="git-flow-dot">4</span>
+                  <strong>可回退</strong>
+                  <small>历史中可恢复<br>随时回退到任意版本</small>
+                </div>
+              </div>
+              <div class="git-flow-assurance" aria-label="快照安全保障说明">
+                <div class="git-flow-assurance-intro">
+                  <span class="git-flow-assurance-kicker">安全保障</span>
+                  <strong>每一次重要改动，都有清晰的回退路径</strong>
+                  <p>建议在 AI 批量修改、依赖升级或结构调整前创建恢复点，出现异常时可从恢复历史中快速定位并回退。</p>
+                </div>
+                <div class="git-flow-assurance-list">
+                  <span><i></i><b>变更可见</b><small>集中查看待快照文件与风险状态</small></span>
+                  <span><i></i><b>恢复可控</b><small>执行回退前再次确认目标和影响范围</small></span>
+                  <span><i></i><b>历史可查</b><small>恢复点按时间记录，关键版本更易追溯</small></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="git-view-section" data-git-section="changes">
+            <div class="git-changes-page" id="gitFilesSection">
+              <header class="git-changes-header">
+                <div>
+                  <h1>待快照改动</h1>
+                  <p>已修改文件，等待纳入快照或忽略</p>
+                </div>
+                <div class="git-changes-filters">
+                  <label class="git-changes-search">
+                    <input type="search" id="gitChangesSearch" placeholder="搜索文件路径或名称..." autocomplete="off">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+                  </label>
+                  <label class="git-changes-select"><span>文件类型</span><select id="gitChangesType"><option value="all">全部类型</option><option value="config">配置文件</option><option value="project">项目文件</option><option value="other">其他文件</option></select></label>
+                  <label class="git-changes-select"><span>目录</span><select id="gitChangesDirectory"><option value="all">全部目录</option></select></label>
+                  <label class="git-changes-select"><span>排序</span><select id="gitChangesSort"><option value="updated">最新修改</option><option value="name">文件名称</option><option value="status">改动状态</option></select></label>
+                </div>
+                <button class="git-changes-refresh" type="button" id="gitChangesRefreshBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg><span>刷新数据</span>
+                </button>
+              </header>
+
+              <div class="git-changes-stats">
+                <button class="git-change-stat tone-warning active" type="button" data-change-filter="all" aria-pressed="true"><span class="git-change-stat-icon">Σ</span><span><small>总改动</small><strong id="gitChangesTotal">0</strong></span></button>
+                <button class="git-change-stat tone-muted" type="button" data-change-filter="unstaged" aria-pressed="false"><span class="git-change-stat-icon">○</span><span><small>未暂存</small><strong id="gitChangesUnstaged">0</strong></span></button>
+                <button class="git-change-stat tone-blue" type="button" data-change-filter="config" aria-pressed="false"><span class="git-change-stat-icon">▣</span><span><small>配置文件</small><strong id="gitChangesConfig">0</strong></span></button>
+                <button class="git-change-stat tone-teal" type="button" data-change-filter="project" aria-pressed="false"><span class="git-change-stat-icon">▤</span><span><small>项目文件</small><strong id="gitChangesProject">0</strong></span></button>
+              </div>
+
+              <div class="git-changes-workspace">
+                <section class="git-changes-list-panel">
+                  <div class="git-changes-actions">
+                    <span class="git-changes-selected">已选择 <b id="gitChangesSelectedCount">0</b> 项</span>
+                    <button class="git-change-action primary" type="button" id="gitChangesStageBtn" disabled><span>加入快照</span><b>›</b></button>
+                    <button class="git-change-action success" type="button" id="gitChangesCreateBtn"><b>＋</b><span>创建恢复点</span></button>
+                    <button class="git-change-action" type="button" id="gitChangesIgnoreBtn" disabled><span>忽略选中</span></button>
+                  </div>
+                  <div class="git-changes-table-head">
+                    <label class="git-change-check"><input type="checkbox" id="gitChangesSelectAll"><span></span></label>
+                    <span>文件路径</span><span>最后修改</span><span>状态</span>
+                  </div>
+                  <div class="git-file-list" id="gitFileList">
+                    <div class="git-empty"><span data-i18n="auto.7">暂无待快照改动</span></div>
+                  </div>
+                  <footer class="git-changes-pagination">
+                    <span>共 <b id="gitFileCount">0</b> 项改动</span>
+                    <div class="git-changes-pages" id="gitChangesPages"></div>
+                    <label><select id="gitChangesPageSize"><option value="10">10 条/页</option><option value="20" selected>20 条/页</option><option value="50">50 条/页</option></select></label>
+                  </footer>
+                </section>
+
+                <aside class="git-changes-aside">
+                  <section class="git-change-overview-card">
+                    <h2>改动概览</h2>
+                    <div class="git-change-donut-wrap">
+                      <div class="git-change-donut" id="gitChangesDonut"><span><b id="gitChangesDonutTotal">0</b><small>总改动</small></span></div>
+                      <div class="git-change-legend">
+                        <span><i class="config"></i>配置文件 <b id="gitChangesConfigLegend">0</b></span>
+                        <span><i class="project"></i>项目文件 <b id="gitChangesProjectLegend">0</b></span>
+                        <span><i class="other"></i>其他文件 <b id="gitChangesOtherLegend">0</b></span>
+                      </div>
+                    </div>
+                    <div class="git-change-queue-summary">
+                      <span><i>○</i>未暂存<b id="gitChangesQueueUnstaged">0</b></span>
+                      <span><i>✓</i>已选择<b id="gitChangesQueueSelected">0</b></span>
+                      <span><i>◷</i>待纳入快照<b id="gitChangesQueuePending">0</b></span>
+                      <span><i>⊘</i>忽略列表<b id="gitChangesQueueIgnored">0</b></span>
+                    </div>
+                  </section>
+                  <section class="git-change-help-card">
+                    <h2>关于待快照改动</h2>
+                    <p>这里显示上次快照以来对项目文件所做的修改，请确认文件后再执行操作。</p>
+                    <div><b>纳入快照</b><span>将选中文件加入本次快照，以便后续可靠恢复。</span></div>
+                    <div><b>创建恢复点</b><span>基于当前工作区的完整状态创建一个恢复点。</span></div>
+                    <div class="warning"><b>忽略文件</b><span>将选中文件加入忽略列表，后续改动将不再显示。</span></div>
+                    <button type="button" id="gitChangesOpenIgnored">查看忽略列表</button>
+                  </section>
+                </aside>
+              </div>
+            </div>
+          </div>
+
+          <div class="git-view-section" data-git-section="create">
+            <div class="git-commit-card" id="gitCommitArea">
+              <div class="git-commit-header">
+                <span class="git-commit-header-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  <span data-i18n="auto.8">创建恢复点</span>
+                </span>
+              </div>
+              <div class="git-commit-body">
+                <div class="git-commit-suggestion" id="gitCommitSuggestion" data-i18n="auto.l595">AI 会根据当前改动生成恢复点说明</div>
+                <textarea class="git-commit-input" id="gitCommitInput" placeholder="恢复点说明，例如：AI 修改前端文案并完成复查" data-i18n-placeholder="auto.l596.placeholder"></textarea>
+                <div class="git-commit-actions">
+                  <button class="git-action-btn primary" id="gitAiSuggestBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <span data-i18n="auto.9">生成说明</span>
+                  </button>
+                  <button class="git-action-btn success" id="gitCommitBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span data-i18n="auto.10">创建恢复点</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="git-view-section" data-git-section="history">
+            <div class="git-history-page">
+              <header class="git-history-page-header">
+                <div>
+                  <h1>恢复点历史</h1>
+                  <p>查看与管理历史恢复点，支持文件级与 Git 级回滚</p>
+                </div>
+                <button type="button" class="git-history-page-refresh" id="gitHistoryRefreshBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg>
+                  <span>刷新</span>
+                </button>
+              </header>
+
+              <div class="git-history-stats">
+                <button type="button" class="git-history-stat tone-blue active" data-history-stat="all">
+                  <span class="git-history-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v14c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></span>
+                  <span><small>总恢复点</small><strong id="gitHistoryTotal">0</strong><em id="gitHistoryTotalHint">共 0 条记录</em></span>
+                </button>
+                <button type="button" class="git-history-stat tone-teal" data-history-stat="file">
+                  <span class="git-history-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                  <span><small>文件级</small><strong id="gitHistoryFileCount">0</strong><em>覆盖文件快照</em></span>
+                </button>
+                <button type="button" class="git-history-stat tone-cyan" data-history-stat="git">
+                  <span class="git-history-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="5" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="12" cy="19" r="2"/><path d="M6 7v3c0 2 1.5 3 3.5 3H12m6-6v3c0 2-1.5 3-3.5 3H12m0 0v4"/></svg></span>
+                  <span><small>Git 级</small><strong id="gitHistoryGitCount">0</strong><em>关联版本控制</em></span>
+                </button>
+                <button type="button" class="git-history-stat tone-violet" data-history-stat="latest">
+                  <span class="git-history-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+                  <span><small>最近恢复</small><strong id="gitHistoryLatest">--</strong><em id="gitHistoryLatestDate">暂无记录</em></span>
+                </button>
+              </div>
+
+              <div class="git-history-toolbar">
+                <label class="git-history-search">
+                  <input type="search" id="gitHistorySearch" placeholder="搜索恢复点、说明或路径...">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/></svg>
+                </label>
+                <label class="git-history-select"><span>类型</span><select id="gitHistoryType"><option value="all">全部</option><option value="file">文件级</option><option value="git">Git 级</option></select></label>
+                <label class="git-history-select"><span>时间</span><select id="gitHistoryTime"><option value="all">全部时间</option><option value="today">今天</option><option value="week">近 7 天</option><option value="month">近 30 天</option></select></label>
+                <label class="git-history-select"><span>项目</span><select id="gitHistoryProject"><option value="current">当前项目</option></select></label>
+                <label class="git-history-select git-history-sort"><span>排序</span><select id="gitHistorySort"><option value="newest">创建时间 ↓</option><option value="oldest">创建时间 ↑</option></select></label>
+                <button type="button" class="git-history-create" id="gitHistoryCreateBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> 创建恢复点
+                </button>
+              </div>
+
+              <div class="git-history-workspace">
+                <section class="git-history-timeline-panel">
+                  <div class="git-history-notices" id="gitHistoryNotices"></div>
+                  <div class="git-history-list git-history-timeline" id="gitInlineHistoryList">
+                    <div class="git-empty" data-i18n="auto.l649">暂无恢复点</div>
+                  </div>
+                  <footer class="git-history-pagination">
+                    <span id="gitHistoryResultCount">共 0 个恢复点</span>
+                    <div class="git-history-pages" id="gitHistoryPages"></div>
+                    <label><select id="gitHistoryPageSize"><option value="6">6 条/页</option><option value="8" selected>8 条/页</option><option value="12">12 条/页</option><option value="20">20 条/页</option></select></label>
+                  </footer>
+                </section>
+                <aside class="git-history-detail" id="gitHistoryDetail">
+                  <div class="git-history-detail-empty">选择一个恢复点查看详情</div>
+                </aside>
+              </div>
+            </div>
+          </div>
+
+          <div class="git-view-section" data-git-section="errors">
+            <div class="error-scan-view">
+              <div class="error-scan-toolbar">
+                <div class="error-scan-title">
+                  <strong>错误扫描</strong>
+                  <span id="errorScanProjectName">只扫描当前项目</span>
+                </div>
+                <div class="error-scan-actions">
+                  <button class="git-action-btn primary" type="button" id="errorScanBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v4l3 2"/></svg>
+                    <span>扫描此项目</span>
+                  </button>
+                  <button class="git-action-btn" type="button" id="runtimeErrorScanBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8"/><path d="M12 18v2"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>
+                    <span>运行态扫描</span>
+                  </button>
+                  <button class="git-action-btn error-scan-cancel-btn" type="button" id="errorScanCancelBtn" style="display:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    <span>取消扫描</span>
+                  </button>
+                </div>
+              </div>
+              <div class="error-scan-progress" id="errorScanProgress" style="display:none;">
+                <div class="error-scan-progress-track"><div class="error-scan-progress-fill"></div></div>
+                <span class="error-scan-progress-text" id="errorScanProgressText">正在扫描当前项目...</span>
+              </div>
+              <div class="error-scan-summary" id="errorScanSummary">
+                <div class="error-scan-stat danger"><span>危险</span><strong>0</strong></div>
+                <div class="error-scan-stat warning"><span>警告</span><strong>0</strong></div>
+                <div class="error-scan-stat"><span>语法失败</span><strong>0</strong></div>
+                <div class="error-scan-stat"><span>扫描文件</span><strong>0</strong></div>
+              </div>
+              <div class="error-scan-chart" id="errorScanChart">
+                <div class="git-empty">点击“扫描此项目”查看当前项目的错误分布</div>
+              </div>
+              <div class="error-scan-list" id="errorScanList">
+                <div class="git-empty">暂无扫描结果</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="git-view-section" data-git-section="policy">
+            <div class="settings-section git-policy-section">
+              <div class="settings-section-title">AI 自动恢复点</div>
+              <label class="model-capability-option" style="margin-top:10px;">
+                <input type="checkbox" id="settingsRecoveryEnabled" checked>
+                AI 修改文件前自动创建文件级恢复点
+              </label>
+              <div class="recovery-policy-grid">
+                <div class="settings-group">
+                  <label class="settings-label">自动恢复点数量</label>
+                  <select class="settings-input settings-select" id="settingsRecoveryMaxPoints">
+                    <option value="10">最多 10 个</option>
+                    <option value="20">最多 20 个</option>
+                    <option value="50">最多 50 个</option>
+                    <option value="100">最多 100 个</option>
+                  </select>
+                </div>
+                <div class="settings-group">
+                  <label class="settings-label">文件级最大总占用</label>
+                  <select class="settings-input settings-select" id="settingsRecoveryMaxBytes">
+                    <option value="536870912">最多 512 MB</option>
+                    <option value="2147483648">最多 2 GB</option>
+                    <option value="5368709120">最多 5 GB</option>
+                    <option value="10737418240">最多 10 GB</option>
+                  </select>
+                </div>
+                <div class="settings-group">
+                  <label class="settings-label">单文件快照上限</label>
+                  <select class="settings-input settings-select" id="settingsRecoveryMaxFileBytes">
+                    <option value="10485760">10 MB</option>
+                    <option value="52428800">50 MB</option>
+                    <option value="104857600">100 MB</option>
+                    <option value="268435456">256 MB</option>
+                  </select>
+                </div>
+              </div>
+              <div class="recovery-policy-status" id="settingsRecoveryStatus">正在读取恢复点占用...</div>
+              <div class="settings-path-row" style="margin-top:12px;">
+                <button class="settings-path-btn" id="settingsRecoverySaveBtn">保存策略</button>
+                <button class="settings-path-btn reset" id="settingsRecoveryCleanupBtn">立即清理旧自动恢复点</button>
+              </div>
+              <div class="settings-hint" style="margin-top:8px;">这里管理的是 AI 自动创建的文件级恢复点，会按数量和占用自动删除较旧记录。Git 恢复点保存在 .git 中，用于覆盖更大范围的命令改动，目前不会按此策略自动删除。</div>
+            </div>
+          </div>
+
+          <div class="git-view-section" data-git-section="advanced">
+            <div class="git-advanced-intro">
+              <strong>高级 Git 信息</strong>
+              <span>这里用于把项目恢复点和代码记录同步到 Git。简单顺序是：先创建恢复点，需要拿远程更新时再同步到本机，确认本机没问题后再上传到远程。</span>
+            </div>
+            <div class="git-actions-grid git-advanced-actions">
+              <button class="git-action-btn git-action-tile" id="gitBranchBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 0-9 9"/></svg>
+                  <span class="git-action-copy">
+                    <span class="git-action-label">版本分线</span>
+                  <span class="git-action-hint">用于查看、合并或删除不同开发方向；切换分线在左侧项目列表点击</span>
+                  </span>
+                </button>
+              <button class="git-action-btn git-action-tile" id="gitPullBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span class="git-action-copy">
+                  <span class="git-action-label">同步远程更新</span>
+                  <span class="git-action-hint">把远程仓库的新内容同步到本机；有冲突时会停止并提示</span>
+                </span>
+              </button>
+              <button class="git-action-btn git-action-tile" id="gitPushBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M21 5v2a4 4 0 0 0-4 4H3"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 0-4 4H3"/></svg>
+                <span class="git-action-copy">
+                  <span class="git-action-label">上传本机记录</span>
+                  <span class="git-action-hint">把本机 Git 恢复点上传到远程备份；确认改动没问题后再用</span>
+                </span>
+              </button>
+            </div>
+            <div class="git-advanced-guide">
+              <details class="git-guide-item">
+                <summary>
+                  <span>版本分线怎么用？</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </summary>
+                <div class="git-guide-body">
+                  <p>版本分线可以理解为：给同一个项目开几条“平行工作线”。原来的项目线继续保留，你可以在另一条线上大胆尝试，试坏了也不影响原来的那条线。</p>
+                  <div class="git-guide-note">大白话：主线像正式稿，分线像草稿纸。草稿纸上怎么改都行，满意了再考虑合回正式稿。</div>
+                  <div class="git-guide-subtitle">什么时候需要用？</div>
+                  <ol>
+                    <li>只是让 AI 改几行文案、修一个小 bug：通常不需要新建分线，直接用恢复点就够了。</li>
+                    <li>要做大改版、大重构、换一套实现方案：建议先新建分线，在新分线上试。</li>
+                    <li>你想同时保留两个方案，比如“当前稳定版”和“新版 UI 实验版”：可以用两条分线分别保存。</li>
+                  </ol>
+                  <div class="git-guide-subtitle">点“版本分线”后会看到什么？</div>
+                  <ol>
+                    <li>当前正在使用的分线会被标记出来。</li>
+                    <li>你可以新建分线，也可以点左侧分支名称查看它相对主线改了什么。</li>
+                    <li>如果要真正切换到某条分线，在左侧项目列表里点击对应的分支会话。</li>
+                  </ol>
+                  <div class="git-guide-subtitle">操作前记住一句话</div>
+                  <p>切换分线前，先创建恢复点。这样就算切换后发现内容不对，也有地方可以回退。</p>
+                </div>
+              </details>
+              <details class="git-guide-item">
+                <summary>
+                  <span>什么时候同步远程更新？</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </summary>
+                <div class="git-guide-body">
+                  <p>当远程仓库里有别人或另一台电脑提交的新内容时，用它把那些内容同步到本机。</p>
+                  <ol>
+                    <li>先确认当前改动已经创建恢复点。</li>
+                    <li>点击“同步远程更新”。</li>
+                    <li>如果提示冲突，先不要继续上传，处理冲突后再创建新的恢复点。</li>
+                  </ol>
+                </div>
+              </details>
+              <details class="git-guide-item">
+                <summary>
+                  <span>什么时候上传本机记录？</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </summary>
+                <div class="git-guide-body">
+                  <p>当你确认本机项目当前状态没问题，并希望把恢复点和代码记录备份到远程仓库时，再上传。</p>
+                  <ol>
+                    <li>先运行或检查本机项目，确认当前改动可用。</li>
+                    <li>创建一个说明清楚的恢复点。</li>
+                    <li>点击“上传本机记录”，让远程也保存这份记录。</li>
+                  </ol>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 恢复点历史面板 -->
+      <div class="git-panel" id="gitHistoryPanel">
+        <div class="git-panel-header">
+          <span class="git-panel-title">
+            <span class="git-panel-title-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <span data-i18n="auto.15">恢复点历史</span>
+          </span>
+          <span class="git-panel-back" id="gitHistoryBack">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </span>
+        </div>
+        <div class="git-panel-body">
+          <div class="git-history-list" id="gitHistoryList">
+            <div class="git-empty" data-i18n="auto.l649">暂无恢复点</div>
+          </div>
+        </div>
+      </div>
+      <!-- Git 分支面板 -->
+      <div class="git-panel" id="gitBranchPanel">
+        <div class="git-panel-header">
+          <span class="git-panel-title">
+            <span class="git-panel-title-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y1="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 0-9 9"/></svg>
+            </span>
+            <span data-i18n="auto.16">分支管理</span>
+          </span>
+          <span class="git-panel-back" id="gitBranchBack">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </span>
+        </div>
+        <div class="git-panel-body git-branch-panel-body">
+          <div class="git-branch-card">
+            <div class="git-section-header">
+              <span class="git-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                <span data-i18n="auto.17">本地分支</span>
+              </span>
+            </div>
+            <div class="git-branch-list" id="gitBranchList">
+              <div class="git-empty" data-i18n="auto.l675">暂无分支</div>
+            </div>
+          </div>
+          <div class="git-branch-workspace">
+            <div class="git-new-branch-card">
+              <div class="git-section-header">
+                <span class="git-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y1="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span data-i18n="auto.18">新建分支</span>
+                </span>
+              </div>
+              <div class="git-new-branch-input-wrap">
+                <input type="text" class="git-new-branch-input" id="gitNewBranchName" placeholder="输入分支名称..." data-i18n-placeholder="auto.l686.placeholder">
+                <button class="git-action-btn primary" id="gitCreateBranchBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span data-i18n="auto.19">创建</span>
+                </button>
+              </div>
+            </div>
+            <div class="git-branch-detail-card" id="gitBranchDetail">
+              <div class="git-branch-detail-head">
+                <div class="git-branch-detail-title-wrap">
+                  <span class="git-branch-detail-eyebrow">分支详情</span>
+                  <strong class="git-branch-detail-title" id="gitBranchDetailTitle">请选择分支</strong>
+                  <span class="git-branch-detail-meta" id="gitBranchDetailMeta">点击左侧分支查看改动点</span>
+                </div>
+                <div class="git-branch-detail-actions">
+                  <button class="git-action-btn primary" id="gitBranchCheckoutBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+                    <span>切换</span>
+                  </button>
+                  <button class="git-action-btn" id="gitBranchMergeBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7a4 4 0 1 0 0 8"/><path d="M16 7a4 4 0 1 1 0 8"/><path d="M8 12h8"/></svg>
+                    <span>合并</span>
+                  </button>
+                  <button class="git-action-btn danger" id="gitBranchDeleteBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                    <span>删除</span>
+                  </button>
+                </div>
+              </div>
+              <div class="git-branch-timeline" id="gitBranchTimeline">
+                <div class="git-empty">点击左侧分支查看改动点</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- AI询问弹窗 - 输入框上方 -->
+      <div class="ai-ask-popup" id="aiAskPopup">
+        <div class="ask-content" id="askContent"></div>
+        <div class="ask-options" id="askOptions"></div>
+        <!-- 自定义输入已改为选项行内输入；保留隐藏节点兼容旧脚本取值 -->
+        <div class="ask-custom-input" id="askCustomInputBox" hidden>
+          <input type="text" id="customAnswerInput" placeholder="输入您的回答..." data-i18n-placeholder="auto.l700.placeholder">
+          <button class="ask-custom-submit" id="customSubmitBtn" data-i18n="auto.l701">提交</button>
+        </div>
+      </div>
+      <!-- 项目隔离终端 - 输入框上方 -->
+      <div class="terminal-panel" id="terminalPanel">
+        <div class="terminal-body" id="terminalBody">
+          <div class="terminal-toolbar">
+            <div class="terminal-tabs-wrap">
+              <span class="terminal-window-title" data-i18n="auto.l718">终端</span>
+              <button class="terminal-new-tab-btn" id="terminalNewTabBtn" title="新增终端" data-i18n-title="auto.l719.title">+</button>
+              <div class="terminal-tabs" id="terminalTabs"></div>
+            </div>
+            <div class="terminal-actions">
+              <button class="terminal-action" id="terminalCopyBtn" title="复制输出" data-i18n-title="auto.l723.title" data-i18n="auto.L723"></button>
+              <button class="terminal-action" id="terminalSendBtn" title="发送输出给 AI" data-i18n-title="auto.l724.title" data-i18n="auto.l724">发送给AI</button>
+              <button class="terminal-action danger" id="terminalStopBtn" title="停止命令" data-i18n-title="auto.l725.title" data-i18n="auto.l725">停止</button>
+              <button class="terminal-action" id="terminalClearBtn" title="清空当前项目终端" data-i18n-title="auto.l726.title" data-i18n="auto.l726">清空</button>
+            </div>
+          </div>
+          <pre class="terminal-output" id="terminalOutput"></pre>
+          <div class="terminal-input-row">
+            <span class="terminal-prompt" id="terminalPrompt">(base) PS &gt;</span>
+            <input class="terminal-command-input" id="terminalCommandInput" type="text" placeholder="输入命令，Enter 执行" data-i18n-placeholder="auto.l732.placeholder">
+            <button class="terminal-run-btn" id="terminalRunBtn" data-i18n="auto.l733">运行</button>
+          </div>
+        </div>
+      </div>
+      <!-- 一键到底按钮 -->
+      <div class="scroll-to-bottom-btn" id="scrollToBottomBtn" title="滚动到最新消息" data-i18n-title="auto.l738.title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+      </div>
+      <div class="chat-input-area">
+        <div class="chat-input-pills" id="chatInputPills">
+          <div class="ai-change-pill-area" id="aiChangePillArea"></div>
+          <div class="message-queue-area" id="messageQueueArea"></div>
+        </div>
+        <div class="cache-usage-strip" id="cacheUsageStrip" hidden></div>
+        <div class="plan-progress-dock" id="planProgressDock" hidden></div>
+        <div class="chat-input-wrapper" id="inputWrapper">
+          <div class="uploaded-files-area" id="uploadedFilesArea"></div>
+          <!-- 执行计划待办面板：#planProgressDock，位于输入框外部上方 -->
+          <div class="chat-input-row">
+            <textarea class="chat-input-box" id="inputBox" placeholder="与 AI 对话，输入 @ 可启用相关指令..." data-i18n-placeholder="auto.l746.placeholder" rows="1"></textarea>
+            <div class="send-btn" id="sendBtn" title="发送消息" data-i18n-title="auto.l747.title">
+              <span class="send-icon" id="sendIcon"><svg viewBox="0 0 24 24"><polyline points="12 19 12 5"/><polyline points="5 12 12 5 19 12"/></svg></span>
+            </div>
+          </div>
+          <div class="chat-input-footer">
+            <div class="file-upload-btn" id="fileUploadBtn" title="上传文件" data-i18n-title="auto.l752.title">
+              <span class="upload-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              </span>
+              <input type="file" id="fileInput" multiple accept="image/*,.svg,.ico,.txt,.md,.json,.js,.ts,.tsx,.jsx,.html,.css,.csv,.xml,.yaml,.yml,.log,.pdf,.doc,.docx,.xls,.xlsx" hidden>
+            </div>
+            <div class="exec-mode-dropdown" id="execModeDropdown">
+              <div class="exec-mode-trigger" id="execModeTrigger" title="授权模式 · 控制 AI 是否需要逐步确认">
+                <span class="exec-mode-icon" id="execModeIcon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
+                <span class="exec-mode-current" id="execModeCurrent">询问授权</span>
+                <span class="exec-mode-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+              <div class="exec-mode-menu" id="execModeMenu">
+                <div class="exec-mode-option selected" data-value="ask" data-icon="shield">
+                  <span class="option-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                  </span>
+                  <div class="option-info">
+                    <div class="option-name" data-i18n="auto.l1084">询问授权</div>
+                    <div class="option-desc" data-i18n="auto.l1085">不在授权列表中的路径和应用会弹窗询问</div>
+                  </div>
+                </div>
+                <div class="exec-mode-option" data-value="smart" data-icon="smart">
+                  <span class="option-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2a4 4 0 0 0-4 4c0 .3 0 .6.1.9"/>
+                      <path d="M12 2a4 4 0 0 1 4 4c0 .3 0 .6-.1.9"/>
+                      <path d="M17 7a5 5 0 0 1 0 10h-2"/>
+                      <path d="M7 7a5 5 0 0 0 0 10h2"/>
+                      <path d="M9 17v4"/>
+                      <path d="M15 17v4"/>
+                      <path d="M12 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                      <path d="M12 13v4"/>
+                    </svg>
+                  </span>
+                  <div class="option-info">
+                    <div class="option-name">智能授权</div>
+                    <div class="option-desc">由独立模型判断是否需要询问</div>
+                  </div>
+                </div>
+                <div class="exec-mode-option" data-value="full" data-icon="unlock">
+                  <span class="option-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                  </span>
+                  <div class="option-info">
+                    <div class="option-name" data-i18n="auto.l1089">完整授权</div>
+                    <div class="option-desc" data-i18n="auto.l1090">完全控制本地电脑（高风险）</div>
+                    <div class="option-warning">谨慎：跳过所有授权弹窗</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="model-dropdown" id="modelDropdown">
+              <div class="model-dropdown-trigger" id="modelTrigger" role="button" tabindex="0" aria-keyshortcuts="Ctrl+Shift+M">
+                <span class="model-trigger-icon" id="modelTriggerIcon" aria-hidden="true"></span>
+                <span class="model-current" id="modelCurrent">glm-5</span>
+                <span class="model-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+              <div class="model-dropdown-menu" id="modelMenu">
+                <div class="model-option" data-value="auto" data-i18n="model.autoSelect" data-i18n="auto.l794">自动选择</div>
+              </div>
+            </div>
+            <!-- 技能选择：仅从「已启用」中单选，选中后才对模型可见 -->
+            <div class="skill-selector" id="skillSelector">
+              <div class="skill-select-btn" id="skillSelectBtn">
+                <span class="skill-trigger-icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9.5l-4.2 1.9L12 16l-1.8-4.6L6 9.5l4.2-1.9z"/><path d="M19 14l.9 2.3L22 17l-2.1.7L19 20l-.9-2.3L16 17l2.1-.7z"/></svg>
+                </span>
+                <span class="skill-current">技能</span>
+                <span class="skill-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+              <div class="skill-select-menu" id="skillSelectMenu">
+                <input class="skill-menu-search" id="skillMenuSearch" type="text" placeholder="搜索已启用技能...">
+                <div class="skill-menu-list" id="skillMenuList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- center -->
+    <div class="sidebar expanded" id="sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-body" id="sidebarBody">
+          <!-- 顶部工具区：创建 + 二级入口 -->
+          <div class="sidebar-tools-block">
+            <div class="sidebar-new-project" id="btnNewProject" title="进入无项目界面">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              <span data-i18n="auto.l850">新建项目</span>
+            </div>
+            <div class="sidebar-menu-group" id="sidebarMainTools">
+              <div class="sidebar-menu-item" id="btnSkill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="6" height="6" rx="1.4"/><rect x="13.5" y="4.5" width="6" height="6" rx="1.4"/><rect x="4.5" y="13.5" width="6" height="6" rx="1.4"/><path d="M16.5 13.5v6"/><path d="M13.5 16.5h6"/></svg>
+                <span>资源中心</span>
+              </div>
+              <div class="sidebar-menu-item" id="btnExcel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/><path d="M3 8l2-5h14l2 5"/><path d="M3 8h18"/><path d="M10 12h4"/></svg>
+                <span data-i18n="auto.l870">归档</span>
+              </div>
+              <div class="sidebar-menu-item" id="btnLocalApps">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                <span>本地应用</span>
+              </div>
+              <div class="sidebar-menu-item" id="btnRemoteBridge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M8 14v.5a4 4 0 0 0 8 0V14"/><path d="M12 18v4"/><path d="M8 22h8"/><circle cx="12" cy="7" r="1"/></svg>
+                <span>远程遥控</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 项目列表（由 project-list.js 动态渲染"置顶"和"项目"分组） -->
+          <div class="sidebar-section sidebar-project-section">
+            <div class="sidebar-project" id="sidebarProject">
+              <div class="sidebar-project-info">
+                <svg class="sidebar-project-icon folder-motion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path class="folder-lid" d="M3.5 7.5h6.6l1.8 2h8.6"/><path class="folder-body" d="M3.5 7.5h17v10a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-10Z"/></svg>
+                <span class="sidebar-project-name" id="sidebarProjectName" data-i18n="auto.l878">未选择</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 底部账户与设置入口：运行时移入 sidebarFooter，避免被错误的历史嵌套层级吞掉。 -->
+        <div class="sidebar-footer" id="sidebarFooter"></div>
+      </div>
+    </div>
+        <!-- 设置面板 -->
+        <div class="settings-main-panel" id="settingsMainPanel">
+          <div class="settings-main-header">
+            <span class="settings-main-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span data-i18n="auto.22">设置</span>
+            </span>
+          </div>
+          <div class="settings-main-layout">
+            <div class="settings-main-nav">
+              <button class="settings-nav-back-btn" id="settingsMainBack" type="button" title="返回应用">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <span>返回应用</span>
+              </button>
+              <div class="settings-main-nav-label" data-i18n="auto.l896">设置分类</div>
+              <div class="settings-main-tabs">
+                <div class="settings-main-tab active" data-tab="model" id="settingsTabModel">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5"/></svg>
+                  <span>模型设置</span>
+                </div>
+                <div class="settings-main-tab" data-tab="cloudTokenUsage" id="settingsTabCloudTokenUsage">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17V13M12 17V9M17 17V7"/></svg>
+                  <span>Token 用量</span>
+                </div>
+                <div class="settings-main-tab" data-tab="permission" id="settingsTabPermission">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-5"/></svg>
+                  <span data-i18n="auto.l912">AI授权</span>
+                </div>
+                <div class="settings-main-tab" data-tab="features" id="settingsTabFeatures">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><path d="M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
+                  <span>能力开关</span>
+                </div>
+                <div class="settings-main-tab" data-tab="browserSettings" id="settingsTabBrowserSettings">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+                  <span>浏览器设置</span>
+                </div>
+                <div class="settings-main-tab" data-tab="storage" id="settingsTabStorage">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
+                  <span data-i18n="auto.l916">存储路径</span>
+                </div>
+                <div class="settings-main-tab" data-tab="theme" id="settingsTabTheme">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M19 11.5a7.5 7.5 0 1 1-6.5-7.43"/><path d="M15.5 15.5h.01M8.5 14h.01M10 8.5h.01"/></svg>
+                  <span data-i18n="auto.l920">个性化</span>
+                </div>
+                <div class="settings-main-tab" data-tab="shortcuts" id="settingsTabShortcuts">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M19 9h.01M7 13h.01M11 13h.01M15 13h3M7 17h10"/></svg>
+                  <span>快捷键</span>
+                </div>
+                <div class="settings-main-tab" data-tab="other" id="settingsTabOther">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.55 1.43c0 1.8-2.05 2.15-2.05 3.57"/><path d="M12 17h.01"/></svg>
+                  <span data-i18n="auto.l924">帮助</span>
+                </div>
+              </div>
+            </div>          <div class="settings-main-body">
+            <!-- 模型设置 -->
+            <div class="settings-main-content active" id="settingsContentModel">
+              <div class="settings-section settings-model-library">
+                <div class="settings-model-library-header">
+                  <div class="settings-section-title" data-i18n="auto.L978">已储存模型</div>
+                  <button class="settings-path-btn" id="settingsOpenAddModelModalBtn" type="button">添加模型</button>
+                </div>
+                <div class="model-category-tabs" id="settingsModelCategoryTabs"></div>
+                <div class="settings-model-list" id="settingsModelList"></div>
+              </div>
+            </div>
+            <!-- 模型能力调度 -->
+            <div class="settings-main-content" id="settingsContentRouting">
+              <div class="settings-section settings-routing-shell">
+                <div class="settings-routing-header">
+                  <div class="settings-routing-header-main">
+                    <span class="settings-routing-title-icon" aria-hidden="true"><img src="assets/brand/lingxi-logo-transparent.png" alt=""></span>
+                    <span class="settings-routing-header-copy">
+                      <span class="settings-section-title">模型能力调度</span>
+                      <span class="settings-hint">先在模型设置勾选能力，这里只排调用优先级；拖到最上面优先调用。</span>
+                    </span>
+                  </div>
+                  <div class="settings-routing-header-right">
+                    <div class="settings-routing-summary" id="settingsRoutingSummary" aria-live="polite"></div>
+                    <div class="settings-routing-actions">
+                      <button type="button" class="settings-routing-btn settings-routing-btn-primary" id="settingsRoutingSaveBtn">保存设置</button>
+                      <button type="button" class="settings-routing-btn settings-routing-btn-ghost" id="settingsRoutingResetBtn">恢复默认</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="settings-routing-workspace">
+                  <nav class="settings-routing-nav" id="settingsRoutingNav" aria-label="能力列表"></nav>
+
+                  <section class="settings-routing-detail" aria-live="polite">
+                    <div class="settings-routing-detail-head">
+                      <div class="settings-routing-detail-title-wrap">
+                        <div class="settings-routing-detail-title" id="settingsRoutingDetailTitle">视觉理解</div>
+                        <div class="settings-routing-detail-sub" id="settingsRoutingDetailSub">拖拽调整调用优先级</div>
+                      </div>
+                      <label class="settings-routing-policy-switch" for="settingsRoutingPolicyToggle">
+                        <span class="settings-routing-policy-copy">
+                          <span class="settings-routing-policy-label">直接调用</span>
+                          <span class="settings-routing-policy-hint" id="settingsRoutingPolicyHint">免确认</span>
+                        </span>
+                        <span class="settings-toggle">
+                          <input type="checkbox" id="settingsRoutingPolicyToggle" checked>
+                          <span class="settings-toggle-slider" aria-hidden="true"></span>
+                        </span>
+                      </label>
+                    </div>
+
+                    <div class="settings-routing-list settings-routing-list-active" id="settingsRoutingActiveList"></div>
+                    <div class="settings-routing-preview" id="settingsRoutingPreview"></div>
+                  </section>
+                </div>
+              </div>
+
+              <!-- 兼容旧脚本取值的隐藏策略输入（由 JS 同步） -->
+              <div class="settings-routing-legacy-policies" hidden aria-hidden="true">
+                <input type="checkbox" id="settingsImageGenerationConfirm" checked>
+                <input type="checkbox" id="settingsVisionConfirm" checked>
+                <input type="checkbox" id="settingsMusicGenerationConfirm" checked>
+                <input type="checkbox" id="settingsVideoGenerationConfirm" checked>
+                <input type="checkbox" id="settingsSpeechSynthesisConfirm" checked>
+              </div>
+            </div>
+            <!-- 后台整理模型 -->
+            <div class="settings-main-content" id="settingsContentWorker">
+              <div class="settings-section settings-worker-shell">
+                <div class="settings-worker-header">
+                  <div class="settings-worker-header-main">
+                    <div class="settings-section-title">后台整理模型</div>
+                    <div class="settings-hint">主模型负责开发执行；这里只负责账本、记忆、路线等后台整理。</div>
+                  </div>
+                  <label class="settings-worker-master-switch" for="workerModelEnabled">
+                    <span class="settings-worker-master-copy">
+                      <span class="settings-worker-master-label">启用后台整理</span>
+                      <span class="settings-worker-master-hint" id="workerModelMasterHint">开启后按链路调度</span>
+                    </span>
+                    <span class="settings-toggle">
+                      <input type="checkbox" id="workerModelEnabled" checked>
+                      <span class="settings-toggle-slider" aria-hidden="true"></span>
+                    </span>
+                  </label>
+                </div>
+
+                <div class="settings-worker-summary" id="workerModelSummary" aria-live="polite"></div>
+
+                <div class="settings-worker-workspace" id="workerModelWorkspace">
+                  <nav class="settings-worker-nav" id="workerModelNav" aria-label="后台整理导航">
+                    <button type="button" class="settings-worker-nav-item active" data-worker-panel="chain"><span class="settings-worker-nav-index" aria-hidden="true">1</span>
+                      <span class="settings-worker-nav-top">
+                        <span class="settings-worker-nav-name">调用链路</span>
+                        <span class="settings-worker-nav-tag" id="workerNavChainTag">3 &#27493;&#38142;&#36335;</span>
+                      </span>
+                       <span class="settings-worker-nav-meta" id="workerNavChainMeta">优先本地，失败后云端兜底</span>
+                    </button>
+                    <button type="button" class="settings-worker-nav-item" data-worker-panel="tasks"><span class="settings-worker-nav-index" aria-hidden="true">2</span>
+                      <span class="settings-worker-nav-top">
+                        <span class="settings-worker-nav-name">整理任务</span>
+                        <span class="settings-worker-nav-tag" id="workerNavTasksTag">3 &#39033;&#21551;&#29992;</span>
+                      </span>
+                       <span class="settings-worker-nav-meta" id="workerNavTasksMeta">账本 / 路线 / 记忆</span>
+                    </button>
+                    <button type="button" class="settings-worker-nav-item" data-worker-panel="test"><span class="settings-worker-nav-index" aria-hidden="true">3</span>
+                      <span class="settings-worker-nav-top">
+                        <span class="settings-worker-nav-name">测试与保存</span>
+                        <span class="settings-worker-nav-tag" id="workerNavTestTag">&#24453;&#27979;&#35797;</span>
+                      </span>
+                       <span class="settings-worker-nav-meta" id="workerNavTestMeta">验证链路并保存配置</span>
+                    </button>
+                  </nav>
+
+                  <section class="settings-worker-detail">
+                    <div class="settings-worker-panel active" data-worker-panel-body="chain">
+                      <div class="settings-worker-panel-head">
+                        <div class="settings-worker-panel-title">调用链路</div>
+                        <div class="settings-worker-panel-sub">按顺序尝试：本地→云端→规则整理</div>
+                      </div>
+
+                      <div class="settings-worker-step-list">
+                        <article class="settings-worker-step-card" data-step="local">
+                          <div class="settings-worker-step-head">
+                            <span class="settings-worker-step-rank">#1</span>
+                            <div class="settings-worker-step-copy">
+                              <div class="settings-worker-step-title">本地优先</div>
+                              <div class="settings-worker-step-desc">Ollama 本地模型，适合账本与记忆整理</div>
+                            </div>
+                            <label class="settings-worker-inline-switch" for="workerModelLocalEnabled">
+                              <span class="settings-worker-inline-switch-label">优先使用</span>
+                              <span class="settings-toggle">
+                                <input type="checkbox" id="workerModelLocalEnabled" checked>
+                                <span class="settings-toggle-slider" aria-hidden="true"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="settings-worker-step-body">
+                            <div class="settings-group">
+                              <label class="settings-label">Ollama 地址</label>
+                              <input type="text" class="settings-input" id="workerModelApiUrl" value="http://127.0.0.1:11434">
+                            </div>
+                            <div class="settings-group">
+                              <label class="settings-label">模型名</label>
+                              <input type="text" class="settings-input" id="workerModelName" value="gemma4:e4b">
+                              <div class="settings-hint">第一版默认用 gemma4:e4b 做账本整理。</div>
+                            </div>
+                            <div class="settings-group">
+                              <label class="settings-label">显存保留时间</label>
+                              <input type="text" class="settings-input" id="workerModelKeepAlive" value="30s">
+                              <div class="settings-hint">Ollama keep_alive，例如 30s、1m、5m、0。越短越快释放显存，但下次调用会重新加载模型。</div>
+                            </div>
+                          </div>
+                        </article>
+
+                        <article class="settings-worker-step-card" data-step="cloud">
+                          <div class="settings-worker-step-head">
+                            <span class="settings-worker-step-rank">#2</span>
+                            <div class="settings-worker-step-copy">
+                              <div class="settings-worker-step-title">云端兜底</div>
+                              <div class="settings-worker-step-desc">使用你自己配置的云端模型；不包含灵犀内置模型</div>
+                            </div>
+                            <label class="settings-worker-inline-switch" for="workerModelCloudEnabled">
+                              <span class="settings-worker-inline-switch-label">启用</span>
+                              <span class="settings-toggle">
+                                <input type="checkbox" id="workerModelCloudEnabled" checked>
+                                <span class="settings-toggle-slider" aria-hidden="true"></span>
+                              </span>
+                            </label>
+                          </div>
+                          <div class="settings-worker-step-body">
+                            <div class="settings-group">
+                              <label class="settings-label" for="workerModelCloudModel">兜底模型</label>
+                              <select class="settings-input settings-select" id="workerModelCloudModel"></select>
+                            </div>
+                          </div>
+                        </article>
+
+                        <article class="settings-worker-step-card is-readonly" data-step="rule">
+                          <div class="settings-worker-step-head">
+                            <span class="settings-worker-step-rank">#3</span>
+                            <div class="settings-worker-step-copy">
+                              <div class="settings-worker-step-title">规则兜底</div>
+                              <div class="settings-worker-step-desc">云端也失败时自动走规则整理，无需额外配置</div>
+                            </div>
+                            <span class="settings-worker-step-fixed">始终可用</span>
+                          </div>
+                        </article>
+                      </div>
+
+                      <div class="settings-worker-preview" id="workerModelPreview">启用中 · 本地 → 规则整理</div>
+                    </div>
+
+                    <div class="settings-worker-panel" data-worker-panel-body="tasks">
+                      <div class="settings-worker-panel-head">
+                        <div class="settings-worker-panel-title">整理任务</div>
+                        <div class="settings-worker-panel-sub">选择需要自动整理的后台任务；不影响主模型开发执行</div>
+                      </div>
+
+                      <div class="settings-worker-task-list">
+                        <article class="settings-worker-task-card">
+                          <div class="settings-worker-task-main">
+                            <div class="settings-worker-task-title">项目记录整理</div>
+                            <div class="settings-worker-task-desc">整理项目账本与方案纪要，便于后续追踪任务</div>
+                          </div>
+                          <label class="settings-worker-inline-switch" for="workerModelTaskLedger">
+                            <span class="settings-worker-inline-switch-label">启用</span>
+                            <span class="settings-toggle">
+                              <input type="checkbox" id="workerModelTaskLedger" checked>
+                              <span class="settings-toggle-slider" aria-hidden="true"></span>
+                            </span>
+                          </label>
+                        </article>
+
+                        <article class="settings-worker-task-card">
+                          <div class="settings-worker-task-main">
+                            <div class="settings-worker-task-title">偏好与规则整理</div>
+                            <div class="settings-worker-task-desc">提取稳定偏好、长期规则、项目事实与未完成关注点</div>
+                          </div>
+                          <label class="settings-worker-inline-switch" for="workerModelTaskMemory">
+                            <span class="settings-worker-inline-switch-label">启用</span>
+                            <span class="settings-toggle">
+                              <input type="checkbox" id="workerModelTaskMemory">
+                              <span class="settings-toggle-slider" aria-hidden="true"></span>
+                            </span>
+                          </label>
+                        </article>
+
+                        <article class="settings-worker-task-card" id="workerCodeMapTaskCard">
+                          <div class="settings-worker-task-main">
+                            <div class="settings-worker-task-title">项目路线整理</div>
+                            <div class="settings-worker-task-desc">整理已查看/已修改位置的定位线索；模型在「测试与保存」统一选择</div>
+                          </div>
+                          <label class="settings-worker-inline-switch" for="workerModelTaskCodeMap">
+                            <span class="settings-worker-inline-switch-label">启用</span>
+                            <span class="settings-toggle">
+                              <input type="checkbox" id="workerModelTaskCodeMap" checked>
+                              <span class="settings-toggle-slider" aria-hidden="true"></span>
+                            </span>
+                          </label>
+                        </article>
+                      </div>
+                    </div>
+
+                    <div class="settings-worker-panel" data-worker-panel-body="test">
+                      <div class="settings-worker-panel-head">
+                        <div class="settings-worker-panel-title">测试与保存</div>
+                        <div class="settings-worker-panel-sub">统一选择模型、验证链路并保存配置</div>
+                      </div>
+
+                      <div class="settings-worker-model-picker" id="workerModelPicker">
+                        <div class="settings-worker-panel-subtitle">模型选择</div>
+                        <div class="settings-group" id="workerCodeMapModelGroup">
+                          <label class="settings-label" for="workerModelCodeMapModel">路线整理模型</label>
+                          <select class="settings-input settings-select" id="workerModelCodeMapModel"></select>
+                          <div class="settings-hint">不选则跟随云端兜底模型。关闭路线整理任务后仍可预选，不会生效。</div>
+                        </div>
+                      </div>
+
+                      <div class="settings-worker-test-actions">
+                        <button type="button" class="settings-path-btn" id="workerModelTestBtn">测试本地</button>
+                        <button type="button" class="settings-path-btn" id="workerModelCloudTestBtn">测试云端</button>
+                        <button type="button" class="settings-path-btn settings-path-btn-primary" id="workerModelSaveBtn">保存配置</button>
+                      </div>
+                      <div class="worker-model-status" id="workerModelStatus" hidden></div>
+                      <div class="settings-worker-preview" id="workerModelTestPreview">当前链路：本地 → 云端 → 规则</div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+            <!-- 本地模型 -->
+            <div class="settings-main-content" id="settingsContentLocalModels">
+              <div class="settings-section settings-local-control">
+                <div class="settings-section-title">本地模型</div>
+                <div class="settings-hint">自动扫描本机 Ollama 已部署模型，启用后会加入灵犀模型列表；移除只会从软件配置里删除，不会删除本机模型文件。</div>
+                <div class="settings-group" style="margin-top:12px;">
+                  <label class="settings-label">Ollama 地址</label>
+                  <input type="text" class="settings-input" id="localModelsApiUrl" value="http://127.0.0.1:11434">
+                </div>
+                <div class="settings-path-row" style="margin-top:12px;">
+                  <button class="settings-path-btn" id="localModelsScanBtn" type="button">扫描本地模型</button>
+                  <button class="settings-path-btn reset" id="localModelsRefreshBtn" type="button">刷新状态</button>
+                </div>
+                <div class="worker-model-status" id="localModelsStatus" hidden></div>
+              </div>
+              <div class="settings-section settings-local-discovered">
+                <div class="settings-section-title">已发现模型</div>
+                <div class="local-model-list" id="localModelsList">
+                  <div class="settings-empty">点击“扫描本地模型”后显示</div>
+                </div>
+              </div>
+            </div>
+            <!-- 云端 Token 用量 -->
+            <div class="settings-main-content" id="settingsContentCloudTokenUsage">
+              <div class="settings-section cloud-token-hero">
+                <div>
+                  <div class="settings-section-title">云端 Token 使用总览</div>
+                  <div class="settings-hint">只统计云端模型消耗；本地 Ollama、LM Studio 等本地部署模型不会计入。</div>
+                </div>
+                <div class="cloud-token-toolbar" aria-label="Token 用量筛选">
+                  <div class="cloud-token-filter" id="cloudTokenUsageRangeFilter">
+                    <span class="cloud-token-filter-label">范围</span>
+                    <button class="cloud-token-filter-trigger" id="cloudTokenUsageRangeTrigger" type="button" aria-haspopup="true" aria-expanded="false">
+                      <span id="cloudTokenUsageRangeText">近 7 天</span>
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="cloud-token-range-popover" id="cloudTokenUsageRangePopover" hidden>
+                      <div class="cloud-token-range-options" id="cloudTokenUsageRangeOptions">
+                        <button type="button" data-preset="today">今天</button>
+                        <button type="button" data-preset="yesterday">昨天</button>
+                        <button type="button" data-preset="last24h">近 24 小时</button>
+                        <button type="button" data-preset="7d" class="is-active">近 7 天</button>
+                        <button type="button" data-preset="14d">近 14 天</button>
+                        <button type="button" data-preset="30d">近 30 天</button>
+                        <button type="button" data-preset="thisMonth">本月</button>
+                        <button type="button" data-preset="lastMonth">上月</button>
+                      </div>
+                      <div class="cloud-token-date-row">
+                        <label>查询某一天<input class="settings-input" id="cloudTokenUsageSingleDate" type="date"></label>
+                        <button class="settings-path-btn primary" id="cloudTokenUsageApplySingleDayBtn" type="button">查看当天</button>
+                      </div>
+                      <div class="cloud-token-date-row cloud-token-date-row-range">
+                        <label>开始日期<input class="settings-input" id="cloudTokenUsageStartDate" type="date"></label>
+                        <label>结束日期<input class="settings-input" id="cloudTokenUsageEndDate" type="date"></label>
+                        <button class="settings-path-btn primary" id="cloudTokenUsageApplyRangeBtn" type="button">应用</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cloud-token-filter" id="cloudTokenUsageGranularityFilter">
+                    <span class="cloud-token-filter-label">粒度</span>
+                    <button class="cloud-token-filter-trigger" id="cloudTokenUsageGranularityTrigger" type="button" aria-haspopup="true" aria-expanded="false">
+                      <span id="cloudTokenUsageGranularityText">按天</span>
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="cloud-token-granularity-menu" id="cloudTokenUsageGranularityMenu" hidden>
+                      <button type="button" data-granularity="hour">按小时</button>
+                      <button type="button" data-granularity="day" class="is-active">按天</button>
+                      <button type="button" data-granularity="week">按周</button>
+                      <button type="button" data-granularity="month">按月</button>
+                    </div>
+                  </div>
+                  <button class="settings-path-btn" id="cloudTokenUsageRefreshBtn" type="button">刷新</button>
+                </div>
+              </div>
+              <div class="cloud-token-overview-grid">
+                <div class="cloud-token-card"><span>今日云端 Token</span><strong id="cloudTokenTodayTotal">0</strong><small id="cloudTokenTodayMeta">输入 0 / 输出 0 · 0 次</small></div>
+                <div class="cloud-token-card"><span>本周云端 Token</span><strong id="cloudTokenWeekTotal">0</strong><small id="cloudTokenWeekMeta">输入 0 / 输出 0 · 0 次</small></div>
+                <div class="cloud-token-card"><span>本月云端 Token</span><strong id="cloudTokenMonthTotal">0</strong><small id="cloudTokenMonthMeta">输入 0 / 输出 0 · 0 次</small></div>
+                <div class="cloud-token-card"><span>累计云端 Token</span><strong id="cloudTokenTotalTotal">0</strong><small id="cloudTokenTotalMeta">输入 0 / 输出 0 · 0 次</small></div>
+              </div>
+              <div class="cloud-token-analytics-grid">
+                <div class="settings-section cloud-token-trend-panel">
+                  <div class="settings-section-title">Token 使用趋势图</div>
+                  <div class="cloud-token-daily-chart cloud-token-trend-chart" id="cloudTokenUsageTrendChart"></div>
+                </div>
+              </div>
+              <div class="settings-section cloud-token-detail-panel">
+                <div class="cloud-token-detail-head">
+                  <div>
+                    <div class="settings-section-title">用量明细</div>
+                    <div class="settings-hint" id="cloudTokenDetailHint">统一查看模型、任务与最近调用</div>
+                  </div>
+                  <div class="cloud-token-detail-tabs" id="cloudTokenDetailTabs" role="tablist" aria-label="用量明细切换">
+                    <button type="button" class="cloud-token-detail-tab is-active" data-detail-tab="models" role="tab" aria-selected="true">模型明细</button>
+                    <button type="button" class="cloud-token-detail-tab" data-detail-tab="tasks" role="tab" aria-selected="false">任务明细</button>
+                    <button type="button" class="cloud-token-detail-tab" data-detail-tab="recent" role="tab" aria-selected="false">最近调用</button>
+                  </div>
+                </div>
+                <div class="cloud-token-table-shell" id="cloudTokenDetailTable"></div>
+              </div>
+              <div class="worker-model-status" id="cloudTokenUsageStatus">仅统计云端模型，本地部署模型不计入。命中率仅供参考，详情请查阅官方数据。</div>
+            </div>
+            <!-- 能力开关 -->
+            <div class="settings-main-content" id="settingsContentFeatures">
+              <div class="settings-section">
+                <div class="feature-settings-page-heading">
+                  <div class="feature-settings-heading-copy">
+                    <div class="settings-section-title">能力开关</div>
+                    <div class="settings-hint">
+                      按用途管理 AI 能力。关闭后对应工具不会出现在模型工具列表中；授权规则仍在「AI 授权」中配置。
+                    </div>
+                  </div>
+                  <div class="feature-settings-actions">
+                    <button type="button" class="settings-path-btn" id="featureSettingsResetBtn">恢复默认</button>
+                    <button type="button" class="settings-path-btn reset" id="featureSettingsReloadBtn">刷新</button>
+                  </div>
+                </div>
+                <div class="feature-settings-summary" id="featureSettingsSummary">正在读取能力开关…</div>
+                <div class="feature-settings-controls">
+                  <label class="feature-settings-search" for="featureSettingsSearchInput">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.1-5.4a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></svg>
+                    <input type="search" id="featureSettingsSearchInput" placeholder="搜索能力、说明或工具名称">
+                  </label>
+                  <div class="feature-settings-status-filter" role="group" aria-label="按启用状态筛选">
+                    <button type="button" data-feature-status-filter="all">全部</button>
+                    <button type="button" data-feature-status-filter="enabled">已开启</button>
+                    <button type="button" data-feature-status-filter="disabled">已关闭</button>
+                  </div>
+                </div>
+                <div class="feature-settings-category-tabs" id="featureSettingsCategoryTabs" role="tablist" aria-label="能力分类"></div>
+                <div class="feature-settings-list" id="featureSettingsList"></div>
+              </div>
+            </div>
+            <!-- 浏览器设置 -->
+            <div class="settings-main-content" id="settingsContentBrowserSettings">
+              <div class="settings-section">
+                <div class="settings-section-title">浏览器设置</div>
+                <div class="settings-hint">管理浏览器导入登录的 Cookie，支持清除、查看和追加导入。</div>
+                <div class="settings-group">
+                  <label class="settings-label">当前导入状态</label>
+                  <div class="settings-hint" id="browserImportStatus">正在检查...</div>
+                </div>
+                <div class="settings-group">
+                  <label class="settings-label">导入模式</label>
+                  <div class="settings-hint">追加模式：只添加新 Cookie，不覆盖已有的。</div>
+                  <div class="settings-hint">覆盖模式：清除现有 Cookie 后重新导入。</div>
+                </div>
+                <div class="settings-group">
+                  <button class="settings-path-btn primary" id="browserImportAppendBtn">追加导入</button>
+                  <button class="settings-path-btn" id="browserImportOverwriteBtn">覆盖导入</button>
+                </div>
+                <div class="settings-group">
+                  <label class="settings-label">清除导入的 Cookie</label>
+                  <div class="settings-hint">清除从浏览器导入的所有 Cookie，不影响灵犀自身的设置。</div>
+                  <button class="settings-path-btn reset" id="browserClearCookiesBtn">清除导入的 Cookie</button>
+                </div>
+                <div class="settings-group">
+                  <label class="settings-label">清除存储配额</label>
+                  <div class="settings-hint">如果遇到存储配额满的提示，可以清除浏览器导入的存储数据。</div>
+                  <button class="settings-path-btn reset" id="browserClearStorageBtn">清除存储配额</button>
+                </div>
+              </div>
+            </div>
+            <!-- AI授权 -->
+            <div class="settings-main-content" id="settingsContentPermission">
+              <div class="permission-page-hero">
+                <span class="permission-page-hero-icon" aria-hidden="true"><img src="assets/settings/permission/permission-shield.png" alt=""></span>
+                <div>
+                  <div class="permission-page-title">AI 权限模式</div>
+                  <div class="permission-page-subtitle">控制 AI 是否可以访问当前项目目录以外的路径或应用程序。</div>
+                </div>
+              </div>
+
+              <div class="settings-section settings-permission-controls">
+                <div class="settings-section-title">权限模式选择</div>
+                <div class="permission-mode-grid">
+                  <label class="permission-mode-card">
+                    <input type="radio" name="aiPermissionMode" id="aiPermissionModeAsk" value="ask" checked>
+                    <img class="permission-mode-icon" src="assets/settings/permission/permission-ask.png" alt="" aria-hidden="true">
+                    <span class="permission-mode-title">询问授权</span>
+                    <span class="permission-mode-desc">AI 访问项目目录以外的路径或应用时，将向您请求授权。</span>
+                  </label>
+                  <label class="permission-mode-card">
+                    <input type="radio" name="aiPermissionMode" id="aiPermissionModeSmart" value="smart">
+                    <img class="permission-mode-icon" src="assets/settings/permission/permission-smart.png" alt="" aria-hidden="true">
+                    <span class="permission-mode-title">智能授权</span>
+                    <span class="permission-mode-desc">AI 自动判断访问请求的安全性并进行授权，无需手动干预。</span>
+                  </label>
+                  <label class="permission-mode-card permission-mode-card-risk">
+                    <input type="radio" name="aiPermissionMode" id="aiPermissionModeFull" value="full">
+                    <img class="permission-mode-icon" src="assets/settings/permission/permission-full.png" alt="" aria-hidden="true">
+                    <span class="permission-mode-title">完整授权</span>
+                    <span class="permission-mode-desc">AI 拥有对本地电脑的完全控制权限（高风险操作请谨慎使用）。</span>
+                    <span class="permission-mode-badge">高风险</span>
+                  </label>
+                </div>
+                <div class="settings-group permission-smart-model-group" id="aiSmartAuthorizationModelGroup" hidden>
+                  <label class="settings-label">智能授权判断模型</label>
+                  <select class="settings-input settings-select" id="aiSmartAuthorizationModel"></select>
+                  <div class="settings-hint">仅用于判断是否需要弹窗；未选择、超时或判断不确定时自动询问。</div>
+                </div>
+              </div>
+
+              <div class="settings-section permission-status-panel" id="aiPermissionStatusSummary">
+                <div class="permission-status-item">
+                  <img id="aiPermissionModeSummaryIcon" src="assets/settings/permission/permission-ask.png" alt="" aria-hidden="true">
+                  <span><span class="permission-status-label">当前模式</span><strong id="aiPermissionModeSummary">询问授权</strong></span>
+                </div>
+                <div class="permission-status-item">
+                  <img src="assets/settings/permission/permission-smart.png" alt="" aria-hidden="true">
+                  <span><span class="permission-status-label">判断模型</span><strong id="aiPermissionModelSummary">未启用</strong></span>
+                </div>
+                <div class="permission-status-item">
+                  <img src="assets/settings/permission/permission-grant.png" alt="" aria-hidden="true">
+                  <span><span class="permission-status-label">已授权</span><strong id="aiPermissionCountSummary">0 项</strong></span>
+                </div>
+              </div>
+
+              <div class="settings-section settings-permission-list-section">
+                <div class="permission-list-header">
+                  <div class="permission-list-heading-copy">
+                    <img src="assets/settings/permission/permission-grant.png" alt="" aria-hidden="true">
+                    <div>
+                      <div class="settings-section-title">已授权路径和应用</div>
+                      <div class="settings-hint">管理 AI 已授权访问的文件系统路径或应用程序，应用需获得授权后方可执行相关操作。</div>
+                    </div>
+                  </div>
+                  <span class="permission-count-badge" id="aiPermissionCountBadge">0</span>
+                </div>
+                <div class="permission-toolbar">
+                  <input type="search" class="settings-input" id="aiPermissionSearch" placeholder="搜索路径、应用或操作来源" autocomplete="off">
+                  <select class="settings-input settings-select" id="aiPermissionFilter">
+                    <option value="all">全部类型</option>
+                    <option value="path">仅路径</option>
+                    <option value="application">仅应用</option>
+                  </select>
+                </div>
+                <div class="settings-path-row permission-add-row">
+                  <select class="settings-input settings-select" id="aiPermissionKind">
+                    <option value="path">路径授权</option>
+                    <option value="application">应用授权</option>
+                  </select>
+                  <input type="text" class="settings-input" id="aiPermissionPath" placeholder="选择或输入路径">
+                  <button class="settings-path-btn" id="aiPermissionSelectBtn">选择</button>
+                  <button class="settings-path-btn primary" id="aiPermissionAddBtn">添加</button>
+                </div>
+                <div class="permission-list" id="aiPermissionList"></div>
+              </div>
+
+              <div class="permission-page-footnote">授权仅对当前设备生效。建议定期审查授权项，及时取消不再需要的权限以保障安全。</div>
+            </div>            <!-- 存储路径 -->
+            <div class="settings-main-content" id="settingsContentStorage">
+              <div class="storage-dashboard">
+                <header class="storage-dashboard-header">
+                  <div class="storage-dashboard-heading">
+                    <div class="settings-section-title">&#25968;&#25454;&#23384;&#20648;&#19982;&#28165;&#29702;</div>
+                    <div class="settings-hint">&#37197;&#32622;&#25968;&#25454;&#23384;&#20648;&#36335;&#24452;&#12289;&#25511;&#21046; AI &#25805;&#20316;&#35760;&#24405;&#20445;&#23384;&#26041;&#24335;&#65292;&#20197;&#21450;&#39033;&#30446;&#22238;&#25910;&#31574;&#30053;&#12290;</div>
+                  </div>
+                  <div class="storage-dashboard-metrics">
+                    <div class="storage-metric-card storage-location-card">
+                      <span>&#23384;&#20648;&#20301;&#32622;</span>
+                      <strong class="storage-mode-badge" id="settingsStorageModeBadge">&#26412;&#22320;&#30913;&#30424;</strong>
+                    </div>
+                    <div class="storage-metric-card storage-disk-card">
+                      <div class="storage-disk-labels"><span>&#21487;&#29992;&#31354;&#38388;</span><span>&#24635;&#31354;&#38388;</span></div>
+                      <div class="storage-disk-values"><strong id="settingsDiskFreeValue">--</strong><strong id="settingsDiskTotalValue">--</strong></div>
+                      <div class="storage-disk-track"><span id="settingsDiskUsageBar"></span></div>
+                    </div>
+                  </div>
+                </header>
+
+                <div class="storage-dashboard-grid">
+                  <section class="storage-dashboard-panel storage-directory-panel">
+                    <div class="storage-dashboard-panel-head">
+                      <div>
+                        <div class="storage-dashboard-panel-title">&#25968;&#25454;&#23384;&#20648;&#36335;&#24452;</div>
+                        <div class="settings-hint">&#20197;&#19979;&#36335;&#24452;&#29992;&#20110;&#23384;&#20648; AI &#30456;&#20851;&#25968;&#25454;&#65292;&#21487;&#33258;&#23450;&#20041;&#20462;&#25913;&#12290;</div>
+                      </div>
+                      <button class="settings-path-btn reset" id="settingsDataPathResetBtn">&#24674;&#22797;&#40664;&#35748;&#36335;&#24452;</button>
+                    </div>
+
+                    <input type="text" id="settingsDataPath" hidden readonly>
+                    <div class="settings-storage-info" id="settingsStorageInfo" style="display:none;">
+                      <div class="settings-storage-item" id="storageSkillsPath" data-storage-key="skills"></div>
+                      <div class="settings-storage-item" id="storagePlansPath" data-storage-key="plans"></div>
+                      <div class="settings-storage-item" id="storageProjectsPath" data-storage-key="projects"></div>
+                      <div class="settings-storage-item" id="storageAssetsPath" data-storage-key="assets"></div>
+                      <div class="settings-storage-item" id="storageSummariesPath" data-storage-key="summaries"></div>
+                      <div class="settings-storage-item" id="storageCachePath" data-storage-key="cache"></div>
+                      <div class="settings-storage-item" id="storageTrashPath" data-storage-key="trash"></div>
+                    </div>
+
+                    <button class="storage-add-path-btn" id="settingsDataPathBtn" type="button"><span aria-hidden="true">+</span> &#28155;&#21152;&#33258;&#23450;&#20041;&#36335;&#24452;</button>
+                    <footer class="storage-panel-footer">
+                      <div class="storage-total-usage"><span aria-hidden="true">&#9432;</span><span>&#28789;&#29312;&#25968;&#25454;&#21344;&#29992;</span><strong id="settingsStorageUsageFooter">--</strong></div>
+                      <button class="settings-path-btn reset" id="settingsStorageRefreshBtn" type="button">&#21047;&#26032;&#32479;&#35745;</button>
+                    </footer>
+                  </section>
+
+                  <section class="storage-dashboard-panel storage-policy-panel">
+                    <div class="storage-dashboard-panel-head">
+                      <div>
+                        <div class="storage-dashboard-panel-title">&#31574;&#30053;&#19982;&#28165;&#29702;</div>
+                        <div class="settings-hint">&#25511;&#21046; AI &#25805;&#20316;&#35760;&#24405;&#20445;&#23384;&#26041;&#24335;&#65292;&#24182;&#23450;&#26102;&#28165;&#29702;&#19981;&#24517;&#35201;&#30340;&#25968;&#25454;&#12290;</div>
+                      </div>
+                    </div>
+
+                    <div class="storage-policy-section storage-memo-section">
+                      <div class="storage-policy-section-head">
+                        <div>
+                          <div class="storage-policy-title">AI &#25805;&#20316;&#22791;&#24536;&#24405;</div>
+                          <div class="settings-hint">&#33258;&#21160;&#20445;&#23384;&#27599;&#27425; AI &#25805;&#20316;&#22791;&#24536;&#24405;&#65292;&#20415;&#20110;&#36861;&#28335;&#19982;&#22797;&#30424;&#12290;</div>
+                        </div>
+                        <label class="storage-inline-switch">
+                          <span>&#21551;&#29992;</span>
+                          <span class="settings-toggle"><input type="checkbox" id="settingsAiMemoAutoSave"><span class="settings-toggle-slider" aria-hidden="true"></span></span>
+                        </label>
+                      </div>
+                      <div class="storage-location-row">
+                        <div><span>&#20445;&#23384;&#20301;&#32622;</span><strong id="settingsAiMemoPath">.lingxi/ai-memos/timeline</strong></div>
+                        <button class="settings-path-btn reset" id="settingsAiMemoOpenBtn" type="button">&#25171;&#24320;&#20301;&#32622;</button>
+                      </div>
+                      <div class="worker-model-status" id="settingsAiMemoStatus"></div>
+                    </div>
+
+                    <div class="storage-policy-section storage-trash-section">
+                      <div class="storage-policy-section-head">
+                        <div>
+                          <div class="storage-policy-title">&#39033;&#30446;&#22238;&#25910;&#21306;</div>
+                          <div class="settings-hint">&#21487;&#23558;&#19981;&#20877;&#38656;&#35201;&#30340;&#39033;&#30446;&#31227;&#21160;&#21040;&#22238;&#25910;&#21306;&#65292;&#30830;&#23450;&#21069;&#35831;&#30830;&#35748;&#37322;&#25918;&#30913;&#30424;&#31354;&#38388;&#12290;</div>
+                        </div>
+                        <span class="storage-policy-tag muted">&#21487;&#31649;&#29702;</span>
+                      </div>
+                      <div class="storage-trash-controls">
+                        <label><span>&#20445;&#30041;&#31574;&#30053;</span><select class="settings-input settings-select" id="settingsTrashRetentionDays">
+                          <option value="1">&#20445;&#30041; 1 &#22825;</option><option value="3">&#20445;&#30041; 3 &#22825;</option><option value="7">&#20445;&#30041; 7 &#22825;</option><option value="15">&#20445;&#30041; 15 &#22825;</option><option value="30">&#20445;&#30041; 30 &#22825;</option>
+                        </select></label>
+                        <button class="settings-path-btn storage-primary-btn" id="settingsCleanupTrashBtn" type="button">&#28165;&#29702;&#36807;&#26399;</button>
+                        <button class="settings-path-btn reset" id="settingsClearTrashBtn" type="button">&#28165;&#31354;&#22238;&#25910;&#21306;</button>
+                      </div>
+                      <div class="storage-trash-status" id="settingsTrashStatus"></div>
+                    </div>
+
+                    <div class="storage-policy-section storage-auto-section">
+                      <div class="storage-policy-section-head">
+                        <div>
+                          <div class="storage-policy-title">&#33258;&#21160;&#28165;&#29702;&#35774;&#32622;</div>
+                          <div class="settings-hint">&#24212;&#29992;&#21551;&#21160;&#26102;&#20250;&#25353;&#24403;&#21069;&#20445;&#30041;&#31574;&#30053;&#26816;&#26597;&#36807;&#26399;&#22238;&#25910;&#39033;&#30446;&#12290;</div>
+                        </div>
+                      </div>
+                      <div class="storage-auto-grid">
+                        <label class="storage-readonly-toggle"><span>&#33258;&#21160;&#28165;&#29702;</span><span class="settings-toggle"><input type="checkbox" checked disabled><span class="settings-toggle-slider" aria-hidden="true"></span></span></label>
+                        <label><span>&#28165;&#29702;&#31574;&#30053;</span><select class="settings-input settings-select" disabled><option>&#27599;&#27425;&#21551;&#21160;</option></select></label>
+                        <div><span>&#19979;&#27425;&#36816;&#34892;</span><strong>&#19979;&#27425;&#21551;&#21160;</strong></div>
+                      </div>
+                      <div class="storage-auto-scopes"><span>&#10003; &#28165;&#29702;&#36807;&#26399;&#22238;&#25910;&#39033;&#30446;</span><span>&#10003; &#20445;&#30041;&#24403;&#21069;&#31574;&#30053;&#33539;&#22260;&#20869;&#30340;&#25968;&#25454;</span></div>
+                    </div>
+
+                    <footer class="storage-panel-footer storage-policy-footer">
+                      <div><span aria-hidden="true">&#9432;</span> &#25152;&#26377;&#26356;&#25913;&#23558;&#33258;&#21160;&#20445;&#23384;&#65292;&#26080;&#38656;&#25163;&#21160;&#24212;&#29992;&#12290;</div>
+                      <button class="settings-path-btn storage-primary-btn" id="settingsStoragePolicySaveBtn" type="button">&#20445;&#23384;&#35774;&#32622;</button>
+                    </footer>
+                  </section>
+                </div>
+              </div>
+            </div>
+            <!-- &#20010;&#24615;&#21270; -->
+            <div class="settings-main-content" id="settingsContentTheme">
+              <div class="settings-section">
+                <div class="settings-section-title">界面显示</div>
+                <div class="settings-row-flex">
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="settingsContextCompressionStackVisible" checked>
+                    <span>显示上下文预算指示器</span>
+                  </label>
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="settingsAiMemoRailVisible" checked>
+                    <span>显示 AI 操作备忘录轨迹</span>
+                  </label>
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="behaviorStyleEnabled">
+                    <span>启用自定义行为风格</span>
+                  </label>
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="behaviorStyleCareReminder">
+                    <span>允许温和关怀提醒</span>
+                  </label>
+                </div>
+                <div class="settings-hint">关闭后，对应的界面组件会立即隐藏并停止挂载。 启用自定义行为风格后，下方出现 5 档风格选择；关怀提醒仅在启用行为风格后才会在回复末尾出现。</div>
+                <div class="behavior-style-subpanel" id="behaviorStyleSubpanel" hidden>
+                  <div class="settings-hint" style="margin-top:6px;">影响 AI 的用户可见过程说明、深度思考展示和最终回复语气，不影响工具调用严谨性和代码正确性。 情绪可以模拟，结果不能编造。</div>
+                  <div class="behavior-style-grid" id="behaviorStyleGrid"></div>
+                  <div class="settings-hint" style="margin-top:10px;">长会话或深夜时段，AI 会在回复末尾以你设置的风格自然地说一句关怀话。 紧急任务会自动跳过。</div>
+                  <div class="settings-hint" id="behaviorStyleStatus" style="margin-top:6px; color:var(--text-secondary);">当前未启用自定义行为风格，使用默认风格回复。</div>
+                </div>
+                <div class="settings-section-title" style="margin-top:18px;">桌宠</div>
+                <div class="settings-row-flex">
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="desktopPetEnabled">
+                    <span>启用桌宠</span>
+                  </label>
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="desktopPetFollowAi" checked>
+                    <span>跟随 AI 状态切换动作</span>
+                  </label>
+                </div>
+                <div class="settings-group" style="margin-top:10px;">
+                  <label class="settings-label" for="desktopPetCharacter">桌宠角色</label>
+                  <select class="settings-input" id="desktopPetCharacter"></select>
+                  <div class="settings-hint" id="desktopPetHint" style="margin-top:6px;">角色来自 data/characters 与项目 assets/characters。可用「角色动画」插件制作。</div>
+                </div>
+                <div class="settings-group" style="margin-top:10px;">
+                  <label class="settings-label" for="desktopPetSize">角色大小 <span id="desktopPetSizeValue" style="color:var(--text-secondary);font-weight:normal;">112px</span></label>
+                  <input type="range" id="desktopPetSize" min="80" max="224" step="2" value="112" style="width:100%; margin-top:6px;">
+                  <div class="settings-hint" style="margin-top:4px;">桌面悬浮角色显示宽度，约 80–224 像素。</div>
+                </div>
+                <div class="settings-row-flex" style="margin-top:8px; gap:8px;">
+                  <button type="button" class="settings-btn" id="desktopPetShowBtn" style="width:auto; margin:0; padding:8px 14px;">显示桌宠</button>
+                  <button type="button" class="settings-btn" id="desktopPetHideBtn" style="width:auto; margin:0; padding:8px 14px; background:transparent; border:1px solid var(--border-default); color:var(--text-secondary);">隐藏</button>
+                  <button type="button" class="settings-btn" id="desktopPetRefreshBtn" style="width:auto; margin:0; padding:8px 14px; background:transparent; border:1px solid var(--border-default); color:var(--text-secondary);">刷新列表</button>
+                </div>
+                <div class="settings-hint" id="desktopPetStatus" style="margin-top:8px; color:var(--text-secondary);">桌宠未启用。</div>
+
+                <div class="settings-section-title" style="margin-top:22px;">桌面操控</div>
+                <div class="settings-row-flex">
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="desktopControlEnabled">
+                    <span>允许 AI 操控电脑</span>
+                  </label>
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="desktopControlShowOverlay" checked>
+                    <span>操控时显示屏幕状态条</span>
+                  </label>
+                  <label class="model-capability-option">
+                    <input type="checkbox" id="desktopControlEscCancel" checked>
+                    <span>允许 Esc 立即停止操控</span>
+                  </label>
+                </div>
+                <div class="settings-hint" style="margin-top:6px;">
+                  总开关与「设置 → 能力开关 → 桌面操控」同步。开启后模型可操作 Windows 应用界面；操控时屏幕边缘会脉冲高亮并显示「灵犀正在使用你的电脑」；按 Esc 可中断本轮。关闭后工具对模型不可见，也不会用 shell 键鼠绕过。
+                </div>
+                <div class="settings-row-flex" style="margin-top:8px; gap:8px;">
+                  <button type="button" class="settings-btn" id="desktopControlClearAllowlistBtn" style="width:auto; margin:0; padding:8px 14px; background:transparent; border:1px solid var(--border-default); color:var(--text-secondary);">清空始终允许的应用</button>
+                  <button type="button" class="settings-btn" id="desktopControlInterruptBtn" style="width:auto; margin:0; padding:8px 14px; background:transparent; border:1px solid var(--border-default); color:var(--text-secondary);">立即停止操控</button>
+                </div>
+                <div class="settings-hint" id="desktopControlStatus" style="margin-top:8px; color:var(--text-secondary);">正在读取桌面操控设置…</div>
+                <div class="settings-hint" id="desktopControlAllowlist" style="margin-top:4px; color:var(--text-secondary);"></div>
+              </div>
+              <div class="settings-section">
+                <div class="settings-section-title" data-i18n="auto.l1156">主题预设</div>
+                <div class="theme-preset-grid" id="themePresetGrid">
+                  <button class="theme-preset-card" data-theme-preset="clean">
+                    <span class="theme-preset-swatches"><span style="background:#ffffff"></span><span style="background:#f7f7f5;border-color:#d8d8d4"></span><span style="background:#111827"></span></span>
+                    <span class="theme-preset-name">清爽白</span>
+                  </button>
+                  <button class="theme-preset-card" data-theme-preset="default">
+                    <span class="theme-preset-swatches"><span style="background:#09090b"></span><span style="background:#6366f1"></span><span style="background:#18181b"></span></span>
+                    <span class="theme-preset-name" data-i18n="auto.l1160">经典深色</span>
+                  </button>
+                  <button class="theme-preset-card" data-theme-preset="graphite">
+                    <span class="theme-preset-swatches"><span style="background:#0c0f12"></span><span style="background:#14b8a6"></span><span style="background:#1b2026"></span></span>
+                    <span class="theme-preset-name" data-i18n="auto.l1164">石墨青</span>
+                  </button>
+                  <button class="theme-preset-card" data-theme-preset="dawn">
+                    <span class="theme-preset-swatches"><span style="background:#f7f3ee"></span><span style="background:#8b5cf6"></span><span style="background:#ffffff"></span></span>
+                    <span class="theme-preset-name" data-i18n="auto.l1168">浅色晨雾</span>
+                  </button>
+                  <button class="theme-preset-card" data-theme-preset="parchment">
+                    <span class="theme-preset-swatches"><span style="background:#1a1410"></span><span style="background:#c4956a"></span><span style="background:#221a14"></span></span>
+                    <span class="theme-preset-name">深夜纸书</span>
+                  </button>
+                </div>
+              </div>
+              <div class="settings-section settings-section-collapsible" id="customColorCollapsible">
+                <div class="settings-section-header" data-collapse-toggle="customColorSection">
+                  <span class="settings-section-title" data-i18n="auto.l1173">自定义颜色</span>
+                  <span class="settings-section-chevron" aria-hidden="true"></span>
+                </div>
+                <div class="settings-section-body" data-collapse-body="customColorSection">
+                  <div class="settings-hint">支持分别调整侧边栏、聊天区、输入框、用户消息和 AI 消息颜色。</div>
+                  <div class="theme-color-grid">
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1176">基础背景</span>
+                    <input type="color" id="themeBgBase" value="#ffffff">
+                  </label>
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1180">主背景</span>
+                    <input type="color" id="themeBgPrimary" value="#f7f7f5">
+                  </label>
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1184">卡片背景</span>
+                    <input type="color" id="themeBgSecondary" value="#f2f2f0">
+                  </label>
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1188">控件背景</span>
+                    <input type="color" id="themeBgTertiary" value="#e8e8e5">
+                  </label>
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1192">强调色</span>
+                    <input type="color" id="themeAccentPrimary" value="#111827">
+                  </label>
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1196">强调亮色</span>
+                    <input type="color" id="themeAccentLight" value="#374151">
+                  </label>
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1200">正文文字</span>
+                    <input type="color" id="themeTextPrimary" value="#111827">
+                  </label>
+                  <label class="theme-color-control">
+                    <span data-i18n="auto.l1204">辅助文字</span>
+                    <input type="color" id="themeTextSecondary" value="#5f6368">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>边框颜色</span>
+                    <input type="color" id="themeBorderColor" value="#d8d8d4">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>侧边栏背景</span>
+                    <input type="color" id="themeSidebarBg" value="#f7f7f5">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>侧边栏悬停</span>
+                    <input type="color" id="themeSidebarHover" value="#e5e5e1">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>侧边栏选中</span>
+                    <input type="color" id="themeSidebarActive" value="#dededb">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>聊天区背景</span>
+                    <input type="color" id="themeChatBg" value="#ffffff">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>输入区背景</span>
+                    <input type="color" id="themeInputBg" value="#ffffff">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>输入框边框</span>
+                    <input type="color" id="themeInputBorder" value="#d8d8d4">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>用户消息背景</span>
+                    <input type="color" id="themeUserMessageBg" value="#ffffff">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>用户消息文字</span>
+                    <input type="color" id="themeUserMessageText" value="#111827">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>AI 消息背景</span>
+                    <input type="color" id="themeAiMessageBg" value="#ffffff">
+                  </label>
+                  <label class="theme-color-control">
+                    <span>AI 消息文字</span>
+                    <input type="color" id="themeAiMessageText" value="#111827">
+                  </label>
+                </div>
+                <div class="theme-action-row">
+                  <button class="settings-path-btn" id="themeSaveBtn" data-i18n="auto.l1209">保存颜色</button>
+                  <button class="settings-path-btn reset" id="themeResetBtn" data-i18n="auto.l1210">恢复默认</button>
+                </div>
+                </div>
+              </div>
+              <!-- 预览组件已按用户要求从个性化面板移除 -->
+            </div>
+            <!-- 快捷键 -->
+            <div class="settings-main-content" id="settingsContentShortcuts">
+              <div class="settings-section settings-section-collapsible" id="shortcutsCollapsible">
+                <div class="settings-section-header" data-collapse-toggle="shortcutsSection" aria-controls="shortcutsSectionBody" aria-expanded="true">
+                  <span class="settings-section-title">快捷键</span>
+                  <span class="settings-section-chevron" aria-hidden="true"></span>
+                </div>
+                <div class="settings-section-body" id="shortcutsSectionBody" data-collapse-body="shortcutsSection">
+                  <div class="settings-hint">集中查看当前软件的键盘操作。Windows / Linux 使用 Ctrl，macOS 使用 Cmd。</div>
+                  <div class="settings-shortcuts-list">
+                    <div class="settings-shortcut-row"><span>聚焦聊天输入框</span><kbd>Ctrl / Cmd + L</kbd></div>
+                    <div class="settings-shortcut-row"><span>打开设置</span><kbd>Ctrl / Cmd + ,</kbd></div>
+                    <div class="settings-shortcut-row"><span>打开模型选择</span><kbd>Ctrl / Cmd + Shift + M</kbd></div>
+                    <div class="settings-shortcut-row"><span>折叠 / 展开左侧栏</span><kbd>Ctrl / Cmd + B</kbd></div>
+                    <div class="settings-shortcut-row"><span>显示 / 隐藏右侧视图</span><kbd>Ctrl / Cmd + Shift + E</kbd></div>
+                    <div class="settings-shortcut-row"><span>打开 / 切换终端面板</span><kbd>Ctrl / Cmd + `</kbd></div>
+                    <div class="settings-shortcut-row"><span>打开 Git 面板</span><kbd>Ctrl / Cmd + Shift + G</kbd></div>
+                    <div class="settings-shortcut-row"><span>打开 Markdown 预览</span><kbd>Ctrl / Cmd + Shift + P</kbd></div>
+                    <div class="settings-shortcut-row"><span>新建 / 清空会话</span><kbd>Ctrl / Cmd + N</kbd></div>
+                    <div class="settings-shortcut-row"><span>撤销</span><kbd>Ctrl / Cmd + Z</kbd></div>
+                    <div class="settings-shortcut-row"><span>重做</span><kbd>Ctrl / Cmd + Shift + Z</kbd></div>
+                    <div class="settings-shortcut-row"><span>画布中删除选中节点</span><kbd>Ctrl / Cmd + Shift + X</kbd></div>
+                    <div class="settings-shortcut-row"><span>中断正在执行的 AI</span><kbd>Esc</kbd></div>
+                  </div>
+                </div>
+              </div>
+              <div class="settings-section settings-section-collapsible" id="shortcutsHelpCollapsible">
+                <div class="settings-section-header" data-collapse-toggle="shortcutsHelpSection" aria-controls="shortcutsHelpSectionBody" aria-expanded="true">
+                  <span class="settings-section-title">操作说明</span>
+                  <span class="settings-section-chevron" aria-hidden="true"></span>
+                </div>
+                <div class="settings-section-body" id="shortcutsHelpSectionBody" data-collapse-body="shortcutsHelpSection">
+                  <div class="settings-help-list">
+                    <div class="settings-help-item"><div class="settings-help-summary"><span>项目切换</span></div><div class="settings-help-body">点击左侧项目即可切换；鼠标悬停项目可查看目录路径。</div></div>
+                    <div class="settings-help-item"><div class="settings-help-summary"><span>项目与目录</span></div><div class="settings-help-body">双击项目图标可打开项目文件管理器；项目右侧箭头可展开或收起项目详情；更多菜单支持置顶、重命名、归档和移除。</div></div>
+                    <div class="settings-help-item"><div class="settings-help-summary"><span>消息操作</span></div><div class="settings-help-body">在聊天消息上右键可引用、多选或删除；进入多选后可批量删除消息。</div></div>
+                    <div class="settings-help-item"><div class="settings-help-summary"><span>聊天记录</span></div><div class="settings-help-body">文件菜单支持导入和导出当前项目聊天记录；导入会覆盖当前项目现有聊天记录。</div></div>
+                    <div class="settings-help-item"><div class="settings-help-summary"><span>聊天输入与协作</span></div><div class="settings-help-body">在输入框输入 @ 可启用相关指令，例如多agent协作、工作台等；同一项目可在左侧项目卡片上点「新开会话」切换独立对话。</div></div>
+                    <div class="settings-help-item"><div class="settings-help-summary"><span>安全快照</span></div><div class="settings-help-body">项目卡片中的快照状态用于查看 AI 修改前后的安全记录和 Git 状态。</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 帮助教程 -->
+            <div class="settings-main-content" id="settingsContentOther">
+              <div class="settings-section">
+                <div class="settings-section-title" data-i18n="auto.l1231">文生图模型配置教程</div>
+                <div class="settings-help-list">
+                  <details class="settings-help-item" open>
+                    <summary class="settings-help-summary">
+                      <span data-i18n="auto.l1235">OpenAI / 中转站文生图</span>
+                      <em>gpt-image-2</em>
+                    </summary>
+                    <div class="settings-help-body">
+                      <div class="settings-help-row"><span><span data-i18n="auto.39">显示名称</span></span><code>OpenAI Image</code></div>
+                      <div class="settings-help-row"><span data-i18n="auto.L1240"></span><code>gpt-image-2</code></div>
+                      <div class="settings-help-row"><span>URL</span><code data-i18n="auto.l1241">填写默认 GPT URL 或中转站 URL</code></div>
+                      <div class="settings-help-row"><span>API Key</span><code data-i18n="auto.l1242">填写对应平台的 Key</code></div>
+                      <div class="settings-help-row"><span data-i18n="auto.L1243"></span><code data-i18n="auto.l1243">只勾选 图片生成</code></div>
+                    </div>
+                    <div class="settings-help-note" data-i18n="auto.l1245">保存后，到“模型能力调度”里的“文生图 / 图生图”排序，把它拖到你想要的优先级。</div>
+                  </details>
+                  <details class="settings-help-item">
+                    <summary class="settings-help-summary">
+                      <span data-i18n="auto.l1249">智谱 GLM-Image 文生图</span>
+                      <em>glm-image</em>
+                    </summary>
+                    <div class="settings-help-body">
+                      <div class="settings-help-row"><span data-i18n="auto.l127">显示名称</span><code data-i18n="auto.l1253">智谱 GLM-Image</code></div>
+                      <div class="settings-help-row"><span data-i18n="auto.L1254"></span><code>glm-image</code></div>
+                      <div class="settings-help-row"><span>URL</span><code>https://open.bigmodel.cn/api/paas/v4</code></div>
+                      <div class="settings-help-row"><span>API Key</span><code data-i18n="auto.l1256">填写智谱 API Key</code></div>
+                      <div class="settings-help-row"><span><span data-i18n="auto.41">模型能力</span></span><code data-i18n="auto.L1257"></code></div>
+                    </div>
+                    <div class="settings-help-note" data-i18n="auto.l1259">保存后，到“模型能力调度”里的“文生图 / 图生图”排序；排第一就会优先调用智谱出图。</div>
+                  </details>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 底部设置区域 -->
+        <div class="sidebar-footer-content">
+          <div class="sidebar-settings-menu" id="sidebarSettingsMenu">
+            <button class="sidebar-settings-menu-item" id="sidebarSettingsThemeToggle" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18 4.5 4.5 0 0 1 0-18z"/></svg>
+              <span>主题</span>
+              <svg class="sidebar-settings-menu-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+            </button>
+            <div class="sidebar-theme-options" id="sidebarThemeOptions">
+              <button class="sidebar-theme-option" type="button" data-sidebar-theme="clean"><span class="sidebar-theme-dot clean"></span><span>清爽白</span></button>
+              <button class="sidebar-theme-option" type="button" data-sidebar-theme="default"><span class="sidebar-theme-dot default"></span><span>经典深色</span></button>
+              <button class="sidebar-theme-option" type="button" data-sidebar-theme="graphite"><span class="sidebar-theme-dot graphite"></span><span>石墨青</span></button>
+              <button class="sidebar-theme-option" type="button" data-sidebar-theme="dawn"><span class="sidebar-theme-dot dawn"></span><span>浅色晨雾</span></button>
+              <button class="sidebar-theme-option" type="button" data-sidebar-theme="parchment"><span class="sidebar-theme-dot parchment"></span><span>深夜纸书</span></button>
+            </div>
+            <button class="sidebar-settings-menu-item" id="sidebarSettingsOpenBtn" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span>设置</span>
+            </button>
+          </div>
+          <div class="sidebar-settings-btn" id="btnSettings" title="打开设置">
+            <div class="sidebar-account-avatar">设</div>
+            <div class="sidebar-account-text">
+              <div class="sidebar-account-name">设置</div>
+              <div class="sidebar-account-plan">模型、权限与个性化</div>
+            </div>
+            <div class="sidebar-account-actions">
+              <button class="sidebar-account-action" id="settingsQuickBtn" type="button" title="设置">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+    </div><!-- main-content -->
+  </div><!-- app -->
+  <script>
+    // Repair the legacy malformed sidebar nesting before feature modules bind their controls.
+    (() => {
+      const footer = document.getElementById('sidebarFooter');
+      const account = document.querySelector('.sidebar-footer-content');
+      if (!footer || !account) return;
+      account.classList.remove('sidebar-footer-content');
+      account.classList.add('sidebar-footer');
+      footer.replaceWith(account);
+    })();
+  </script>
+
+  <!-- 自定义右键菜单 -->
+  <div class="context-menu" id="contextMenu">
+    <div class="context-menu-item" data-action="cut">
+      <span class="context-menu-label" data-i18n="auto.l1329">剪切</span>
+      <span class="context-menu-shortcut">⌃X</span>
+    </div>
+    <div class="context-menu-item" data-action="copy">
+      <span class="context-menu-label" data-i18n="auto.L1333"></span>
+      <span class="context-menu-shortcut">⌃C</span>
+    </div>
+    <div class="context-menu-item" data-action="paste">
+      <span class="context-menu-label" data-i18n="auto.l1337">粘贴</span>
+      <span class="context-menu-shortcut">⌃V</span>
+    </div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" data-action="selectAll">
+      <span class="context-menu-label" data-i18n="menu.edit.selectAll" data-i18n="auto.l1342">全选</span>
+      <span class="context-menu-shortcut">⌃A</span>
+    </div>
+  </div>
+</div><!-- #app -->
+  <!-- Toast 提示容器 -->
+  <div class="toast-container" id="toastContainer"></div>
+  <!-- 添加远程仓库对话框 -->
+  <div class="git-remote-modal" id="gitRemoteModal">
+    <div class="git-remote-dialog">
+      <div class="git-remote-title">添加远程仓库</div>
+      <div class="git-remote-desc">当前项目没有关联远程仓库，添加后即可同步和上传。请在 GitHub、GitLab 或 Gitee 上先创建一个空仓库，再把地址粘贴到下方。</div>
+      <label class="git-remote-label">远程仓库地址</label>
+      <input class="git-remote-input" id="gitRemoteUrlInput" type="text" placeholder="https://github.com/用户名/仓库名.git 或 git@github.com:用户名/仓库名.git" autocomplete="off" spellcheck="false">
+      <div class="git-remote-hint">支持 HTTPS 和 SSH 两种格式</div>
+      <div class="git-remote-error" id="gitRemoteError"></div>
+      <div class="git-remote-actions">
+        <button class="git-remote-btn" id="gitRemoteCancelBtn">取消</button>
+        <button class="git-remote-btn primary" id="gitRemoteConfirmBtn">确认添加</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="scripts/core/i18n.js"></script>
+  <script type="module" src="scripts/features/i18n-settings.js"></script>
+  <script src="scripts/utils/html-utils.js"></script>
+  <script src="scripts/utils/format-utils.js"></script>
+  <script src="scripts/utils/logger.js"></script>
+  <script src="scripts/features/behavior-style-settings.js"></script>
+
+  <script src="scripts/features/desktop-control-settings.js"></script>
+  <script src="scripts/features/feature-settings.js"></script>
+                <script src="scripts/features/browser-settings.js"></script>
+  <script src="scripts/features/inline-visualize-ui.js"></script>
+    <script src="scripts/features/collapsible-sections.js"></script>
+  <script src="scripts/core/monaco.js"></script>
+  <script src="scripts/core/file-utils.js"></script>
+  <script src="scripts/features/models.js"></script>
+  <script src="scripts/features/projects.js"></script>
+  <script src="scripts/features/project-workspaces.js"></script>
+  <script src="scripts/features/project-list.js?v=20260719-session-activity"></script>
+  <script src="scripts/features/delete-project-dialog.js"></script>
+  <script src="scripts/features/branch-danger-dialog.js"></script>
+  <script src="scripts/features/attachments.js"></script>
+  <script src="scripts/features/ask-popup.js"></script>
+  <script src="scripts/features/context-ui.js"></script>
+  <script src="scripts/features/context-visibility.js"></script>
+  <script src="scripts/features/settings-panel-ui.js"></script>
+  <script src="scripts/features/chat-history.js"></script>
+  <script src="scripts/features/thinking-display.js"></script>
+  <script src="scripts/features/tool-display-metadata.js"></script>
+  <script src="scripts/features/tool-detail-lazy.js?v=20260720-tool-detail-height-fix"></script>
+  <script src="scripts/features/chat-renderer.js"></script>
+  <script src="scripts/features/chat-history-ranges.js"></script>
+  <script src="scripts/features/chat-virtual-scroller.js?v=20260719-running-ui-v2"></script>
+  <script src="scripts/features/chat-history-paginator.js?v=20260719-running-ui-v2"></script>
+  <script src="scripts/features/chat-session-cleanup.js"></script>
+  <script src="scripts/features/chat-session-scroll-restorer.js"></script>
+  <script src="scripts/features/chat-scroll.js"></script>
+  <script src="scripts/features/context-menu.js"></script>
+  <script src="scripts/features/layout-ui.js"></script>
+  <script src="scripts/features/keyboard-shortcuts.js"></script>
+  <script src="scripts/features/titlebar-ui.js"></script>
+  <script src="scripts/features/about-update.js"></script>
+  <script src="scripts/features/panel-manager.js"></script>
+  <script src="scripts/features/git-panel.js"></script>
+  <script src="scripts/features/storage-settings.js"></script>
+  <script src="scripts/features/ai-operation-memo-settings.js"></script>
+
+  <script src="scripts/features/worker-model-settings.js"></script>
+  <script src="scripts/features/ai-permission-settings.js"></script>
+  <script src="scripts/features/theme-settings.js"></script>
+  <script src="scripts/features/model-brand-icons.js"></script>
+  <script src="scripts/features/input-footer-brand-icon.js"></script>
+
+  <!-- 新增模型弹窗 -->
+  <div class="settings-model-editor-modal" id="settingsModelEditorModal" aria-hidden="true">
+    <div class="settings-model-editor-overlay" id="settingsModelEditorOverlay"></div>
+    <div class="settings-model-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="settingsModelEditorTitle">
+      <div class="settings-model-editor-header">
+        <div class="settings-model-editor-heading">
+          <span class="settings-model-editor-heading-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 2 8 4.5v9L12 22l-8-6.5v-9L12 2Z"/><path d="m4.5 6.8 7.5 4.4 7.5-4.4M12 11.2V22"/></svg>
+          </span>
+          <div>
+            <div class="settings-section-title" id="settingsModelEditorTitle"><span data-i18n="auto.23">新增模型</span></div>
+            <p>配置模型连接、能力与认证信息</p>
+          </div>
+        </div>
+        <button class="settings-model-editor-close" id="settingsModelEditorClose" type="button" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+        </button>
+      </div>
+      <div class="settings-model-editor-body">
+        <div class="settings-model-editor-form">
+          <section class="settings-model-editor-card settings-model-basic-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>基础信息</span></h3>
+            <div class="settings-model-fields">
+              <div class="settings-group">
+                <label class="settings-label"><span data-i18n="auto.24">显示名称</span> <span class="settings-optional" data-i18n="auto.l939">（可选）</span></label>
+                <input type="text" class="settings-input" id="settingsModelName" placeholder="不填则使用模型 ID" data-i18n-placeholder="auto.l940.placeholder">
+                <div class="settings-hint">用于界面显示的名称</div>
+              </div>
+              <div class="settings-group">
+                <label class="settings-label"><span data-i18n="auto.l132">模型 ID</span></label>
+                <input type="text" class="settings-input" id="settingsModelId" placeholder="如 gpt-5.2、claude-sonnet-5" data-i18n-placeholder="auto.l133.placeholder">
+                <div class="settings-hint">API 请求使用的实际模型 ID</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-model-editor-card settings-model-connection-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 12h8M15 7l5 5-5 5M9 17l-5-5 5-5"/></svg><span>连接配置</span></h3>
+            <div class="settings-group">
+              <label class="settings-label">API URL（OpenAI / Anthropic）</label>
+              <div class="settings-model-url-row">
+                <div class="settings-input-row">
+                  <input type="text" class="settings-input" id="settingsApiUrl" placeholder="OpenAI: https://api.openai.com/v1；Anthropic: https://api.anthropic.com/v1" data-i18n-placeholder="auto.l946.placeholder">
+                  <button class="settings-lock-btn" id="settingsUrlLockBtn" type="button" aria-pressed="false" title="锁定URL，添加后不清空" data-i18n-title="auto.l947.title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </button>
+                </div>
+              </div>
+              <label class="model-url-mode-option"><input type="checkbox" id="settingsApiUrlFullMode"><span>完整 URL（不自动拼接路径）</span></label>
+              <div class="settings-hint" data-i18n="auto.l951">根据接口类型自动补全 /chat/completions、/responses 或 /messages 路径</div>
+            </div>
+            <div class="settings-group">
+              <label class="settings-label">API Key</label>
+              <div class="key-wrapper">
+                <input type="password" class="settings-input key-input" id="settingsApiKey" placeholder="sk-••••••••••••••••••••••••••••••••">
+                <button class="key-toggle" id="settingsKeyToggle" type="button" aria-label="显示 API Key" aria-pressed="false" title="显示 API Key">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.6"/><path class="key-toggle-slash" d="m4 4 16 16"/></svg>
+                </button>
+                <button class="settings-lock-btn" id="settingsKeyLockBtn" type="button" aria-pressed="false" title="锁定Key，添加后不清空" data-i18n-title="auto.l958.title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-model-editor-card settings-model-capability-card">
+            <div class="settings-model-capability-main">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"/><path d="m18 15 .9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15Z"/></svg><span data-i18n="auto.26">模型能力</span></h3>
+              <div class="model-capability-grid settings-capability-grid">
+                <label class="model-capability-option"><input type="checkbox" id="settingsCapabilityText" checked><span data-i18n="auto.27">文本</span></label>
+                <label class="model-capability-option"><input type="checkbox" id="settingsCapabilityVision"><span data-i18n="auto.28">视觉理解</span></label>
+                <label class="model-capability-option"><input type="checkbox" id="settingsCapabilityImageGeneration"><span data-i18n="auto.29">图片生成</span></label>
+                <label class="model-capability-option"><input type="checkbox" id="settingsCapabilityMusicGeneration"><span data-i18n="auto.30">音乐生成</span></label>
+                <label class="model-capability-option"><input type="checkbox" id="settingsCapabilityVideoGeneration"><span data-i18n="auto.31">视频生成</span></label>
+                <label class="model-capability-option"><input type="checkbox" id="settingsCapabilitySpeechSynthesis"><span>语音合成</span></label>
+                <label class="model-capability-option"><input type="checkbox" id="settingsCapabilityToolCalling" checked><span data-i18n="auto.32">工具调用</span></label>
+              </div>
+              <div class="settings-hint" data-i18n="auto.l973">能力标注会影响图片理解等跨模型中转；调用其他能力模型前会先询问。</div>
+            </div>
+            <aside class="settings-model-connection-preview">
+              <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 12h8M15 7l5 5-5 5M9 17l-5-5 5-5"/></svg>连接预览</h4>
+              <span>基础地址</span>
+              <strong id="settingsModelPreviewBase">https://api.openai.com/v1</strong>
+              <span>请求路由（自动补全）</span>
+              <div id="settingsModelPreviewRoutes"><code>/chat/completions</code><code>/responses</code><code>/messages</code></div>
+              <p id="settingsModelTestStatus" aria-live="polite"></p>
+            </aside>
+          </section>
+        </div>
+      </div>
+      <footer class="settings-model-editor-footer">
+        <div class="settings-model-security-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l7 4v5c0 5-3 9-7 11-4-2-7-6-7-11V6l7-4z"/><path d="M9 12l2 2 4-5"/></svg><span>基于能力路由与安全校验，保障调用稳定与合规。</span></div>
+        <div class="settings-model-footer-actions">
+          <button class="settings-model-cancel-btn" id="settingsModelCancelBtn" type="button">取消</button>
+          <button class="settings-model-test-btn settings-model-footer-test-btn" id="settingsModelTestBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6M12 9v6"/><rect x="4" y="5" width="16" height="14" rx="3"/></svg><span>测试连接</span></button>
+          <button class="settings-btn" id="settingsAddModelBtn" data-i18n="auto.l975">添加模型</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="scripts/features/settings-main.js?v=20260722-card-reorder-v2"></script>
+  <script src="scripts/features/cloud-token-usage-settings.js?v=20260719-restore"></script>
+  <script src="scripts/features/skills-main.js"></script>
+  <script src="scripts/features/quick-model-settings.js"></script>
+  <script src="scripts/features/project-actions.js"></script>
+  <script src="scripts/features/change-diff-policy.js"></script>
+  <script src="scripts/features/bookmarks-ui.js"></script>
+  <script src="scripts/features/window-tabs.js"></script>
+  <script src="scripts/features/text-input-ui.js"></script>
+  <script src="scripts/features/terminal-panel.js"></script>
+  <script src="scripts/features/integration-market.js"></script>
+  <script src="scripts/features/local-apps.js?v=icon-src-sanitize-20260615"></script>
+  <script src="scripts/libs/qrcode.js"></script>
+  <script src="scripts/features/remote-bridge-ui.js"></script>
+  <script src="scripts/features/file-preview.js"></script>
+  <script src="scripts/features/markdown-table-parser.js?v=20260721-structured-table"></script>
+  <script src="scripts/features/ai-message-ui.js?v=20260721-structured-table"></script>
+  <script src="scripts/features/ai-tool-renderer.js?v=20260720-tool-detail-height-fix"></script>
+  <script src="scripts/features/operation-summary.js"></script>
+  <script src="scripts/features/ai-change-pill.js"></script>
+  <script src="scripts/features/message-queue.js"></script>
+  <script src="scripts/features/agent-collaboration-lifecycle.js"></script>
+  <script src="scripts/features/agent-collaboration-ui.js"></script>
+  <script src="scripts/features/memo-logo-scene.js"></script>
+  <script src="scripts/features/no-project-logo-scene.js"></script>
+  <script src="scripts/features/handoff-confirmation-queue.js"></script>
+  <script src="scripts/features/ai-operation-memo-ui.js"></script>
+  <script src="scripts/features/ai-operation-memo-rail.js"></script>
+  <script src="scripts/features/skill-draft-ui.js"></script>
+  <script src="scripts/features/context-compression-status.js"></script>
+  <script src="scripts/features/change-session-actions.js"></script>
+  <script src="scripts/features/toast-ui.js"></script>
+  <script src="scripts/features/summary-menu.js"></script>
+    <script src="scripts/features/cache-usage-renderer.js?v=20260722-hit-rate-bounds-v1"></script>
+  <script src="scripts/features/workbench-mention.js"></script>
+  <script src="scripts/features/context-status-poller.js"></script>
+  <script src="scripts/features/project-branch-session.js"></script>
+  <script src="scripts/features/archive-panel.js"></script>
+  <script src="scripts/features/collaboration-preview.js"></script>
+  <script src="scripts/features/titlebar-actions.js"></script>
+  <script src="scripts/features/running-ui-restore.js?v=20260719-running-ui-v2"></script>
+  <script src="scripts/features/ai-runtime-cache.js?v=20260719-running-ui-v2"></script>
+  <script src="scripts/features/ai-stream-renderer.js"></script>
+  <script src="scripts/features/background-reply-sound.js"></script>
+  <script src="scripts/features/chat-runtime-history-cache.js"></script>
+  <script src="scripts/features/ipc-reply-listener.js?v=20260719-session-activity"></script>
+  <script src="scripts/features/ipc-ai-stream-listeners.js?v=20260719-session-activity"></script>
+  <script src="scripts/features/ipc-exec-system-listeners.js"></script>
+  <script src="scripts/features/plan-progress-ui.js"></script>
+  <script src="scripts/features/project-ai-state.js"></script>
+  <script src="scripts/features/ai-content-renderer.js"></script>
+  <script src="scripts/features/exec-mode-selector.js"></script>
+  <script src="scripts/features/ask-popup-handler.js"></script>
+  <script src="scripts/features/project-switcher.js?v=20260719-running-ui-v2"></script>
+  <script src="scripts/features/message-sender.js?v=20260719-session-activity"></script>
+  <script src="scripts/features/project-state-helpers.js?v=20260719-running-ui-restore"></script>
+  <script src="scripts/features/stateless-sessions.js"></script>
+  <script src="scripts/features/ai-message-helpers.js?v=20260719-running-ui-v2"></script>
+  <script src="scripts/features/tabs-proxy.js"></script>
+  <script src="scripts/features/model-settings-proxy.js"></script>
+  <script src="scripts/features/canvas-workflow-save-queue.js"></script>
+  <script src="scripts/features/canvas-workflows.js"></script>
+  <script src="scripts/features/canvas-inspector.js"></script>
+  <script src="scripts/canvas-view.js"></script>
+  <script src="scripts/app.js?v=20260719-running-ui-v2"></script>
+  <script type="module" src="scripts/features/startup-access-topology.js?v=20260722-lingxi-topology-v1"></script>
+  <script type="module" src="scripts/features/startup-access-visual.js?v=20260722-light-rays-v10"></script>
+  <script src="scripts/features/startup-access-gateway.js?v=20260722-normal-access-v3"></script>
+  <script src="scripts/agent-ui.js"></script>
+  <script src="scripts/message-copy.js"></script>
+  <script src="scripts/features/context-memory-ruler.js"></script>
+  <script>
+    // 初始化 Agent UI 模块
+    if (window.AgentUI) window.AgentUI.init()
+    if (window.BackgroundReplySound) window.BackgroundReplySound.init()
+    // 初始化复制按钮模块
+    if (window.CopyButton) window.CopyButton.init()
+    // 画布视图 & 功能栏标签切换
+    if (window.CanvasView) {
+      const canvasContainer = document.getElementById('canvasViewContainer');
+      const chatMessages = document.getElementById('chatMessages');
+      const chatInputArea = document.querySelector('.chat-input-area');
+      const center = document.getElementById('center');
+      const chatToolbar = document.getElementById('chatToolbar');
+      const toolbarTabs = document.querySelectorAll('.chat-toolbar-tab');
+      const workTab = document.querySelector('.chat-toolbar-tab[data-tab="work"]');
+      let canvasInited = false;
+      let lastNonCanvasTab = 'chat';
+
+      function switchCanvasViewTab(tabName) {
+        // 标记布局切换中，临时禁用过渡动画避免全量消息重排闪烁
+        var root = document.documentElement;
+        root.classList.add('layout-switching');
+        if (window.__canvasTabRaf) cancelAnimationFrame(window.__canvasTabRaf);
+        window.__canvasTabRaf = requestAnimationFrame(function () {
+          window.__canvasTabRaf = requestAnimationFrame(function () {
+            window.__canvasTabRaf = 0;
+            root.classList.remove('layout-switching');
+          });
+        });
+
+        if (tabName === 'work') {
+          // 切换到画布模式
+          toolbarTabs.forEach(t => t.classList.remove('active'));
+          workTab.classList.add('active');
+          workTab.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回';
+          chatMessages.style.display = 'none';
+          if (chatInputArea) chatInputArea.style.display = 'none';
+          if (center) center.classList.add('canvas-mode');
+          if (chatToolbar) chatToolbar.classList.add('canvas-mode');
+          canvasContainer.classList.add('active');
+          if (!canvasInited) {
+            window.CanvasView.init(canvasContainer);
+            canvasInited = true;
+          } else {
+            // 重新显示时刷新渲染
+            setTimeout(function () { window.CanvasView.fitView && window.CanvasView.fitView(); }, 100);
+          }
+        } else {
+          // 返回聊天模式（只剩 work tab，非画布状态）
+          toolbarTabs.forEach(t => t.classList.remove('active'));
+          workTab.classList.add('active');
+          workTab.textContent = '画布';
+          chatMessages.style.display = '';
+          if (chatInputArea) chatInputArea.style.display = '';
+          if (center) center.classList.remove('canvas-mode');
+          if (chatToolbar) chatToolbar.classList.remove('canvas-mode');
+          canvasContainer.classList.remove('active');
+          window.closeCanvasInspector?.();
+          lastNonCanvasTab = 'chat';
+        }
+      }
+
+      window.CanvasView.onBack = function () {
+        switchCanvasViewTab(lastNonCanvasTab);
+      };
+      window.openCanvasView = function () {
+        switchCanvasViewTab('work');
+      };
+      window.closeCanvasView = function () {
+        switchCanvasViewTab(lastNonCanvasTab);
+      };
+
+      // 画布标签点击：如果在画布模式则返回，否则进入画布
+      workTab.addEventListener('click', function () {
+        if (canvasContainer.classList.contains('active')) {
+          // 当前在画布模式，返回聊天
+          switchCanvasViewTab(lastNonCanvasTab);
+        } else {
+          switchCanvasViewTab('work');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

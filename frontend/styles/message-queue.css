@@ -1,0 +1,329 @@
+/* ================================================================
+   灵犀 LingXi — 消息队列 UI
+   队列胶囊放在输入框外部上方，与 diff 胶囊并排；
+   每个胶囊：标题 + 「消息注入」 + 「×」
+   点击标题 → 弹窗看完整内容 + 发送/消息注入/删除
+   ================================================================ */
+
+.chat-input-pills {
+  width: min(100%, var(--chat-message-track-width, 780px));
+  margin: 0 auto 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+}
+
+.chat-input-pills:empty {
+  display: none;
+}
+
+.ai-change-pill-area {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.message-queue-area {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: flex-end;
+}
+
+.message-queue-area:not(.has-items) {
+  display: none;
+}
+
+.message-queue-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 10px;
+  background: color-mix(in srgb, var(--bg-secondary, #f3f4f6) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-subtle, #d4d4d8) 70%, transparent);
+  border-radius: 999px;
+  color: var(--text-secondary, #475569);
+  font-size: 12px;
+  line-height: 1.4;
+  max-width: 100%;
+  min-width: 0;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.message-queue-pill:hover {
+  background: color-mix(in srgb, var(--bg-hover, #e5e7eb) 70%, transparent);
+  border-color: color-mix(in srgb, var(--border-subtle, #d4d4d8) 90%, transparent);
+}
+
+.message-queue-pill[data-channel="interject"] {
+  border-color: color-mix(in srgb, var(--accent-primary, #06b6d4) 50%, transparent);
+  background: color-mix(in srgb, var(--accent-primary, #06b6d4) 8%, transparent);
+}
+
+.message-queue-pill-title {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 2px 0;
+  max-width: 220px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.message-queue-pill-title:hover {
+  color: var(--text-primary, #111827);
+}
+
+.message-queue-pill-title:focus-visible {
+  outline: 2px solid var(--accent-primary, #06b6d4);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
+.message-queue-pill-action {
+  border: 0;
+  background: transparent;
+  color: var(--accent-primary, #06b6d4);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.message-queue-pill-action:hover {
+  background: color-mix(in srgb, var(--accent-primary, #06b6d4) 14%, transparent);
+}
+
+.message-user-interject[data-interject-state="queued"] .message-bubble::after,
+.message-user-interject[data-interject-state="consumed"] .message-bubble::after {
+  content: '消息注入';
+  display: inline-flex;
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-primary, #06b6d4) 12%, transparent);
+  color: var(--accent-primary, #06b6d4);
+  font-size: 11px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.message-user-interject[data-interject-state="consumed"] .message-bubble::after {
+  content: '已接收';
+  background: color-mix(in srgb, var(--success, #22c55e) 13%, transparent);
+  color: var(--success, #16a34a);
+}
+
+.message-queue-pill-close {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted, #94a3b8);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 6px;
+  border-radius: 6px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-queue-pill-close:hover {
+  background: color-mix(in srgb, var(--error, #ef4444) 14%, transparent);
+  color: var(--error, #ef4444);
+}
+
+/* ===== 弹窗 ===== */
+
+.message-queue-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.message-queue-modal-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: mqMaskFade 0.16s ease;
+}
+
+.message-queue-modal {
+  position: relative;
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(70vh, 560px);
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-subtle, #d4d4d8);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+  animation: mqModalIn 0.18s ease;
+}
+
+.message-queue-modal-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle, #e5e7eb);
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.message-queue-modal-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--text-muted, #94a3b8) 18%, transparent);
+  color: var(--text-secondary, #475569);
+}
+
+.message-queue-modal-tag.is-interject {
+  background: color-mix(in srgb, var(--accent-primary, #06b6d4) 18%, transparent);
+  color: var(--accent-primary, #06b6d4);
+}
+
+.message-queue-modal-time {
+  flex: 1 1 auto;
+  font-size: 12px;
+  color: var(--text-muted, #94a3b8);
+}
+
+.message-queue-modal-close {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted, #94a3b8);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.message-queue-modal-close:hover {
+  background: var(--bg-hover, #e5e7eb);
+  color: var(--text-primary, #111827);
+}
+
+.message-queue-modal-body {
+  padding: 14px 16px;
+  flex: 1 1 auto;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-primary, #111827);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.message-queue-modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-subtle, #e5e7eb);
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.message-queue-modal-btn {
+  border: 1px solid var(--border-subtle, #d4d4d8);
+  background: var(--bg-primary, #ffffff);
+  color: var(--text-secondary, #475569);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.message-queue-modal-btn:hover {
+  background: var(--bg-hover, #e5e7eb);
+}
+
+.message-queue-modal-btn.primary {
+  background: var(--accent-primary, #06b6d4);
+  border-color: var(--accent-primary, #06b6d4);
+  color: #ffffff;
+}
+
+.message-queue-modal-btn.primary:hover {
+  background: color-mix(in srgb, var(--accent-primary, #06b6d4) 88%, #000000 12%);
+}
+
+.message-queue-modal-btn.ghost {
+  border-color: transparent;
+  color: var(--text-muted, #94a3b8);
+}
+
+.message-queue-modal-btn.ghost:hover {
+  background: color-mix(in srgb, var(--error, #ef4444) 14%, transparent);
+  color: var(--error, #ef4444);
+}
+
+@keyframes mqMaskFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes mqModalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===== 即发注入的 user 消息在聊天区的轻量提示 ===== */
+
+.message.message-user-interject {
+  position: relative;
+}
+
+.message.message-user-interject .interject-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-primary, #06b6d4) 14%, transparent);
+  color: var(--accent-primary, #06b6d4);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.message.message-user-interject .interject-tag::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-primary, #06b6d4);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--accent-primary, #06b6d4) 60%, transparent);
+}

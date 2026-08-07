@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "minimal-letterhead",
+  "kind": "document",
+  "title": "商务信笺",
+  "reference": "../../templates/minimal-letterhead.docx",
+  "defaultOutput": "assets/office/minimal-letterhead"
+}

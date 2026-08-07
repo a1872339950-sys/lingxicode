@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "team-alignment",
+  "kind": "presentation",
+  "title": "团队对齐",
+  "reference": "../../templates/team-alignment.pptx",
+  "defaultOutput": "assets/office/team-alignment"
+}

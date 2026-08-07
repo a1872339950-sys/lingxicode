@@ -1,0 +1,22 @@
+// file_preview 模块
+export default {
+  'auto.js_file_preview_92_5': 'Failed to read image: ',
+  'auto.js_file_preview_88_4': 'Failed to read image: ',
+  'auto.js_file_preview_70_3': 'Call failed: ',
+  'auto.js_file_preview_66_2': 'Failed to read file: ',
+  'auto.js_file_preview_62_1': 'This is a folder. Opened its location.',
+  'auto.js_file_preview_36_0': 'Empty path',
+  'auto.js_file_preview_36_1': '路径为空',
+  'auto.js_file_preview_62_2': '这是文件夹，已打开文件夹位置。',
+  'auto.js_file_preview_66_3': '读取文件失败: ',
+  'auto.js_file_preview_66_4': '\\n路径: ',
+  'auto.js_file_preview_70_5': '调用失败: ',
+  'auto.js_file_preview_88_6': '读取图片失败: ',
+  'auto.js_file_preview_88_7': '未知错误',
+  'auto.js_file_preview_88_8': '\\n路径: ',
+  'auto.js_file_preview_92_9': '读取图片失败: ',
+  'auto.js_file_preview_108_10': '保存图片',
+  'auto.js_file_preview_108_11': '保存图片',
+  'auto.js_file_preview_111_12': '关闭',
+  'auto.js_file_preview_115_13': '<div class="image-preview-expiry-note">此图片将在一天后自动删除，若需保存，请自行保存。</div>',
+};

@@ -1,0 +1,205 @@
+/* ================================================================
+   灵犀 LingXi — 右键菜单 (Context Menu)
+   缩放渐显动画 · 玻璃态背景 · 左侧强调指示条 · 快捷键药丸
+   Teal/Cyan 强调 · 2026 AI 产品风格
+   ================================================================ */
+
+/* ── 菜单容器 (scale+fade 入场动画) ── */
+.context-menu {
+  position: fixed;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 6px 0;
+  min-width: 180px;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.03) inset;
+  z-index: 9999;
+  opacity: 0;
+  transform: scale(0.92) translateY(-6px);
+  transform-origin: top left;
+  transition: opacity var(--dur-normal) var(--ease-spring),
+              transform var(--dur-normal) var(--ease-spring);
+  pointer-events: none;
+}
+
+.context-menu.show {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+/* ── 菜单项 ── */
+.context-menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 9px 14px 9px 18px;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+  overflow: hidden;
+}
+
+/* 悬停左侧强调指示条 */
+.context-menu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  background: var(--accent-gradient);
+  border-radius: 0 2px 2px 0;
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition: opacity var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
+}
+
+.context-menu-item:hover {
+  background: var(--accent-glow);
+}
+
+.context-menu-item:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.context-menu-item:hover .context-menu-label {
+  color: var(--accent-light);
+}
+
+/* ── 图标 ── */
+.context-menu-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  transition: color var(--dur-fast);
+  flex-shrink: 0;
+}
+
+.context-menu-item:hover .context-menu-icon {
+  color: var(--accent-primary);
+}
+
+/* ── 标签文字 ── */
+.context-menu-label {
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  flex: 1;
+  transition: color var(--dur-fast);
+}
+
+/* ── 快捷键药丸 ── */
+.context-menu-shortcut {
+  font-size: var(--text-xs);
+  color: var(--text-disabled);
+  background: color-mix(in srgb, var(--bg-tertiary) 80%, transparent);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--border-subtle);
+  line-height: 1.6;
+  flex-shrink: 0;
+  transition: color var(--dur-fast), border-color var(--dur-fast);
+}
+
+.context-menu-item:hover .context-menu-shortcut {
+  color: var(--text-muted);
+  border-color: var(--border-default);
+}
+
+/* ── 分隔线 ── */
+.context-menu-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 8%, var(--border-default) 50%, transparent 92%);
+  margin: 5px 10px;
+}
+
+/* ================================================================
+   摘要文件菜单 (Summary File Menu)
+   ================================================================ */
+.summary-file-menu {
+  position: fixed;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 6px 0;
+  min-width: 160px;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.03) inset;
+  z-index: 9999;
+  opacity: 0;
+  transform: scale(0.92) translateY(-4px);
+  transform-origin: top left;
+  transition: opacity var(--dur-normal) var(--ease-spring),
+              transform var(--dur-normal) var(--ease-spring);
+  pointer-events: none;
+}
+
+.summary-file-menu.show {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+/* ── 摘要菜单项 ── */
+.summary-menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px 9px 18px;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease);
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  overflow: hidden;
+}
+
+/* 悬停左侧强调指示条 */
+.summary-menu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  background: var(--accent-gradient);
+  border-radius: 0 2px 2px 0;
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition: opacity var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
+}
+
+.summary-menu-item:hover {
+  background: var(--accent-glow);
+  color: var(--accent-light);
+}
+
+.summary-menu-item:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.summary-menu-item svg {
+  opacity: 0.6;
+  transition: opacity var(--dur-fast), color var(--dur-fast);
+  flex-shrink: 0;
+}
+
+.summary-menu-item:hover svg {
+  opacity: 1;
+  color: var(--warning);
+}

@@ -1,0 +1,22 @@
+// integration_market module
+export default {
+  'auto.js_integration_market_251_0': 'This integration is not yet connected',
+  'auto.js_integration_market_43_31': 'Music Studio',
+  'auto.js_integration_market_44_32': 'Audio creation',
+  'auto.js_integration_market_45_33': 'Multi-instrument draft music and audio export',
+  'auto.js_integration_market_46_34': 'Built-in web audio synthesizer for playable draft music, with sections, instruments, tempo, scale, step editing and export.',
+  'auto.js_integration_market_47_35': 'User available',
+  'auto.js_integration_market_47_36': 'Agent available',
+  'auto.js_integration_market_47_37': 'Audio export',
+  'auto.js_integration_market_47_38': 'Right panel',
+  'auto.js_integration_market_49_39': 'Users can generate, audition, edit and export draft music directly.',
+  'auto.js_integration_market_50_40': 'AI can open the same studio and create music through tools.',
+  'auto.js_integration_market_51_41': 'Built-in piano, violin, xylophone, electronic drums and other tracks without external soundfonts.',
+  'auto.js_integration_market_52_42': 'Supports intro, verse, chorus, climax and outro arrangement.',
+  'auto.js_integration_market_53_43': 'Supports audio export for temporary BGM in pages, games or demos.',
+  'auto.js_integration_market_56_44': 'Click Use to open the music studio window.',
+  'auto.js_integration_market_57_45': 'Choose style, tempo, scale and density, then generate a phrase.',
+  'auto.js_integration_market_58_46': 'Toggle timeline steps, play previews, or export the full audio.',
+  'auto.js_integration_market_222_48': 'Music Studio',
+  'auto.js_integration_market_251_50': 'This integration is not yet connected',
+};

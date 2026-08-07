@@ -1,0 +1,7 @@
+{
+  "name": "conversation-visual",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lingxi conversation inline visual plugin",
+  "license": "Apache-2.0"
+}

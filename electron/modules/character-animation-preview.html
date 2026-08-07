@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>角色动画预览</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      user-select: none;
+      -webkit-app-region: drag;
+      color-scheme: dark;
+    }
+    /* 桌宠用自定义拖拽，便于按位移切跑动帧 */
+    body.pet-mode {
+      -webkit-app-region: no-drag;
+      cursor: grab;
+    }
+    body.pet-mode.is-dragging {
+      cursor: grabbing;
+    }
+    .stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 10px 10px 12px;
+      box-sizing: border-box;
+      gap: 8px;
+    }
+    /* 桌宠：角色靠右下，状态托盘叠在上方 */
+    body.pet-mode .stage {
+      padding: 8px 10px 10px;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 6px;
+      -webkit-app-region: no-drag;
+    }
+    .activity-tray {
+      -webkit-app-region: no-drag;
+      display: none;
+      width: min(100%, 300px);
+      max-width: 100%;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(20, 22, 30, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(12px);
+      color: #e8eaf2;
+      font-size: 11px;
+      line-height: 1.4;
+      box-sizing: border-box;
+    }
+    body.pet-mode .activity-tray.visible {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .activity-tray .tone-dot {
+      flex: 0 0 auto;
+      width: 8px;
+      height: 8px;
+      margin-top: 4px;
+      border-radius: 50%;
+      background: #8b92a8;
+    }
+    .activity-tray[data-tone="busy"] .tone-dot {
+      background: #7c9cff;
+      box-shadow: 0 0 8px rgba(124, 156, 255, 0.55);
+      animation: tone-pulse 1.4s ease-in-out infinite;
+    }
+    .activity-tray[data-tone="wait"] .tone-dot {
+      background: #f0b429;
+    }
+    .activity-tray[data-tone="error"] .tone-dot {
+      background: #f07178;
+    }
+    .activity-tray[data-tone="done"] .tone-dot {
+      background: #4fd1a5;
+    }
+    @keyframes tone-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.85); }
+    }
+    .activity-tray .tray-body {
+      min-width: 0;
+      flex: 1;
+    }
+    .activity-tray .tray-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      opacity: 0.72;
+      margin-bottom: 2px;
+    }
+    .activity-tray .tray-text {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+      color: #eef0f7;
+    }
+    .sprite-wrap {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+    body.pet-mode .sprite-wrap {
+      flex: 0 0 auto;
+      height: auto;
+      width: auto;
+      justify-content: flex-end;
+    }
+    #sprite {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      background-repeat: no-repeat;
+      background-color: transparent;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    #frameImg {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+    .bar {
+      -webkit-app-region: no-drag;
+      position: relative;
+      width: 100%;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 8px;
+      border-radius: 12px;
+      background: rgba(18, 18, 24, 0.88);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      color: #e8e8f0;
+      font-size: 12px;
+      z-index: 2;
+    }
+    /* 桌宠模式：不显示底栏与调试 hint */
+    body.pet-mode .bar,
+    body.pet-mode .hint {
+      display: none !important;
+    }
+    .title {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      opacity: 0.9;
+    }
+    button, .dd-trigger {
+      -webkit-app-region: no-drag;
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.08);
+      color: #f3f3f8;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      line-height: 1.3;
+    }
+    button:hover, .dd-trigger:hover,
+    button:focus-visible, .dd-trigger:focus-visible {
+      background: rgba(255,255,255,0.14);
+      outline: none;
+    }
+    button.danger { border-color: rgba(248,113,113,0.45); color: #fecaca; }
+    .dd {
+      position: relative;
+      flex: 0 0 auto;
+      min-width: 112px;
+      max-width: 42%;
+    }
+    .dd-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      text-align: left;
+      box-sizing: border-box;
+    }
+    .dd-trigger-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .dd-caret { opacity: 0.7; font-size: 10px; flex-shrink: 0; }
+    .dd-menu {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(100% + 6px);
+      max-height: 180px;
+      overflow: auto;
+      margin: 0;
+      padding: 4px;
+      list-style: none;
+      border-radius: 10px;
+      background: #1a1b22;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+      z-index: 20;
+    }
+    .dd.open .dd-menu { display: block; }
+    .dd-item {
+      display: block;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #e8e8f0;
+      text-align: left;
+      border-radius: 7px;
+      padding: 7px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    .dd-item:hover, .dd-item:focus-visible {
+      background: rgba(124, 58, 237, 0.28);
+      outline: none;
+    }
+    .dd-item.active {
+      background: rgba(124, 58, 237, 0.38);
+      color: #fff;
+    }
+    .hint {
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      right: 10px;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="hint" id="hint">拖动窗口 · 预览中</div>
+    <div class="activity-tray" id="activityTray" aria-live="polite" role="status">
+      <span class="tone-dot" aria-hidden="true"></span>
+      <div class="tray-body">
+        <span class="tray-label" id="trayLabel">忙碌中</span>
+        <span class="tray-text" id="trayText"></span>
+      </div>
+    </div>
+    <div class="sprite-wrap">
+      <div id="sprite" hidden></div>
+      <img id="frameImg" alt="" hidden />
+    </div>
+    <div class="bar" id="controlBar">
+      <div class="title" id="title">角色动画</div>
+      <div class="dd" id="actionDd">
+        <button type="button" class="dd-trigger" id="actionTrigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="dd-trigger-label" id="actionLabel">idle</span>
+          <span class="dd-caret">▲</span>
+        </button>
+        <ul class="dd-menu" id="actionMenu" role="listbox"></ul>
+      </div>
+      <button type="button" id="btnPause">暂停</button>
+      <button type="button" id="btnClose" class="danger">关闭</button>
+    </div>
+  </div>
+  <script>
+    const state = {
+      mode: 'atlas',
+      petMode: false,
+      displayName: '',
+      actions: [],
+      actionId: '',
+      frameIndex: 0,
+      timer: null,
+      paused: false,
+      sheetUrl: '',
+      cellW: 192,
+      cellH: 208,
+      columns: 8,
+      scale: 1.5,
+      mascotWidthPx: 0,
+      trayText: '',
+      trayTimer: null,
+      drag: null
+    }
+
+    const elSprite = document.getElementById('sprite')
+    const elFrame = document.getElementById('frameImg')
+    const elTitle = document.getElementById('title')
+    const elHint = document.getElementById('hint')
+    const elTray = document.getElementById('activityTray')
+    const elTrayText = document.getElementById('trayText')
+    const elTrayLabel = document.getElementById('trayLabel')
+    const elDd = document.getElementById('actionDd')
+    const elTrigger = document.getElementById('actionTrigger')
+    const elLabel = document.getElementById('actionLabel')
+    const elMenu = document.getElementById('actionMenu')
+    const btnPause = document.getElementById('btnPause')
+    const btnClose = document.getElementById('btnClose')
+
+    function clearTimer() {
+      if (state.timer) {
+        clearTimeout(state.timer)
+        state.timer = null
+      }
+    }
+
+    function currentAction() {
+      return state.actions.find(a => a.id === state.actionId) || state.actions[0] || null
+    }
+
+    function paintAtlasFrame(action, frameIndex) {
+      const col = frameIndex % (action.frameCount || 1)
+      const row = action.row ?? 0
+      const x = -col * state.cellW * state.scale
+      const y = -row * state.cellH * state.scale
+      elSprite.style.width = (state.cellW * state.scale) + 'px'
+      elSprite.style.height = (state.cellH * state.scale) + 'px'
+      elSprite.style.backgroundImage = `url("${state.sheetUrl}")`
+      elSprite.style.backgroundSize = `${state.columns * state.cellW * state.scale}px auto`
+      elSprite.style.backgroundPosition = `${x}px ${y}px`
+    }
+
+    function paintFramesFrame(action, frameIndex) {
+      const urls = action.frameUrls || []
+      const url = urls[frameIndex % Math.max(urls.length, 1)]
+      if (url) elFrame.src = url
+    }
+
+    function scheduleNext(action) {
+      clearTimer()
+      if (state.paused || !action) return
+      const count = state.mode === 'frames'
+        ? (action.frameUrls?.length || 1)
+        : (action.frameCount || 1)
+      const durs = action.durationsMs || []
+      const byFps = action.fps ? Math.round(1000 / action.fps) : 140
+      const delay = durs[state.frameIndex] || byFps
+      state.timer = setTimeout(() => {
+        state.frameIndex = (state.frameIndex + 1) % Math.max(count, 1)
+        renderFrame()
+        scheduleNext(action)
+      }, Math.max(40, delay))
+    }
+
+    function renderFrame() {
+      const action = currentAction()
+      if (!action) return
+      if (state.mode === 'frames') {
+        elSprite.hidden = true
+        elFrame.hidden = false
+        paintFramesFrame(action, state.frameIndex)
+      } else {
+        elFrame.hidden = true
+        elSprite.hidden = false
+        paintAtlasFrame(action, state.frameIndex)
+      }
+      if (!state.petMode) {
+        elHint.textContent = `${action.id} · 帧 ${state.frameIndex + 1}`
+      }
+    }
+
+    function closeMenu() {
+      elDd.classList.remove('open')
+      elTrigger.setAttribute('aria-expanded', 'false')
+    }
+
+    function openMenu() {
+      elDd.classList.add('open')
+      elTrigger.setAttribute('aria-expanded', 'true')
+    }
+
+    function toggleMenu() {
+      if (elDd.classList.contains('open')) closeMenu()
+      else openMenu()
+    }
+
+    function setAction(actionId) {
+      if (!state.actions.some(a => a.id === actionId)) return
+      state.actionId = actionId
+      state.frameIndex = 0
+      const action = currentAction()
+      elLabel.textContent = action?.label || actionId
+      fillMenu()
+      closeMenu()
+      clearTimer()
+      renderFrame()
+      scheduleNext(action)
+    }
+
+    function fillMenu() {
+      elMenu.innerHTML = ''
+      for (const a of state.actions) {
+        const li = document.createElement('li')
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'dd-item' + (a.id === state.actionId ? ' active' : '')
+        btn.textContent = a.label || a.id
+        btn.dataset.id = a.id
+        btn.setAttribute('role', 'option')
+        btn.setAttribute('aria-selected', a.id === state.actionId ? 'true' : 'false')
+        btn.onclick = (e) => {
+          e.stopPropagation()
+          setAction(a.id)
+        }
+        li.appendChild(btn)
+        elMenu.appendChild(li)
+      }
+      const cur = currentAction()
+      elLabel.textContent = cur?.label || state.actionId || '动作'
+    }
+
+    function applyPetMode(on) {
+      state.petMode = !!on
+      document.body.classList.toggle('pet-mode', state.petMode)
+    }
+
+    function showActivityTray(payload) {
+      if (!payload) {
+        clearActivityTray()
+        return
+      }
+      const label = String(payload.label || '').trim()
+      const body = String(payload.body || payload.text || '').trim()
+      if (!label && !body) {
+        clearActivityTray()
+        return
+      }
+      state.trayText = body
+      elTrayLabel.textContent = label || '状态'
+      elTrayText.textContent = body || ''
+      elTray.dataset.tone = payload.tone || 'busy'
+      elTray.classList.add('visible')
+      if (state.trayTimer) clearTimeout(state.trayTimer)
+      // 无新内容一段时间后自动收起，避免桌面常驻脏信息
+      const ttl = Number(payload.ttlMs)
+      state.trayTimer = setTimeout(() => {
+        elTray.classList.remove('visible')
+      }, Number.isFinite(ttl) && ttl > 0 ? ttl : 14000)
+    }
+
+    function clearActivityTray() {
+      state.trayText = ''
+      elTrayText.textContent = ''
+      elTrayLabel.textContent = ''
+      elTray.classList.remove('visible')
+      delete elTray.dataset.tone
+      if (state.trayTimer) {
+        clearTimeout(state.trayTimer)
+        state.trayTimer = null
+      }
+    }
+
+    window.boot = function boot(payload) {
+      clearTimer()
+      applyPetMode(!!payload.petMode)
+      state.mode = payload.mode || 'atlas'
+      state.displayName = payload.displayName || payload.id || '角色动画'
+      state.actions = Array.isArray(payload.actions) ? payload.actions : []
+      state.actionId = payload.actionId || state.actions[0]?.id || ''
+      state.sheetUrl = payload.sheetUrl || ''
+      state.cellW = payload.cellWidth || 192
+      state.cellH = payload.cellHeight || 208
+      state.columns = payload.columns || 8
+      state.mascotWidthPx = Number(payload.mascotWidthPx) || 0
+      if (state.mascotWidthPx > 0) {
+        state.scale = state.mascotWidthPx / state.cellW
+      } else {
+        state.scale = payload.scale || (state.petMode ? (112 / 192) : 1.35)
+      }
+      state.paused = false
+      state.frameIndex = 0
+      btnPause.textContent = '暂停'
+      elTitle.textContent = state.displayName
+      if (!state.petMode) clearActivityTray()
+      fillMenu()
+      closeMenu()
+      renderFrame()
+      scheduleNext(currentAction())
+    }
+
+    window.setPreviewAction = function setPreviewAction(actionId) {
+      setAction(actionId)
+      return { ok: true, actionId: state.actionId }
+    }
+
+    /** 桌宠状态托盘：{ label, body, tone } 或 null 清空 */
+    window.setActivityTray = function setActivityTray(payload) {
+      if (!state.petMode) return { ok: false }
+      if (payload == null) {
+        clearActivityTray()
+        return { ok: true }
+      }
+      showActivityTray(payload)
+      return { ok: true }
+    }
+
+    // 兼容旧调用名
+    window.setThinkingText = function setThinkingText(text, label) {
+      if (!state.petMode) return { ok: false }
+      showActivityTray({
+        label: label || '忙碌中',
+        body: text,
+        tone: 'busy'
+      })
+      return { ok: true }
+    }
+
+    window.clearThinkingText = function clearThinkingText() {
+      clearActivityTray()
+      return { ok: true }
+    }
+
+    window.getPreviewStatus = function getPreviewStatus() {
+      return {
+        open: true,
+        petMode: state.petMode,
+        displayName: state.displayName,
+        actionId: state.actionId,
+        frameIndex: state.frameIndex,
+        paused: state.paused,
+        actions: state.actions.map(a => a.id),
+        tray: state.trayText
+      }
+    }
+
+    elTrigger.onclick = (e) => {
+      e.stopPropagation()
+      toggleMenu()
+    }
+    btnPause.onclick = () => {
+      state.paused = !state.paused
+      btnPause.textContent = state.paused ? '播放' : '暂停'
+      if (state.paused) clearTimer()
+      else scheduleNext(currentAction())
+    }
+    btnClose.onclick = () => {
+      if (window.lingxiPreview && window.lingxiPreview.close) window.lingxiPreview.close()
+      else window.close()
+    }
+    document.addEventListener('click', (e) => {
+      if (!elDd.contains(e.target)) closeMenu()
+    })
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu()
+    })
+
+    // —— 桌宠自定义拖拽：位移 → 左右跑；单击 → 由主进程切 jumping ——
+    function petBridge() {
+      return window.lingxiPet || null
+    }
+
+    function endPetDrag(e) {
+      if (!state.drag) return
+      const bridge = petBridge()
+      if (bridge?.drag) {
+        bridge.drag({
+          phase: 'end',
+          screenX: e?.screenX,
+          screenY: e?.screenY,
+          moved: !!state.drag.moved
+        })
+      }
+      state.drag = null
+      document.body.classList.remove('is-dragging')
+      try { window.releasePointerCapture?.(e?.pointerId) } catch (_) { /* ignore */ }
+    }
+
+    document.addEventListener('pointerdown', (e) => {
+      if (!state.petMode) return
+      if (e.button !== 0) return
+      // 托盘可点选文字区域，不启动拖窗
+      if (e.target?.closest?.('.activity-tray')) return
+      state.drag = {
+        startSX: e.screenX,
+        startSY: e.screenY,
+        lastSX: e.screenX,
+        moved: false,
+        pointerId: e.pointerId
+      }
+      try { e.currentTarget?.setPointerCapture?.(e.pointerId) } catch (_) {
+        try { document.body.setPointerCapture?.(e.pointerId) } catch (__) { /* ignore */ }
+      }
+      const bridge = petBridge()
+      if (bridge?.drag) {
+        bridge.drag({
+          phase: 'start',
+          screenX: e.screenX,
+          screenY: e.screenY
+        })
+      }
+    })
+
+    document.addEventListener('pointermove', (e) => {
+      if (!state.petMode || !state.drag) return
+      const dx = e.screenX - state.drag.startSX
+      const dy = e.screenY - state.drag.startSY
+      if (!state.drag.moved && Math.hypot(dx, dy) > 5) {
+        state.drag.moved = true
+        document.body.classList.add('is-dragging')
+      }
+      if (!state.drag.moved) return
+      const bridge = petBridge()
+      if (bridge?.drag) {
+        bridge.drag({
+          phase: 'move',
+          screenX: e.screenX,
+          screenY: e.screenY,
+          dx: e.screenX - state.drag.lastSX
+        })
+      }
+      state.drag.lastSX = e.screenX
+    })
+
+    document.addEventListener('pointerup', endPetDrag)
+    document.addEventListener('pointercancel', endPetDrag)
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "simple-light",
+  "kind": "presentation",
+  "title": "简约演示",
+  "reference": "../../templates/simple-light.pptx",
+  "defaultOutput": "assets/office/simple-light"
+}

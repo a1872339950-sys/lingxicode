@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "project-kickoff",
+  "kind": "presentation",
+  "title": "项目启动",
+  "reference": "../../templates/project-kickoff.pptx",
+  "defaultOutput": "assets/office/project-kickoff"
+}

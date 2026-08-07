@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>灵犀棱镜生成场 QA</title>
+  <link rel="stylesheet" href="../../frontend/styles/tokens.css">
+  <link rel="stylesheet" href="../../frontend/styles/chat.css?v=20260711-media-timeline-3">
+  <style>
+    body { margin: 0; background: var(--bg-base); color: var(--text-primary); font-family: Inter, "Microsoft YaHei", sans-serif; }
+    main { width: min(1120px, calc(100% - 40px)); margin: 28px auto; }
+    h1 { margin: 0 0 6px; font-size: 20px; font-weight: 600; letter-spacing: 0; }
+    .subtitle { margin: 0 0 22px; color: var(--text-muted); font-size: 13px; }
+    .preview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .preview-cell { min-width: 0; padding: 14px; background: var(--bg-primary); border: 1px solid var(--border-default); border-radius: 8px; }
+    .preview-cell h2 { margin: 0 0 10px; color: var(--text-secondary); font-size: 13px; font-weight: 560; }
+    .ai-message { width: 100%; }
+    .tool-call-group { width: 100%; }
+    .tool-call-card { width: calc(100% - 20px); }
+    @media (max-width: 760px) { .preview-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>灵犀棱镜生成场</h1>
+    <p class="subtitle">真实工具卡结构中的等待状态</p>
+    <div class="preview-grid" id="previewGrid"></div>
+  </main>
+  <script>
+    window.HtmlUtils = {
+      escapeHtml(value = '') { const node = document.createElement('div'); node.textContent = String(value); return node.innerHTML; },
+      displayText(key = '', vars = {}) { return Object.keys(vars).reduce((text, name) => text.replace(`{${name}}`, vars[name]), key); },
+      displayCount(key = '', count = 0) { return `${count}`; },
+      getFullFilePath(path = '') { return path; },
+      clipText(value = '') { return String(value); },
+      formatFileList() { return ''; },
+      formatMatches() { return ''; },
+      formatSearchCandidates() { return ''; },
+      formatPathFailureDetail() { return ''; }
+    };
+    window.ToolDisplayMetadata = {
+      getPendingText() { return '正在生成'; },
+      getToolLabel(name) { return ({ generate_image: '生成图片', generate_video: '生成视频', generate_music: '生成音乐', inspect_image: '视觉分析' })[name] || name; },
+      getTypeLabel(type) { return type; }
+    };
+    window.toggleToolGroup = function () {};
+    window.toggleToolCard = function () {};
+  </script>
+  <script src="../../frontend/scripts/features/ai-tool-renderer.js"></script>
+  <script>
+    const cases = [
+      { title: '图片生成', name: 'generate_image', type: 'image', args: { prompt: '银蓝色空间装置，克制的金属折射与清晰主体' } },
+      { title: '视频生成', name: 'generate_video', type: 'video', args: { prompt: '三角结构在深空中缓慢展开，镜头稳定推进' } },
+      { title: '音乐生成', name: 'generate_music', type: 'music', args: { prompt: '冷静、精密、具有空间层次的电子氛围音乐' } },
+      { title: '视觉理解', name: 'inspect_image', type: 'vision', args: { path: '../../frontend/assets/startup/lingxi-access-poster.png', question: '分析画面的布局、材质与视觉层级' } }
+    ];
+    const grid = document.getElementById('previewGrid');
+    cases.forEach(item => {
+      const cell = document.createElement('section');
+      cell.className = 'preview-cell';
+      cell.innerHTML = `<h2>${item.title}</h2><div class="ai-message"><div class="ai-dynamic-area"><div class="ai-work-segment"></div></div></div>`;
+      grid.appendChild(cell);
+      const message = cell.querySelector('.ai-message');
+      const renderer = window.AiToolRenderer.bind({
+        getCurrentAiMsg: () => message,
+        getCurrentProjectPath: () => '',
+        getOpIcons: () => ({ [item.type]: '<img src="../../frontend/assets/brand/lingxi-logo-transparent.png" width="15" height="15" alt="">' }),
+        getOpTypes: () => ({ [item.name]: item.type }),
+        getFileName: path => String(path || '').split(/[\\/]/).pop(),
+        calculateEditLines: () => ({ add: 0, remove: 0 }),
+        sanitizeContent: value => value
+      });
+      renderer.preShowOperation(item.name, item.args, { toolCallId: `preview-${item.name}` });
+    });
+  </script>
+</body>
+</html>

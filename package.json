@@ -1,0 +1,87 @@
+{
+  "name": "lingxi-lingxicode",
+  "version": "1.0.0",
+  "description": "An open-source desktop AI workspace built with Electron.",
+  "license": "Apache-2.0",
+  "author": "LingXiCode contributors",
+  "private": false,
+  "main": "electron/main.js",
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@vscode/ripgrep": "^1.18.0",
+    "esbuild": "^0.28.0",
+    "sharp": "^0.35.3",
+    "three": "^0.184.0",
+    "undici": "^6.26.0",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "electron": "^43.1.1",
+    "electron-builder": "^26.8.1",
+    "png-to-ico": "^3.0.1"
+  },
+  "scripts": {
+    "start": "electron .",
+    "check": "node scripts/check-syntax.js",
+    "audit:open-source": "node scripts/open-source-audit.js",
+    "verify": "npm run check && npm run audit:open-source",
+    "test:scenarios": "node scripts/real-scenarios/runner.js",
+    "pack": "electron-builder --dir",
+    "dist": "npm run dist:self",
+    "dist:legacy": "electron-builder",
+    "dist:self": "powershell -NoProfile -ExecutionPolicy Bypass -File installer/build-self-installer.ps1",
+    "dist:self:skip-pack": "powershell -NoProfile -ExecutionPolicy Bypass -File installer/build-self-installer.ps1 -SkipPack"
+  },
+  "build": {
+    "appId": "com.lingxi.lingxicode",
+    "productName": "灵犀 LingXiCode",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "package.json",
+      "electron/**",
+      "frontend/**",
+      "assets/**",
+      "config/**",
+      "skills/**",
+      "plugins/**",
+      "docs/**",
+      "!installer/**",
+      "!dist/**",
+      "!temp/**",
+      "!.tmp-real-scenarios/**",
+      "!.lingxi-temp-diagnostics/**",
+      "!codemap/**",
+      "!change-sessions/**",
+      "!node_modules/.cache/**",
+      "!**/*.log",
+      "!**/*.zip",
+      "!**/*.7z",
+      "!**/*.rar",
+      "!**/*.blockmap",
+      "!**/*Setup*.exe",
+      "!**/*Installer*.exe",
+      "!__scan*",
+      "!*.bat"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/@vscode/ripgrep*/**",
+      "electron/powershell/**"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "executableName": "lingxi-lingxicode",
+      "target": [
+        "dir"
+      ]
+    }
+  }
+}

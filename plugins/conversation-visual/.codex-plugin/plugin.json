@@ -1,0 +1,36 @@
+{
+  "name": "conversation-visual",
+  "version": "1.0.0",
+  "description": "对话内嵌可交互示意：流程图、关系图、步骤模拟、可调参数对比。",
+  "author": {
+    "name": "Lingxi"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "visual",
+    "diagram",
+    "示意",
+    "流程图"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "对话示意",
+    "shortDescription": "在对话里用可交互图把道理讲清楚",
+    "longDescription": "当结构、流程、对比或模拟用图比长文更清楚时，在对话中静默生成可交互示意（支持折叠）。静态结构优先 Mermaid。安装后选用「对话示意」。需设置中开启「对话内可视化」。",
+    "developerName": "灵犀",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "用可交互步骤图解释二分查找怎么工作",
+      "画一张模块调用关系示意",
+      "对比两种方案的状态流转"
+    ],
+    "logo": "./assets/logo.svg",
+    "brandColor": "#8B5CF6",
+    "screenshots": []
+  }
+}

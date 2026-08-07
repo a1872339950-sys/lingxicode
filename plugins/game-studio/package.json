@@ -1,0 +1,12 @@
+{
+  "name": "game-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lingxi Game Studio plugin: browser games 2D/3D workflows",
+  "license": "Apache-2.0",
+  "scripts": {
+    "scaffold:phaser": "node scripts/scaffold-phaser.cjs",
+    "scaffold:three": "node scripts/scaffold-three.cjs",
+    "scaffold:r3f": "node scripts/scaffold-r3f.cjs"
+  }
+}

@@ -1,0 +1,21 @@
+// worker_model_settings 模块
+export default {
+  'auto.js_worker_model_settings_114_6': '本地模型连接失败',
+  'auto.js_worker_model_settings_111_5': '本地模型连接成功',
+  'auto.js_worker_model_settings_107_4': '正在测试 Ollama...',
+  'auto.js_worker_model_settings_104_3': '不支持测试本地模型',
+  'auto.js_worker_model_settings_95_2': '已保存。账本整理会优先使用本地模型，失败后再用云端兜底。',
+  'auto.js_worker_model_settings_94_1': '后台整理模型配置已保存',
+  'auto.js_worker_model_settings_88_0': '不支持保存后台整理模型配置',
+  'auto.js_worker_model_settings_62_1': '<option value="">不使用云端兜底</option>',
+  'auto.js_worker_model_settings_88_2': '不支持保存后台整理模型配置',
+  'auto.js_worker_model_settings_94_3': '后台整理模型配置已保存',
+  'auto.js_worker_model_settings_95_4': '已保存。账本整理会优先使用本地模型，失败后再用云端兜底。',
+  'auto.js_worker_model_settings_97_5': '保存失败',
+  'auto.js_worker_model_settings_98_6': '保存失败',
+  'auto.js_worker_model_settings_104_7': '不支持测试本地模型',
+  'auto.js_worker_model_settings_107_8': '正在测试 Ollama...',
+  'auto.js_worker_model_settings_111_9': '本地模型连接成功',
+  'auto.js_worker_model_settings_113_10': '连接失败',
+  'auto.js_worker_model_settings_114_11': '本地模型连接失败',
+};

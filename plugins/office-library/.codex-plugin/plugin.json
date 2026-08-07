@@ -1,0 +1,37 @@
+{
+  "name": "office-library",
+  "version": "0.1.0",
+  "description": "灵犀办公文档库：在项目/本地目录中发现、摘要、安全编辑 Word / Excel / PowerPoint 存量文件。",
+  "author": {
+    "name": "Lingxi",
+    "url": "https://lingxi.local"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "office",
+    "docx",
+    "xlsx",
+    "pptx",
+    "document-library",
+    "spreadsheet",
+    "presentation"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "办公文档库",
+    "shortDescription": "发现并安全编辑项目内 Office 文件",
+    "longDescription": "面向项目或本地文档库：先定位再读写。支持 Word 结构编辑、Excel 公式与表格、PowerPoint 版式敏感修改，以及跨文档维护。不绑定微软云连接器；输出始终落在用户指定或项目目录。",
+    "developerName": "Lingxi",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "汇总项目 docs 目录下最近的 Office 文件",
+      "更新这份 Excel 跟踪表的进度列并保留公式",
+      "在现有 PPT 里加一页总结页并保持原风格"
+    ],
+    "brandColor": "#0369A1",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg",
+    "screenshots": []
+  }
+}

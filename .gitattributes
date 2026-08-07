@@ -1,0 +1,3 @@
+# Keep Windows launcher byte-for-byte so CMD receives UTF-8 BOM and CRLF.
+*.bat -text
+

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "business-review",
+  "kind": "presentation",
+  "title": "业务复盘",
+  "reference": "../../templates/business-review.pptx",
+  "defaultOutput": "assets/office/business-review"
+}

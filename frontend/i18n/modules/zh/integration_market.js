@@ -1,0 +1,22 @@
+// integration_market 模块
+export default {
+  'auto.js_integration_market_251_0': '该集成暂未接入',
+  'auto.js_integration_market_43_31': '音乐工作台',
+  'auto.js_integration_market_44_32': '音频创作',
+  'auto.js_integration_market_45_33': '多乐器纯音乐草稿与音频导出',
+  'auto.js_integration_market_46_34': '用内置网页音频合成器生成可播放的纯音乐演示，支持歌曲段落、钢琴、小提琴、木琴、电音鼓点、速度、调式、轨道步进编辑和音频导出。',
+  'auto.js_integration_market_47_35': '用户可用',
+  'auto.js_integration_market_47_36': 'Agent 可用',
+  'auto.js_integration_market_47_37': '音频导出',
+  'auto.js_integration_market_47_38': '右侧视图',
+  'auto.js_integration_market_49_39': '用户可以直接生成、试听、修改和导出纯音乐草稿。',
+  'auto.js_integration_market_50_40': 'AI 可以打开同一套工作台并通过工具创作乐段。',
+  'auto.js_integration_market_51_41': '内置钢琴、小提琴、木琴、电音鼓点、合成主音、氛围垫、低音、原声鼓组等轨道，不依赖外部音源。',
+  'auto.js_integration_market_52_42': '支持前奏、主段、副段、高潮、尾声的段落编排，不只是循环同一小节。',
+  'auto.js_integration_market_53_43': '支持导出音频，适合做前端页面、游戏或演示项目的临时背景音乐。',
+  'auto.js_integration_market_56_44': '点击“使用”会打开独立音乐工作台窗口。',
+  'auto.js_integration_market_57_45': '选择风格、速度、调式和密度后点击生成乐段。',
+  'auto.js_integration_market_58_46': '可点击时间线步进开关音符，也可以播放试听或导出整首音频。',
+  'auto.js_integration_market_222_48': '音乐工作台',
+  'auto.js_integration_market_251_50': '该集成暂未接入',
+};

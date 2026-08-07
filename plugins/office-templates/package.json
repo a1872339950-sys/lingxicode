@@ -1,0 +1,10 @@
+{
+  "name": "office-templates",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lingxi office document / presentation / spreadsheet templates.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build:references": "python scripts/build_references.py"
+  }
+}

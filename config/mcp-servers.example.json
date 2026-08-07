@@ -1,0 +1,17 @@
+{
+  "servers": [
+    {
+      "id": "custom-aidev",
+      "name": "Custom AI Dev MCP",
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "D:\\path\\to\\external-mcp-server.js",
+        "--root={projectPath}"
+      ],
+      "cwd": "{projectPath}",
+      "enabled": false,
+      "description": "External MCP server connected by Lingxi as an MCP client."
+    }
+  ]
+}

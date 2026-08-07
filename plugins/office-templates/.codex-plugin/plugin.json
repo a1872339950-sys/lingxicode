@@ -1,0 +1,38 @@
+{
+  "name": "office-templates",
+  "version": "0.1.0",
+  "description": "灵犀办公模板：从文档/演示/表格参考模板新建专业产物。",
+  "author": {
+    "name": "Lingxi",
+    "url": "https://lingxi.local"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "office",
+    "template",
+    "document",
+    "presentation",
+    "spreadsheet",
+    "docx",
+    "pptx",
+    "xlsx"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "办公模板",
+    "shortDescription": "文档 / 演示 / 表格一键起稿",
+    "longDescription": "用内置参考模板新建 Word 文档、PowerPoint 演示和 Excel 表格。先选模板再填内容，保留版式结构；复杂 PPT/Excel 走 artifact_workflow / office_workflow。",
+    "developerName": "Lingxi",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "用商务信笺模板写一封合作邀请函",
+      "用团队对齐模板做一版季度规划演示",
+      "用分析看板模板生成项目指标表"
+    ],
+    "brandColor": "#0F766E",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg",
+    "screenshots": []
+  }
+}

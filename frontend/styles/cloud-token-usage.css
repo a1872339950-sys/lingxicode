@@ -1,0 +1,1149 @@
+/* 云端 Token 使用总览 */
+.settings-empty.compact {
+  padding: 18px;
+  font-size: 12px;
+}
+
+.cloud-token-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cloud-token-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.cloud-token-filter {
+  position: relative;
+  z-index: 120;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.cloud-token-filter-label {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.cloud-token-filter-trigger {
+  height: 34px;
+  min-width: 112px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 11px;
+  border-radius: 10px;
+  border: 1px solid var(--settings-glass-border);
+  background: var(--settings-glass-bg-strong);
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.cloud-token-filter-trigger:hover,
+.cloud-token-filter-trigger[aria-expanded="true"] {
+  border-color: color-mix(in srgb, var(--accent-primary) 42%, var(--settings-glass-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 12%, transparent);
+}
+
+.cloud-token-filter-trigger svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+}
+
+.cloud-token-range-popover,
+.cloud-token-granularity-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10020;
+  min-width: 360px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--settings-glass-border);
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, .22), 0 0 0 1px rgba(148, 163, 184, .12);
+  backdrop-filter: none;
+}
+
+:root[data-theme="dark"] .cloud-token-range-popover,
+:root[data-theme="dark"] .cloud-token-granularity-menu,
+[data-theme="dark"] .cloud-token-range-popover,
+[data-theme="dark"] .cloud-token-granularity-menu {
+  background: #111827;
+}
+
+.cloud-token-range-popover[hidden],
+.cloud-token-granularity-menu[hidden] {
+  display: none;
+}
+
+.cloud-token-range-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.cloud-token-range-options button,
+.cloud-token-granularity-menu button {
+  height: 34px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.cloud-token-range-options button:hover,
+.cloud-token-granularity-menu button:hover {
+  background: color-mix(in srgb, var(--accent-primary) 8%, transparent);
+  color: var(--text-primary);
+}
+
+.cloud-token-range-options button.is-active,
+.cloud-token-granularity-menu button.is-active {
+  background: color-mix(in srgb, #f59e0b 17%, transparent);
+  color: #d97706;
+  font-weight: 700;
+}
+
+.cloud-token-granularity-menu {
+  min-width: 150px;
+  padding: 8px;
+}
+
+.cloud-token-granularity-menu button {
+  width: 100%;
+  position: relative;
+  padding-left: 30px;
+}
+
+.cloud-token-granularity-menu button.is-active::before {
+  content: '✓';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #d97706;
+}
+
+.cloud-token-date-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid color-mix(in srgb, var(--settings-glass-border) 70%, transparent);
+}
+
+.cloud-token-date-row-range {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+}
+
+.cloud-token-date-row label {
+  display: grid;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.cloud-token-date-row input {
+  height: 34px;
+  cursor: pointer;
+}
+
+.cloud-token-date-row input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.cloud-token-date-row .settings-path-btn.primary {
+  height: 34px;
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #fff;
+}
+
+.cloud-token-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: var(--space-5);
+}
+
+.cloud-token-card {
+  min-width: 0;
+  padding: 15px 16px;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(6,182,212,0.14), transparent 42%),
+    var(--settings-glass-bg);
+  border: 1px solid var(--settings-glass-border);
+  box-shadow: var(--settings-glass-shadow), var(--shadow-inset);
+}
+
+.cloud-token-card span,
+.cloud-token-card small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.cloud-token-card strong {
+  display: block;
+  margin: 8px 0 5px;
+  color: var(--text-primary);
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cloud-token-analytics-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.92fr) minmax(480px, 1.35fr);
+  gap: var(--space-5);
+  align-items: stretch;
+  margin-bottom: var(--space-5);
+}
+
+.cloud-token-distribution-panel,
+.cloud-token-trend-panel {
+  min-width: 0;
+}
+
+.cloud-token-daily-chart,
+.cloud-token-trend-chart {
+  position: relative;
+  min-height: 335px;
+}
+
+.cloud-token-trend-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 2px 0 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.cloud-token-chart-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cloud-token-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.cloud-token-chart-legend i,
+.cloud-token-model-name i {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--series-color, var(--model-color, var(--accent-primary)));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--series-color, var(--model-color, var(--accent-primary))) 18%, transparent);
+}
+
+.cloud-token-trend-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 275px;
+  overflow: visible;
+}
+
+.cloud-token-chart-bg {
+  fill: color-mix(in srgb, var(--settings-glass-bg-strong) 82%, transparent);
+}
+
+.cloud-token-chart-grid {
+  stroke: color-mix(in srgb, var(--text-muted) 14%, transparent);
+  stroke-width: 1;
+}
+
+.cloud-token-chart-axis {
+  stroke: color-mix(in srgb, var(--text-muted) 25%, transparent);
+  stroke-width: 1;
+}
+
+.cloud-token-axis-label {
+  fill: var(--text-muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cloud-token-axis-label.is-date {
+  font-size: 12px;
+  font-weight: 620;
+  fill: color-mix(in srgb, var(--text-secondary) 88%, var(--text-muted));
+}
+
+.cloud-token-chart-line {
+  fill: none;
+  stroke: var(--series-color);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 6px 12px color-mix(in srgb, var(--series-color) 20%, transparent));
+}
+
+.cloud-token-chart-line.is-dashed {
+  stroke-dasharray: 7 6;
+  stroke-width: 2.4;
+}
+
+.cloud-token-chart-dot {
+  fill: var(--settings-panel-bg, #fff);
+  stroke: var(--series-color);
+  stroke-width: 2;
+}
+
+.cloud-token-chart-dot-trigger {
+  cursor: pointer;
+  outline: none;
+  transition: r .14s ease, stroke-width .14s ease, filter .14s ease;
+}
+
+.cloud-token-chart-dot-trigger:hover,
+.cloud-token-chart-dot-trigger:focus,
+.cloud-token-chart-dot-trigger.is-active {
+  stroke-width: 3;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--series-color) 42%, transparent));
+}
+
+.cloud-token-chart-dot-trigger.is-active {
+  fill: color-mix(in srgb, var(--series-color) 16%, #fff);
+}
+
+.cloud-token-chart-tooltip {
+  position: absolute;
+  z-index: 5;
+  min-width: 178px;
+  max-width: 230px;
+  padding: 10px 12px;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, var(--settings-glass-border) 82%, transparent);
+  background: var(--bg-secondary, #ffffff);
+  color: var(--text-secondary);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, .2);
+  font-size: 11px;
+  line-height: 1.55;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -4px);
+  transition: opacity .14s ease, transform .14s ease;
+}
+
+.cloud-token-chart-tooltip.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.cloud-token-chart-tooltip strong,
+.cloud-token-chart-detail strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.cloud-token-chart-tooltip span,
+.cloud-token-chart-detail span {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.cloud-token-chart-detail {
+  display: none;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--settings-glass-border) 78%, transparent);
+  background: color-mix(in srgb, var(--settings-glass-bg-strong) 88%, transparent);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.cloud-token-chart-detail.is-visible {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 3px 12px;
+}
+
+:root[data-theme="dark"] .cloud-token-chart-tooltip,
+[data-theme="dark"] .cloud-token-chart-tooltip {
+  background: var(--bg-secondary, #111827);
+}
+
+.cloud-token-distribution-shell {
+  position: relative;
+  border-radius: 18px;
+  padding: 18px;
+  background: color-mix(in srgb, var(--settings-glass-bg-strong) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--settings-glass-border) 74%, transparent);
+}
+
+.cloud-token-distribution-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-height: 0;
+}
+
+.cloud-token-distribution-body.is-bar-layout {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+
+.cloud-token-model-table {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cloud-token-model-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--settings-glass-bg) 74%, transparent);
+  border: 1px solid color-mix(in srgb, var(--settings-glass-border) 68%, transparent);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.cloud-token-model-bar {
+  position: relative;
+  height: 7px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--settings-glass-border) 44%, transparent);
+}
+
+.cloud-token-model-bar span {
+  display: block;
+  width: var(--model-percent, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--model-color, var(--accent-primary));
+}
+
+.cloud-token-model-row:focus,
+.cloud-token-model-row.is-active {
+  border-color: color-mix(in srgb, var(--model-color, var(--accent-primary)) 54%, var(--settings-glass-border));
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--model-color, var(--accent-primary)) 14%, var(--settings-glass-bg-strong)),
+    var(--settings-glass-bg-strong));
+  box-shadow: inset 3px 0 0 var(--model-color, var(--accent-primary));
+}
+
+.cloud-token-model-main {
+  min-width: 0;
+}
+
+.cloud-token-model-name {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cloud-token-model-name i {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--model-color, var(--accent-primary));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--model-color, var(--accent-primary)) 14%, transparent);
+}
+
+.cloud-token-model-name span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.cloud-token-model-total {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.cloud-token-model-stat {
+  text-align: right;
+}
+
+.cloud-token-model-stat strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 780;
+}
+
+.cloud-token-model-stat span {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.cloud-token-detail-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cloud-token-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cloud-token-detail-head .settings-section-title {
+  margin-bottom: 2px;
+}
+
+.cloud-token-detail-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--settings-glass-border);
+  background: var(--settings-glass-bg-strong);
+}
+
+.cloud-token-detail-tab {
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .14s ease, color .14s ease, box-shadow .14s ease;
+}
+
+.cloud-token-detail-tab:hover {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--settings-glass-hover) 80%, transparent);
+}
+
+.cloud-token-detail-tab.is-active {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--accent-primary) 14%, var(--settings-glass-bg));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-primary) 28%, transparent);
+}
+
+.cloud-token-table-shell {
+  min-width: 0;
+}
+
+.cloud-token-table-scroll {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid var(--settings-glass-border);
+  background: color-mix(in srgb, var(--settings-glass-bg-strong) 92%, transparent);
+  box-shadow: var(--shadow-inset, inset 0 1px 0 rgba(255,255,255,.03));
+}
+
+.cloud-token-data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 920px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.cloud-token-data-table td.is-hit {
+  color: color-mix(in srgb, var(--success, #10b981) 82%, var(--text-primary));
+  font-weight: 650;
+}
+
+.cloud-token-data-table td.is-miss {
+  color: color-mix(in srgb, var(--warning, #f59e0b) 82%, var(--text-primary));
+  font-weight: 650;
+}
+
+.cloud-token-data-table td.is-rate {
+  color: color-mix(in srgb, var(--accent-primary) 72%, var(--text-primary));
+  font-weight: 700;
+}
+
+.cloud-token-data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 38px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--settings-glass-border);
+  background: color-mix(in srgb, var(--settings-glass-bg-strong) 96%, #000 4%);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.cloud-token-data-table thead th.is-num,
+.cloud-token-data-table td.is-num {
+  text-align: right;
+}
+
+.cloud-token-data-table thead th button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.cloud-token-data-table thead th.is-num button {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.cloud-token-sort-icon {
+  width: 8px;
+  height: 10px;
+  position: relative;
+  opacity: .28;
+}
+
+.cloud-token-sort-icon::before,
+.cloud-token-sort-icon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+  transform: translateX(-50%);
+}
+
+.cloud-token-sort-icon::before {
+  top: 0;
+  border-bottom: 4px solid currentColor;
+}
+
+.cloud-token-sort-icon::after {
+  bottom: 0;
+  border-top: 4px solid currentColor;
+}
+
+.cloud-token-sort-icon.is-active {
+  opacity: .95;
+  color: var(--accent-light, #67e8f9);
+}
+
+.cloud-token-sort-icon.is-asc::after {
+  opacity: .25;
+}
+
+.cloud-token-sort-icon.is-desc::before {
+  opacity: .25;
+}
+
+.cloud-token-data-table tbody td {
+  height: 40px;
+  padding: 0 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--settings-glass-border) 72%, transparent);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.cloud-token-data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.cloud-token-data-table tbody tr:hover td {
+  background: color-mix(in srgb, var(--accent-primary) 7%, transparent);
+}
+
+.cloud-token-data-table td.is-name {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.cloud-token-data-table td.is-name .cloud-token-table-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--model-color, var(--accent-primary));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--model-color, var(--accent-primary)) 14%, transparent);
+  vertical-align: middle;
+}
+
+.cloud-token-data-table td.is-strong {
+  color: var(--text-primary);
+  font-weight: 720;
+}
+
+.cloud-token-data-table td.is-time {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.cloud-token-share-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 92px;
+}
+
+.cloud-token-share-bar {
+  width: 56px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--settings-glass-border) 48%, transparent);
+}
+
+.cloud-token-share-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.cloud-token-rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 兼容旧类名，避免残留样式干扰 */
+.cloud-token-detail-grid,
+.cloud-token-task-list,
+.cloud-token-recent-list {
+  display: none;
+}
+
+@media (max-width: 1280px) {
+  .cloud-token-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1100px) {
+  .cloud-token-overview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .cloud-token-hero,
+  .cloud-token-toolbar,
+  .cloud-token-trend-head,
+  .cloud-token-detail-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cloud-token-toolbar,
+  .cloud-token-filter,
+  .cloud-token-filter-trigger,
+  .cloud-token-toolbar .settings-path-btn {
+    width: 100%;
+  }
+
+  .cloud-token-range-popover,
+  .cloud-token-granularity-menu {
+    left: 0;
+    right: auto;
+    min-width: min(100%, 360px);
+  }
+
+  .cloud-token-date-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cloud-token-overview-grid,
+  .cloud-token-analytics-grid,
+  .cloud-token-distribution-body {
+    grid-template-columns: 1fr;
+  }
+
+  .cloud-token-detail-tabs {
+    width: 100%;
+  }
+
+  .cloud-token-detail-tab {
+    flex: 1 1 auto;
+  }
+
+  .cloud-token-model-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+
+/* Token trend dashboard refresh 2026-07 */
+.cloud-token-analytics-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.cloud-token-trend-panel {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  overflow: hidden;
+}
+
+.cloud-token-daily-chart,
+.cloud-token-trend-chart {
+  min-height: 0;
+}
+
+.cloud-token-trend-period {
+  margin: -2px 0 16px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cloud-token-trend-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cloud-token-trend-metric {
+  min-width: 0;
+  padding: 14px 15px 13px;
+  border: 1px solid color-mix(in srgb, var(--settings-glass-border) 74%, transparent);
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--metric-color) 11%, transparent), transparent 52%),
+    color-mix(in srgb, var(--settings-glass-bg-strong) 92%, transparent);
+  box-shadow: var(--shadow-inset, inset 0 1px 0 rgba(255,255,255,.03));
+}
+
+.cloud-token-trend-metric.is-total { --metric-color: #1688ff; }
+.cloud-token-trend-metric.is-input { --metric-color: #37c978; }
+.cloud-token-trend-metric.is-output { --metric-color: #f59e0b; }
+.cloud-token-trend-metric.is-average { --metric-color: #9b6cff; }
+.cloud-token-trend-metric.is-peak { --metric-color: #17b6c9; }
+
+.cloud-token-trend-metric > span,
+.cloud-token-trend-metric > small {
+  display: block;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cloud-token-trend-metric > span::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--metric-color);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--metric-color) 12%, transparent);
+  vertical-align: 1px;
+}
+
+.cloud-token-trend-metric > strong {
+  display: block;
+  overflow: hidden;
+  margin: 7px 0 5px;
+  color: var(--metric-color);
+  font-size: clamp(18px, 1.8vw, 25px);
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.025em;
+  line-height: 1;
+  text-overflow: ellipsis;
+}
+
+.cloud-token-trend-head {
+  display: grid;
+  grid-template-columns: minmax(130px, 1fr) auto minmax(90px, 1fr);
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 4px;
+}
+
+.cloud-token-trend-axis-title {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.cloud-token-trend-axis-title span {
+  margin-left: 7px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.cloud-token-trend-axis-title.is-right {
+  text-align: right;
+}
+
+.cloud-token-chart-legend {
+  gap: 14px;
+}
+
+.cloud-token-chart-legend i {
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--series-color);
+  box-shadow: none;
+}
+
+.cloud-token-chart-legend i.is-dashed {
+  height: 0;
+  border-top: 2px dashed var(--series-color);
+  border-radius: 0;
+  background: transparent;
+}
+
+.cloud-token-chart-stage {
+  position: relative;
+  min-width: 0;
+}
+
+.cloud-token-trend-svg {
+  width: 100%;
+  min-height: 360px;
+  max-height: 510px;
+}
+
+.cloud-token-chart-bg {
+  fill: color-mix(in srgb, var(--settings-glass-bg-strong) 84%, transparent);
+}
+
+.cloud-token-chart-grid.is-vertical {
+  stroke-opacity: .55;
+}
+
+.cloud-token-chart-area {
+  pointer-events: none;
+}
+
+.cloud-token-chart-line {
+  stroke-width: 2.35;
+  filter: drop-shadow(0 4px 9px color-mix(in srgb, var(--series-color) 16%, transparent));
+}
+
+.cloud-token-chart-line.is-dashed {
+  stroke-dasharray: 7 6;
+  stroke-width: 2;
+}
+
+.cloud-token-axis-label.is-cumulative {
+  fill: color-mix(in srgb, #1688ff 68%, var(--text-muted));
+}
+
+.cloud-token-chart-dot {
+  fill: var(--settings-glass-bg-strong);
+}
+
+.cloud-token-chart-crosshair {
+  opacity: 0;
+  stroke: color-mix(in srgb, var(--text-secondary) 34%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  transition: opacity .12s ease;
+  pointer-events: none;
+}
+
+.cloud-token-chart-crosshair.is-visible {
+  opacity: 1;
+}
+
+.cloud-token-chart-tooltip {
+  min-width: 190px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-secondary) 96%, transparent);
+  box-shadow: 0 18px 45px rgba(3, 10, 24, .28);
+  transform: translate(-50%, -100%);
+}
+
+.cloud-token-chart-tooltip.is-visible {
+  transform: translate(-50%, -100%);
+}
+
+.cloud-token-chart-tooltip span i,
+.cloud-token-chart-detail span i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--detail-color, var(--text-muted));
+}
+
+.cloud-token-chart-tooltip i.is-total,
+.cloud-token-chart-detail i.is-total { --detail-color: #1688ff; }
+.cloud-token-chart-tooltip i.is-input,
+.cloud-token-chart-detail i.is-input { --detail-color: #37c978; }
+.cloud-token-chart-tooltip i.is-output,
+.cloud-token-chart-detail i.is-output { --detail-color: #f59e0b; }
+.cloud-token-chart-tooltip i.is-cumulative,
+.cloud-token-chart-detail i.is-cumulative { --detail-color: #7bbcff; }
+
+.cloud-token-chart-tooltip span.is-cache,
+.cloud-token-chart-detail span.is-cache {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid color-mix(in srgb, var(--settings-glass-border) 68%, transparent);
+  color: var(--text-muted);
+}
+
+.cloud-token-trend-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--settings-glass-border) 60%, transparent);
+}
+
+.cloud-token-trend-shortcuts {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid color-mix(in srgb, var(--settings-glass-border) 68%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--settings-glass-bg-strong) 88%, transparent);
+}
+
+.cloud-token-trend-shortcuts button {
+  height: 27px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.cloud-token-trend-shortcuts button:hover {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--accent-primary) 9%, transparent);
+}
+
+.cloud-token-trend-shortcuts button.is-active {
+  color: #fff;
+  background: #1677e8;
+  box-shadow: 0 4px 12px rgba(22,119,232,.24);
+}
+
+.cloud-token-trend-update {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1180px) {
+  .cloud-token-trend-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cloud-token-trend-head {
+    grid-template-columns: 1fr;
+  }
+
+  .cloud-token-trend-axis-title.is-right {
+    display: none;
+  }
+
+  .cloud-token-chart-legend {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .cloud-token-trend-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cloud-token-trend-svg {
+    min-width: 720px;
+  }
+
+  .cloud-token-chart-stage {
+    overflow-x: auto;
+  }
+
+  .cloud-token-trend-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cloud-token-trend-shortcuts {
+    overflow-x: auto;
+  }
+
+  .cloud-token-trend-shortcuts button {
+    flex: 0 0 auto;
+  }
+}

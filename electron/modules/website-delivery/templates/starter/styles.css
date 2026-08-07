@@ -1,0 +1,108 @@
+:root {
+  color-scheme: light dark;
+  --bg: #0b0c10;
+  --fg: #e8e9ed;
+  --muted: #9aa0b4;
+  --card: #16181f;
+  --accent: #6366f1;
+  --border: rgba(255, 255, 255, 0.08);
+  --radius: 14px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f7f7f8;
+    --fg: #18181b;
+    --muted: #71717a;
+    --card: #ffffff;
+    --border: rgba(0, 0, 0, 0.08);
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--fg); }
+.app { min-height: 100vh; }
+
+.skeleton-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+}
+
+.skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.skeleton-hero { margin-bottom: 40px; }
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.sk {
+  background: linear-gradient(90deg, var(--card), rgba(99, 102, 241, 0.12), var(--card));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.sk-logo { width: 96px; height: 28px; }
+.sk-nav { width: 180px; height: 20px; }
+.sk-title { width: min(520px, 90%); height: 42px; margin-bottom: 14px; }
+.sk-sub { width: min(420px, 80%); height: 18px; margin-bottom: 10px; }
+.sk-cta { width: 140px; height: 40px; border-radius: 999px; margin-top: 18px; }
+.sk-card { height: 120px; }
+
+.skeleton-hint {
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* 成品页面可用的基础样式 */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--border);
+}
+.site-main { max-width: 1080px; margin: 0 auto; padding: 40px 20px 64px; }
+.hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 12px; }
+.hero p { color: var(--muted); max-width: 52ch; line-height: 1.6; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-top: 36px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}

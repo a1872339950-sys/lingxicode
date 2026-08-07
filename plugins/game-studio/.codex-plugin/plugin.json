@@ -1,0 +1,40 @@
+{
+  "name": "game-studio",
+  "version": "1.0.0",
+  "description": "浏览器游戏工作室：从玩法规划、架构、2D/3D 实现、精灵与 3D 资产、游戏 UI 到试玩验收。",
+  "author": {
+    "name": "Lingxi"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "game",
+    "studio",
+    "phaser",
+    "three",
+    "2d",
+    "3d",
+    "sprite",
+    "游戏工作室"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "游戏工作室",
+    "shortDescription": "规划、实现并试玩浏览器游戏（2D/3D）",
+    "longDescription": "完整浏览器游戏能力包：总入口分流、架构边界、Phaser 2D、Three.js 3D、React Three Fiber、精灵管线、3D 资产、游戏 UI、试玩验收。默认 2D 走 Phaser；3D 按技术栈给可执行路径。可与「角色动画」插件配合产出 2D 角色帧。",
+    "developerName": "灵犀",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "帮我规划一个浏览器游戏的核心循环和技术路线",
+      "用 Phaser 搭一个可玩的 2D 最小关卡",
+      "给现有网页小游戏做一轮试玩验收"
+    ],
+    "logo": "./assets/logo.svg",
+    "brandColor": "#F59E0B",
+    "screenshots": []
+  }
+}

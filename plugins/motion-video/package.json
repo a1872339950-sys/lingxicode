@@ -1,0 +1,10 @@
+{
+  "name": "motion-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lingxi motion / programmatic video plugin",
+  "license": "Apache-2.0",
+  "scripts": {
+    "scaffold:remotion": "node scripts/scaffold-remotion.cjs"
+  }
+}

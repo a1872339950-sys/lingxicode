@@ -1,0 +1,36 @@
+{
+  "name": "website-delivery",
+  "version": "1.0.0",
+  "description": "落地页/简单站点：骨架预览、设计三选一、实现与收尾。",
+  "author": {
+    "name": "Lingxi"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "website",
+    "landing",
+    "站点",
+    "落地页"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "网页交付",
+    "shortDescription": "先预览骨架，再选设计方向，最后定稿站点",
+    "longDescription": "面向落地页、官网首页、简单站点：脚手架与加载骨架，2～3 个设计方向弹窗选择，实现后预览并收尾。安装后选用「网页交付」。需设置中开启「网页交付」能力。",
+    "developerName": "灵犀",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "帮我做一个公司落地页，先出三种视觉方向",
+      "从零搭一个产品官网首页并预览",
+      "把当前站点骨架换成正式首页再收尾"
+    ],
+    "logo": "./assets/logo.svg",
+    "brandColor": "#10B981",
+    "screenshots": []
+  }
+}

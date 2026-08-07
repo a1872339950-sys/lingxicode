@@ -1,0 +1,7 @@
+{
+  "name": "website-delivery",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lingxi website delivery plugin",
+  "license": "Apache-2.0"
+}

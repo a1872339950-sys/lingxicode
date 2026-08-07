@@ -1,0 +1,22 @@
+// ai_permission_settings 模块
+export default {
+  'auto.js_ai_permission_settings_104_5': '添加失败: ',
+  'auto.js_ai_permission_settings_101_4': '授权已添加',
+  'auto.js_ai_permission_settings_94_3': '请先选择或输入路径',
+  'auto.js_ai_permission_settings_76_2': '权限模式保存失败',
+  'auto.js_ai_permission_settings_57_1': '取消失败: ',
+  'auto.js_ai_permission_settings_54_0': '授权已取消',
+  'auto.js_ai_permission_settings_27_1': '应用',
+  'auto.js_ai_permission_settings_28_2': '路径',
+  'auto.js_ai_permission_settings_37_3': '<div class="settings-empty">暂无授权记录</div>',
+  'auto.js_ai_permission_settings_54_4': '授权已取消',
+  'auto.js_ai_permission_settings_57_5': '取消失败: ',
+  'auto.js_ai_permission_settings_57_6': '未知错误',
+  'auto.js_ai_permission_settings_74_7': '已切换为完整授权',
+  'auto.js_ai_permission_settings_74_8': '已切换为询问授权',
+  'auto.js_ai_permission_settings_76_9': '权限模式保存失败',
+  'auto.js_ai_permission_settings_94_10': '请先选择或输入路径',
+  'auto.js_ai_permission_settings_101_11': '授权已添加',
+  'auto.js_ai_permission_settings_104_12': '添加失败: ',
+  'auto.js_ai_permission_settings_104_13': '未知错误',
+};

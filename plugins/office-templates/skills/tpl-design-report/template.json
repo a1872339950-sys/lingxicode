@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "design-report",
+  "kind": "document",
+  "title": "设计报告",
+  "reference": "../../templates/design-report.docx",
+  "defaultOutput": "assets/office/design-report"
+}

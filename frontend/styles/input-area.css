@@ -1,0 +1,970 @@
+/* ================================================================
+   灵犀 LingXi — 输入区域模块 (Input Area)
+   Teal/Cyan (#06b6d4) accent · Violet (#8b5cf6) secondary
+   依赖: tokens.css
+   ================================================================ */
+
+/* ── 聊天输入区域 ── */
+.chat-input-area {
+  padding: var(--space-4) clamp(16px, 6vw, 72px);
+  background: var(--chat-input-bg);
+}
+
+.chat-input-area.hidden-no-project {
+  display: none;
+}
+
+.cache-usage-strip {
+  width: min(100%, var(--chat-message-track-width, 780px));
+  margin: 0 auto 5px;
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.cache-usage-strip[hidden] {
+  display: none;
+}
+
+.plan-progress-dock {
+  width: fit-content;
+  max-width: min(calc(100% - 24px), var(--chat-message-track-width, 780px));
+  margin: 0 auto 2px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.plan-progress-dock[hidden] {
+  display: none;
+}
+
+.plan-progress-card {
+  min-width: 168px;
+  max-width: min(520px, calc(100vw - 32px));
+  border: 1px solid color-mix(in srgb, var(--chat-input-border) 58%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--chat-input-bg) 82%, transparent);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.plan-progress-current {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 30px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.plan-progress-current:hover {
+  background: var(--bg-hover);
+}
+
+.plan-progress-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary) 16%, transparent);
+}
+
+.plan-progress-dot.is-done,
+.plan-progress-card.is-done .plan-progress-dot {
+  background: #10b981;
+  box-shadow: 0 0 0 4px color-mix(in srgb, #10b981 16%, transparent);
+}
+
+.plan-progress-card.is-done .plan-progress-title {
+  color: color-mix(in srgb, var(--text-primary) 88%, #10b981);
+}
+
+.plan-progress-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.plan-progress-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.plan-progress-chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.16s ease;
+}
+
+.plan-progress-card.expanded .plan-progress-chevron {
+  transform: rotate(180deg);
+}
+
+.plan-progress-list {
+  display: none;
+  max-height: 176px;
+  overflow-y: auto;
+  padding: 4px 10px 9px 25px;
+  border-top: 1px solid var(--border-subtle);
+  background: color-mix(in srgb, var(--bg-secondary) 35%, transparent);
+}
+
+.plan-progress-card.expanded .plan-progress-list {
+  display: grid;
+  gap: 4px;
+}
+
+.plan-progress-step {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  align-items: start;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.plan-progress-step-icon {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 18px;
+}
+
+.plan-progress-step-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plan-progress-step.done .plan-progress-step-icon,
+.plan-progress-step.done .plan-progress-step-text {
+  color: var(--text-muted);
+}
+
+.plan-progress-step.done .plan-progress-step-text {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: currentColor;
+}
+
+.plan-progress-step.active .plan-progress-step-icon,
+.plan-progress-step.active .plan-progress-step-text {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.cache-usage-strip .cache-usage-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.cache-usage-strip.cache-usage-pending .cache-usage-dot {
+  animation: cacheUsagePulse 1.2s ease-in-out infinite;
+}
+
+.cache-usage-strip.cache-usage-hit {
+  color: var(--accent-light);
+}
+
+.cache-usage-strip.cache-usage-muted {
+  opacity: 0.68;
+}
+
+@keyframes cacheUsagePulse {
+  0%, 100% { transform: scale(0.8); opacity: 0.45; }
+  50% { transform: scale(1.25); opacity: 1; }
+}
+
+/* ── 技能选择器 (输入框旁 pill 胶囊) ── */
+.skill-selector {
+  position: relative;
+  margin-right: var(--space-2);
+}
+.skill-select-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  transition: color var(--dur-normal) var(--ease), background var(--dur-normal) var(--ease);
+  white-space: nowrap;
+}
+.skill-select-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+.skill-select-btn.active {
+  background: transparent;
+  color: var(--accent-light);
+}
+.skill-select-btn.active:hover {
+  background: var(--bg-hover);
+}
+.skill-trigger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+.skill-trigger-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+}
+.skill-current {
+  white-space: nowrap;
+}
+.skill-arrow {
+  display: flex;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+}
+.skill-arrow svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--text-muted);
+  stroke-width: 2;
+  fill: none;
+}
+.skill-select-btn:hover .skill-arrow svg,
+.skill-select-btn.active .skill-arrow svg {
+  stroke: currentColor;
+}
+.skill-select-menu {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  min-width: 280px;
+  max-width: 340px;
+  width: max-content;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+  margin-bottom: var(--space-1);
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  animation: skillMenuIn var(--dur-normal) var(--ease) both;
+}
+.skill-select-menu.show { display: block; }
+.skill-menu-section-title {
+  padding: 8px 10px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-transform: none;
+}
+.skill-menu-empty {
+  padding: 8px 10px 12px;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+.skill-menu-item.selected-row {
+  background: rgba(6, 182, 212, 0.08);
+}
+.skill-menu-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.skill-menu-check input {
+  accent-color: #06b6d4;
+  flex-shrink: 0;
+}
+.skill-menu-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--accent-light);
+  opacity: 0.9;
+}
+.skill-menu-badge.muted {
+  color: var(--text-muted);
+}
+.skill-menu-primary-btn {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+.skill-menu-primary-btn.active,
+.skill-menu-primary-btn:hover {
+  color: #a5f3fc;
+  border-color: rgba(6, 182, 212, 0.45);
+  background: rgba(6, 182, 212, 0.15);
+}
+.skill-menu-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 6px 4px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border-subtle);
+}
+.skill-menu-link {
+  border: none;
+  background: transparent;
+  color: var(--accent-light);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 6px;
+  font-family: inherit;
+}
+.skill-menu-link:hover { text-decoration: underline; }
+
+@keyframes skillMenuIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.skill-menu-search {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  outline: none;
+  margin-bottom: var(--space-2);
+  transition: border-color var(--dur-normal) var(--ease), box-shadow var(--dur-normal) var(--ease);
+}
+.skill-menu-search:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+.skill-menu-list {
+  max-height: 180px;
+  overflow-y: auto;
+}
+.skill-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);}
+.skill-menu-item:hover {
+  background: var(--bg-hover);
+}
+.skill-menu-item.selected {
+  background: var(--accent-glow);
+}
+.skill-menu-item-name {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+.skill-menu-item-none {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  padding: 8px 10px;
+}
+
+/* ── 聊天输入容器 ── */
+.chat-input-wrapper {
+  position: relative;
+  width: min(100%, var(--chat-message-track-width, 780px));
+  margin: 0 auto;
+  background: var(--chat-input-bg);
+  border: 1px solid var(--chat-input-border);
+  border-radius: var(--radius-xl);
+  padding: 10px 16px;
+  box-sizing: border-box;
+  transition:
+    border-color var(--dur-normal) var(--ease),
+    background var(--dur-normal) var(--ease),
+    box-shadow var(--dur-normal) var(--ease);
+}
+
+.workbench-mention-menu {
+  position: absolute;
+  left: 14px;
+  right: auto;
+  bottom: calc(100% + 8px);
+  z-index: 60;
+  display: grid;
+  gap: 6px;
+  width: min(360px, calc(100% - 28px));
+  padding: 7px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.workbench-mention-menu[hidden] {
+  display: none;
+}
+
+.workbench-mention-search {
+  width: 100%;
+  height: 30px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0 9px;
+  font-size: 12px;
+  outline: none;
+}
+
+.workbench-mention-search:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.workbench-mention-list {
+  display: grid;
+  gap: 2px;
+  max-height: calc((42px * 5) + (2px * 4));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+}
+
+.workbench-mention-item {
+  width: 100%;
+  min-height: 42px;
+  height: 42px;
+  display: grid;
+  grid-template-columns: minmax(106px, 0.46fr) 1fr;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  padding: 5px 7px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.workbench-mention-empty {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.workbench-mention-item:hover,
+.workbench-mention-item.active {
+  background: var(--hover-bg);
+}
+
+.workbench-mention-token {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #0284c7;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.workbench-mention-desc {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.center.shrink .chat-input-area {
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+.chat-input-wrapper:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-accent);
+}
+.chat-input-wrapper.drag-over {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+  box-shadow: 0 0 0 2px var(--border-accent), var(--glow-accent);
+  border-style: dashed;
+  animation: dragOverFlash var(--dur-slow) var(--ease);
+}
+@keyframes dragOverFlash {
+  0%   { box-shadow: 0 0 0 2px var(--border-accent), 0 0 30px rgba(6,182,212,0.25); }
+  100% { box-shadow: 0 0 0 2px var(--border-accent), var(--glow-accent); }
+}
+.chat-input-wrapper.has-files {
+  padding-top: var(--space-2);
+}
+
+/* ── 构件引用区 ── */
+.artifact-refs-area {
+  display: none;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  padding: 6px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bg-secondary) 78%, transparent);
+}
+.artifact-refs-area.show { display: flex; }
+
+.artifact-ref-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  height: 26px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent-glow);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1;
+  transition: all var(--dur-fast) var(--ease);
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);.artifact-ref-chip:hover {
+  background: rgba(6,182,212,0.15);
+  border-color: var(--accent-primary);
+}
+.artifact-ref-label {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.artifact-ref-chip button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px; height: 16px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  line-height: 1;
+  transition: all var(--dur-fast);
+}
+  transition: background var(--dur-fast), color var(--dur-fast);  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* ── 上传文件区域 ── */
+.uploaded-files-area {
+  display: none;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  padding: 6px 10px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  max-height: 60px;
+  overflow-y: auto;
+  transition: max-height var(--dur-normal) var(--ease);
+}
+.uploaded-files-area.show { display: flex; }
+
+.uploaded-file-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px 6px;
+  background: var(--bg-hover);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  transition: background var(--dur-fast);
+}
+.uploaded-file-item.is-clickable { cursor: pointer; }
+.uploaded-file-item:hover {
+  background: var(--bg-active);
+}
+.uploaded-file-thumb {
+  width: 14px; height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.uploaded-file-icon {
+  font-size: var(--text-sm);
+}
+.uploaded-file-name {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.uploaded-file-remove {
+  cursor: pointer;
+  color: var(--error);
+  font-size: var(--text-sm);
+  margin-left: 2px;
+  opacity: 0.7;
+  transition: opacity var(--dur-fast);
+}
+.uploaded-file-remove:hover { opacity: 1; }
+.uploaded-file-item.is-pasted-text {
+  max-width: min(100%, 440px);
+}
+.uploaded-file-item.is-pasted-text .uploaded-file-name {
+  max-width: 150px;
+}
+.uploaded-file-meta {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.uploaded-file-restore {
+  border: 0;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent);
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.uploaded-file-restore:hover {
+  background: var(--bg-active);
+}
+
+/* ── 输入框 ── */
+.chat-input-box {
+  width: 100%;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  outline: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 1;
+  resize: none;
+  min-height: 36px;
+  max-height: 120px;
+  padding: 0;
+  line-height: var(--leading-normal);
+  position: relative;
+  z-index: 2;
+}
+
+.chat-input-wrapper.has-workbench-mention .chat-input-box {
+  color: var(--text-primary);
+  caret-color: var(--text-primary);
+}
+
+.chat-input-highlight {
+  position: absolute;
+  left: 0;
+  right: 48px;
+  top: 0;
+  z-index: 1;
+  min-height: 36px;
+  max-height: 120px;
+  overflow: hidden;
+  pointer-events: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: transparent;
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+}
+
+.chat-input-highlight-token {
+  color: transparent;
+  background: rgba(14, 165, 233, 0.12);
+  border-radius: 5px;
+  padding: 0 2px;
+}
+.chat-input-box:focus,
+.chat-input-box:focus-visible {
+  outline: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.chat-input-box::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── 输入行 ── */
+.chat-input-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+/* ── 发送按钮 (圆形 36px + 渐变) ── */
+.send-btn {
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-gradient);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--dur-normal) var(--ease);
+  flex-shrink: 0;
+  border: none;
+  position: relative;
+  transition: transform var(--dur-normal) var(--ease), box-shadow var(--dur-normal) var(--ease);  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(6,182,212,0.2);
+}
+.send-btn:hover {
+  box-shadow: var(--glow-accent-strong);
+  transform: scale(1.08);
+}
+.send-btn:active {
+  transform: scale(0.95);
+}
+.send-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.send-icon svg {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* ── 发送按钮·停止态 ── */
+.send-btn.active {
+  background: var(--error-muted);
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(239,68,68,0.4);
+  box-shadow: 0 0 12px rgba(239,68,68,0.15);
+}
+.send-btn.active:hover {
+  background: rgba(239,68,68,0.22);
+  box-shadow: 0 0 20px rgba(239,68,68,0.2);
+}
+.send-btn.active .send-icon {
+  color: var(--error);
+  display: none;
+}
+.send-btn.active::after {
+  content: '';
+  display: block;
+  width: 14px; height: 14px;
+  background: var(--error);
+  border-radius: 50%;
+}
+
+/* ── 输入底部栏 ── */
+.chat-input-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  height: auto;
+  min-height: 28px;
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.chat-input-footer > * {
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+/* ── 文件上传按钮 ── */
+.file-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--dur-normal) var(--ease), background var(--dur-normal) var(--ease);
+  border-radius: var(--radius-sm);
+}
+.file-upload-btn:hover {
+  color: var(--accent-light);
+  transition: color var(--dur-normal) var(--ease), background var(--dur-normal) var(--ease);
+}
+.upload-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  line-height: 1;
+}
+.upload-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+}
+/* ================================================================
+   浮动玻璃命令台（Mineradio 视觉语言，适配系统主题配色）
+   ================================================================ */
+/* ================================================================
+   浮动玻璃命令台（Mineradio 视觉语言，适配系统主题配色）
+   ================================================================ */
+
+/* ── 命令台主体：玻璃渐变 + 多层光影 + 大圆角 ── */
+.chat-input-wrapper {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.34);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.34);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-window);
+  box-shadow: var(--glass-shadow);
+}
+
+.chat-input-wrapper:focus-within {
+  border-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+  background: var(--glass-bg-strong);
+  box-shadow: var(--glass-shadow-focus);
+  transform: var(--hover-lift);
+  transition: border-color var(--dur-slow) var(--ease),
+              background var(--dur-slow) var(--ease),
+              box-shadow var(--dur-slow) var(--ease),
+              transform var(--dur-slow) var(--ease);
+}
+
+/* ── 底栏分隔线：弱化 ── */
+.chat-input-footer {
+  border-top-color: color-mix(in srgb, var(--text-primary) 6%, transparent);
+}
+
+/* ── 底栏按钮统一胶囊化 + hover 三件套 ── */
+.file-upload-btn,
+.exec-mode-trigger,
+.model-dropdown-trigger,
+.skill-select-btn {
+  height: 30px;
+  min-width: 30px;
+  padding: 0 10px;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 8%, transparent);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  color: var(--text-secondary);
+  transition: background var(--dur-normal) var(--ease),
+              color var(--dur-normal) var(--ease),
+              transform var(--dur-normal) var(--ease),
+              border-color var(--dur-normal) var(--ease),
+              box-shadow var(--dur-normal) var(--ease);
+}
+
+.file-upload-btn {
+  padding: 0;
+  width: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.file-upload-btn:hover,
+.exec-mode-trigger:hover,
+.model-dropdown-trigger:hover,
+.skill-select-btn:hover {
+  background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  border-color: color-mix(in srgb, var(--accent-primary) 30%, transparent);
+  color: var(--accent-primary);
+  transform: var(--hover-lift);
+  box-shadow: var(--hover-glow);
+}
+
+/* 激活态用香槟金点缀 */
+.skill-select-btn.active {
+  border-color: color-mix(in srgb, var(--accent-gold) 40%, transparent);
+  background: color-mix(in srgb, var(--accent-gold) 10%, transparent);
+  color: var(--accent-gold-deep);
+}
+
+/* ── 发送按钮：主题色纯色 + 发光 ── */
+.send-btn {
+  background: var(--accent-primary);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-primary) 22%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+.send-btn:hover {
+  background: var(--accent-light);
+  box-shadow: 0 12px 34px color-mix(in srgb, var(--accent-primary) 36%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  transform: var(--hover-lift) scale(1.06);
+}
+
+/* ── 右侧窗口打开时：底栏按钮只显示图标 ── */
+/* 授权模式：隐藏文字和箭头，只留盾牌图标 */
+.center.has-webview .exec-mode-current,
+.center.has-webview .exec-mode-arrow {
+  display: none;
+}
+
+/* 模型选择：隐藏模型名和箭头，只留图标 */
+.center.has-webview .model-current,
+.center.has-webview .model-arrow {
+  display: none;
+}
+
+/* 技能选择器：保留文字显示（图标辨识度不够） */
+/* .skill-current 不隐藏 */
+
+/* 缩减按钮内边距以适配紧凑模式 */
+.center.has-webview .exec-mode-trigger,
+.center.has-webview .model-dropdown-trigger {
+  padding: 0 6px;
+}

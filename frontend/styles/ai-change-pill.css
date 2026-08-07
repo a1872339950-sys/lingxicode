@@ -1,0 +1,83 @@
+.ai-change-pill-area {
+  width: min(100%, var(--chat-message-track-width, 780px));
+  min-height: 0;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-change-pill-area:empty {
+  display: none;
+}
+
+.ai-change-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 4px 10px;
+  border: 1px solid var(--chat-input-border);
+  border-radius: 8px;
+  background: var(--chat-input-bg);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+  transition: border-color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast);
+}
+
+.ai-change-pill:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.ai-change-pill-label {
+  color: var(--text-primary);
+}
+
+.ai-change-pill-add {
+  display: inline-flex;
+  align-items: center;
+  color: #059669;
+  font-weight: 760;
+}
+
+.ai-change-pill-remove {
+  display: inline-flex;
+  align-items: center;
+  color: #dc2626;
+  font-weight: 760;
+}
+
+.ai-change-pill .diff-roll-number {
+  display: inline-flex;
+  align-items: center;
+  height: 1.32em;
+  line-height: 1.2;
+  min-width: 0.62em;
+  overflow: visible;
+  vertical-align: -0.12em;
+  font-variant-numeric: tabular-nums;
+}
+
+.ai-change-pill .diff-roll-digit {
+  display: inline-block;
+  min-width: 0.58em;
+  line-height: 1.2;
+  animation: diffNumberRollUp 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--roll-index, 0) * 74ms);
+}
+
+.ai-change-pill .diff-roll-number[data-roll-dir="down"] .diff-roll-digit {
+  animation-name: diffNumberRollDown;
+}
+
+.ai-change-pill-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 580;
+}

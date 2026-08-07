@@ -1,0 +1,446 @@
+/* 备忘录询问条默认再抬高一点，避免和输入区缓存预估条叠在一起 */
+.ai-operation-memo-handoff,
+.handoff-confirmation-queue.ai-operation-memo-handoff {
+  bottom: var(--handoff-bottom, 168px);
+}
+
+.ai-operation-memo-handoff .agent-collab-handoff-text {
+  display: grid;
+  gap: 6px;
+}
+
+.ai-operation-memo-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 680;
+  line-height: 1.45;
+}
+
+.ai-operation-memo-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.handoff-confirmation-queue .agent-collab-handoff-text {
+  display: grid;
+  gap: 6px;
+}
+
+.handoff-confirmation-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 680;
+  line-height: 1.45;
+}
+
+.handoff-confirmation-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.handoff-confirmation-body {
+  display: grid;
+  gap: 3px;
+  max-width: min(520px, 58vw);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.handoff-confirmation-body span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.handoff-confirmation-queue .agent-collab-handoff-actions button[data-action-kind="primary"] {
+  border-color: color-mix(in srgb, var(--accent-primary) 55%, transparent);
+  background: color-mix(in srgb, var(--accent-primary) 16%, var(--bg-secondary));
+  color: var(--accent-light);
+}
+
+.handoff-confirmation-queue .agent-collab-handoff-actions button[data-action-kind="danger"] {
+  border-color: color-mix(in srgb, var(--error) 48%, transparent);
+  background: color-mix(in srgb, var(--error) 10%, var(--bg-secondary));
+  color: var(--error);
+}
+
+.handoff-confirmation-queue .agent-collab-handoff-actions button:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.ai-memo-chat-rail {
+  position: absolute;
+  top: 72px;
+  bottom: 122px;
+  left: 9px;
+  width: 26px;
+  z-index: 18;
+  pointer-events: auto;
+  opacity: 0.88;
+  transition: opacity 0.16s ease;
+}
+
+.ai-memo-chat-rail::before,
+.ai-memo-chat-rail::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease;
+}
+
+.ai-memo-chat-rail::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--bg-primary), transparent);
+}
+
+.ai-memo-chat-rail::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--bg-primary), transparent);
+}
+
+.ai-memo-chat-rail.can-scroll-older::before,
+.ai-memo-chat-rail.can-scroll-newer::after {
+  opacity: 0.84;
+}
+
+/* 滚轮方向箭头：默认隐藏，滚动时短暂亮起 */
+.ai-memo-chat-rail-arrow {
+  position: absolute;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--text-primary) 82%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.86);
+  transition: opacity 0.14s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), color 0.14s ease;
+  z-index: 2;
+}
+
+.ai-memo-chat-rail-arrow svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ai-memo-chat-rail-arrow.is-top {
+  top: 2px;
+}
+
+.ai-memo-chat-rail-arrow.is-bottom {
+  bottom: 2px;
+}
+
+.ai-memo-chat-rail.is-scroll-dir-older .ai-memo-chat-rail-arrow.is-top,
+.ai-memo-chat-rail.is-scroll-dir-newer .ai-memo-chat-rail-arrow.is-bottom {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ai-memo-chat-rail.is-scroll-dir-older .ai-memo-chat-rail-arrow.is-top {
+  animation: ai-memo-arrow-nudge-up 0.38s ease;
+}
+
+.ai-memo-chat-rail.is-scroll-dir-newer .ai-memo-chat-rail-arrow.is-bottom {
+  animation: ai-memo-arrow-nudge-down 0.38s ease;
+}
+
+/* 到顶/到底：箭头变灰，方向仍可辨 */
+.ai-memo-chat-rail.is-scroll-blocked .ai-memo-chat-rail-arrow {
+  color: color-mix(in srgb, var(--text-muted) 70%, transparent);
+  opacity: 0.72;
+}
+
+@keyframes ai-memo-arrow-nudge-up {
+  0% { transform: translateY(3px) scale(0.9); opacity: 0.2; }
+  45% { transform: translateY(-1px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes ai-memo-arrow-nudge-down {
+  0% { transform: translateY(-3px) scale(0.9); opacity: 0.2; }
+  45% { transform: translateY(1px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.ai-memo-chat-rail.is-scrollable {
+  opacity: 0.94;
+}
+
+.ai-memo-chat-rail.is-empty {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ai-memo-chat-rail-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 1px;
+  background: color-mix(in srgb, var(--border-color) 54%, transparent);
+}
+
+.ai-memo-chat-rail-list {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 滚轮时整条刻度轻位移，方向一眼可辨 */
+.ai-memo-chat-rail-list.is-scroll-nudging {
+  transform: translateY(var(--scroll-nudge, 0px));
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ai-memo-chat-node {
+  position: absolute;
+  left: 0;
+  width: 26px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-50%);
+}
+
+.ai-memo-chat-node::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: var(--wave-width, 12px);
+  height: var(--wave-height, 2px);
+  border-radius: 999px;
+  background: color-mix(
+    in srgb,
+    var(--text-muted) calc(42% + (var(--wave-strength, 0) * 40%)),
+    transparent
+  );
+  transform: translateY(-50%) translateX(var(--wave-shift, 0px));
+  /* 滑动时相邻刻度有轻微滞后，形成海浪起伏 */
+  transition:
+    width 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.16s ease,
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.16s ease;
+  will-change: width, height, transform;
+}
+
+.ai-memo-chat-rail-list.is-wave-active .ai-memo-chat-node::before {
+  background: color-mix(
+    in srgb,
+    var(--text-primary) calc(28% + (var(--wave-strength, 0) * 58%)),
+    transparent
+  );
+}
+
+.ai-memo-chat-node.is-wave-focus::before,
+.ai-memo-chat-node:focus-visible::before,
+.ai-memo-chat-node.is-active::before,
+.ai-memo-chat-node.is-scroll-feedback::before {
+  width: var(--wave-width, 22px);
+  height: var(--wave-height, 3px);
+  background: color-mix(in srgb, var(--text-primary) 86%, transparent);
+}
+
+/* 当前预览标题对应的那根：比邻居更粗、更长、更凸出 */
+.ai-memo-chat-node.is-wave-preview {
+  z-index: 3;
+}
+
+.ai-memo-chat-node.is-wave-preview::before {
+  width: var(--wave-width, 30px);
+  height: var(--wave-height, 4.5px);
+  background: color-mix(in srgb, var(--text-primary) 96%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--text-primary) 16%, transparent),
+    1px 0 8px color-mix(in srgb, var(--text-primary) 18%, transparent);
+  transform: translateY(-50%) translateX(var(--wave-shift, 9px));
+}
+
+/* 无滑动时，单点悬停仍给一个轻提示，但不抢海浪主效果 */
+.ai-memo-chat-rail-list:not(.is-wave-active) .ai-memo-chat-node:hover::before {
+  width: 18px;
+  height: 2.5px;
+  background: color-mix(in srgb, var(--text-primary) 72%, transparent);
+}
+
+.ai-memo-chat-node.is-draft::before {
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--text-muted) 48%, transparent) 0 4px,
+    transparent 4px 6px
+  );
+}
+
+.ai-memo-chat-tooltip {
+  position: fixed;
+  z-index: 5000;
+  max-width: min(280px, calc(100vw - 48px));
+  padding: 7px 9px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-secondary) 96%, transparent);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.35;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(-3px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-memo-chat-tooltip.show {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.ai-memo-chat-modal.hidden {
+  display: none;
+}
+
+.ai-memo-chat-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 4800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.ai-memo-chat-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.34);
+}
+
+.ai-memo-chat-modal-panel {
+  position: relative;
+  width: min(760px, calc(100vw - 48px));
+  max-height: min(760px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.ai-memo-chat-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
+}
+
+.ai-memo-chat-modal-kicker {
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.ai-memo-chat-modal-header h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.ai-memo-chat-modal-meta {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.ai-memo-chat-modal-close {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-base) 78%, transparent);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.ai-memo-chat-modal-close:hover {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--accent-primary) 48%, var(--border-color));
+}
+
+.ai-memo-chat-modal-summary {
+  display: none;
+  padding: 12px 20px 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ai-memo-chat-modal-summary:not(:empty) {
+  display: block;
+}
+
+.ai-memo-chat-modal-content {
+  flex: 1 1 auto;
+  min-height: 220px;
+  margin: 0;
+  padding: 16px 20px 20px;
+  overflow: auto;
+  color: var(--text-primary);
+  background: transparent;
+  font: 12.5px/1.65 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.center.shrink .ai-memo-chat-rail {
+  left: 5px;
+}
+
+@media (max-width: 720px) {
+  .ai-memo-chat-rail {
+    left: 4px;
+    top: 64px;
+    bottom: 116px;
+  }
+
+  .ai-memo-chat-modal {
+    padding: 14px;
+  }
+
+  .ai-memo-chat-modal-panel {
+    width: calc(100vw - 28px);
+    max-height: calc(100vh - 28px);
+  }
+}

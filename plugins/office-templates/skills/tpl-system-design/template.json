@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "system-design",
+  "kind": "document",
+  "title": "系统设计",
+  "reference": "../../templates/system-design.docx",
+  "defaultOutput": "assets/office/system-design"
+}

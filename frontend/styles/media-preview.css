@@ -1,0 +1,402 @@
+/* ================================================================
+   灵犀 LingXi — 媒体预览模块 (Media Preview)
+   唱片播放器 · 视频 · Blend 文件信息
+   ================================================================ */
+
+/* ── 容器与布局 ── */
+.media-view-container {
+  background: var(--bg-base);
+}
+
+.media-preview-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 25% 36%, rgba(6,182,212,0.10), transparent 33%),
+    var(--bg-base);
+  color: var(--text-primary);
+}
+
+.media-preview-card {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 34px 34px 82px;
+  display: grid;
+  grid-template-columns: minmax(180px, 38%) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 72px);
+  overflow: hidden;
+}
+
+.media-preview-body.video .media-preview-card {
+  display: flex;
+  width: min(980px, 100%);
+}
+
+/* ── 唱片封面 (Vinyl Record Art) ── */
+.media-preview-art {
+  position: relative;
+  align-self: center;
+  justify-self: center;
+  width: min(260px, 100%);
+  aspect-ratio: 1;
+  border-radius: var(--radius-full);
+  background: repeating-radial-gradient(
+    circle,
+    #070807 0 2px,
+    #111 2px 5px,
+    #080908 5px 8px
+  );
+  box-shadow:
+    0 22px 48px rgba(0,0,0,0.42),
+    inset 0 0 0 14px rgba(255,255,255,0.03),
+    inset 0 0 0 46px rgba(0,0,0,0.44);
+  overflow: visible;
+}
+
+/* 唱片标签 (有机绿色保留) */
+.media-preview-art::before {
+  content: "";
+  position: absolute;
+  inset: 28%;
+  border-radius: var(--radius-full);
+  background: radial-gradient(
+    circle,
+    rgba(246,255,237,0.96) 0 8px,
+    rgba(120,210,84,0.95) 9px 48%,
+    rgba(232,255,178,0.95) 49% 100%
+  );
+  box-shadow: inset 0 0 22px rgba(0,0,0,0.22);
+}
+
+/* 唱臂点缀 */
+.media-preview-art::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  right: 18%;
+  top: -28%;
+  background: var(--text-primary);
+  box-shadow: 0 0 0 5px rgba(0,0,0,0.16), 28px 112px 0 3px var(--text-primary);
+  transform: rotate(-13deg);
+  transform-origin: 50% 150px;
+}
+
+/* ── 信息区域 ── */
+.media-preview-info {
+  min-width: 0;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.media-preview-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.media-preview-type,
+.media-preview-source {
+  width: fit-content;
+  padding: 5px 11px;
+  border: 0;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  background: var(--accent-glow);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-normal);
+}
+
+.media-preview-title {
+  color: var(--text-primary);
+  font-size: clamp(22px, 3.2vw, 32px);
+  line-height: 1.15;
+  font-weight: 760;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.media-preview-subtitle {
+  color: var(--text-muted);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+}
+
+/* ── 歌词 ── */
+.media-preview-lyric {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-top: 10px;
+  color: var(--text-disabled);
+  font-size: clamp(18px, 2.1vw, 25px);
+  line-height: 1.35;
+  font-weight: 650;
+}
+
+.media-preview-lyric .active {
+  color: var(--text-primary);
+  font-size: clamp(22px, 2.8vw, 34px);
+}
+
+/* ── 播放器 ── */
+.media-preview-player {
+  width: 100%;
+  outline: none;
+}
+
+.media-preview-audio {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 74px;
+  opacity: 0.001;
+  pointer-events: none;
+}
+
+.media-preview-video {
+  max-height: min(62vh, 620px);
+  border-radius: var(--radius-md);
+  background: var(--bg-void);
+}
+
+/* ── 时间轴控制栏 ── */
+.media-preview-timeline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: minmax(120px, 28%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 28px;
+  background: color-mix(in srgb, var(--bg-primary) 86%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.media-preview-now {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.media-preview-now-title {
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-preview-now-source {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 控制按钮 ── */
+.media-preview-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+}
+
+.media-preview-play {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--accent-glow);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-inset);
+  transition:
+    background var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.media-preview-play:hover {
+  background: color-mix(in srgb, var(--accent-primary) 22%, transparent);
+  transform: translateY(-1px);
+}
+
+/* 播放三角 */
+.media-preview-play::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 12px solid currentColor;
+}
+
+/* 暂停双杠 */
+.media-preview-play.is-playing::before,
+.media-preview-play.is-playing::after {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+  background: currentColor;
+  border: 0;
+  margin: 0 2px;
+}
+
+.media-preview-play.is-playing::before {
+  margin-left: 0;
+}
+
+/* ── 进度条与时间 ── */
+.media-preview-range {
+  width: min(260px, 24vw);
+  height: 4px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.media-preview-time {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.media-preview-path {
+  color: var(--text-disabled);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  word-break: break-all;
+  max-height: 34px;
+  overflow: hidden;
+}
+
+/* ── 响应式 ── */
+@media (max-width: 760px) {
+  .media-preview-card {
+    grid-template-columns: 1fr;
+    padding: 24px 22px 92px;
+    gap: 18px;
+    overflow: auto;
+  }
+
+  .media-preview-art {
+    width: min(220px, 58vw);
+  }
+
+  .media-preview-info {
+    align-self: start;
+  }
+
+  .media-preview-timeline {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    padding: 12px 16px;
+  }
+
+  .media-preview-controls {
+    justify-content: space-between;
+  }
+
+  .media-preview-range {
+    width: 100%;
+  }
+}
+
+/* ── Blend 文件信息 ── */
+.blend-file-info {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-secondary);
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      color-mix(in srgb, var(--accent-glow) 65%, transparent),
+      transparent 36%
+    ),
+    var(--bg-base);
+}
+
+.blend-file-icon {
+  width: 74px;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--warning) 42%, var(--border-subtle));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--warning) 12%, var(--bg-secondary));
+  color: var(--warning);
+  font-size: var(--text-base);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.blend-file-title {
+  max-width: 78%;
+  color: var(--text-primary);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blend-file-desc {
+  max-width: 420px;
+  color: var(--text-muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+
+.blend-file-path {
+  max-width: 82%;
+  padding: 7px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  word-break: break-all;
+}

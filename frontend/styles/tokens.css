@@ -1,0 +1,288 @@
+/* ================================================================
+   灵犀 LingXi — 设计令牌系统 (Design Tokens)
+   Teal/Cyan 科技渐变 · 2026 AI 产品风格
+   ================================================================ */
+:root {
+  /* ── 背景层级 ── */
+  --bg-void: #05060a;
+  --bg-base: #0a0b10;
+  --bg-primary: #10121a;
+  --bg-secondary: #161925;
+  --bg-tertiary: #1c1f2e;
+  --bg-hover: #252938;
+  --bg-active: #2e3345;
+  --bg-elevated: #1a1d2a;
+
+  /* ── 强调色 (Teal/Cyan → Violet 渐变) ── */
+  --accent-primary: #06b6d4;
+  --accent-light: #22d3ee;
+  --accent-dark: #0891b2;
+  --accent-secondary: #8b5cf6;
+  --accent-glow: rgba(6,182,212,0.12);
+  --accent-gradient: linear-gradient(135deg, #06b6d4, #8b5cf6);
+
+  /* ── 语义色 ── */
+  --success: #10b981; --success-muted: rgba(16,185,129,0.10);
+  --warning: #f59e0b; --warning-muted: rgba(245,158,11,0.10);
+  --error: #ef4444;   --error-muted: rgba(239,68,68,0.10);
+  --info: #38bdf8;    --info-muted: rgba(56,189,248,0.10);
+
+  /* ── 文字层级 ── */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-disabled: #475569;
+  --text-placeholder: #334155;
+
+  /* ── 边框系统 (slate 色调) ── */
+  --border-subtle: rgba(148,163,184,0.06);
+  --border-default: rgba(148,163,184,0.10);
+  --border-strong: rgba(148,163,184,0.16);
+  --border-accent: rgba(6,182,212,0.35);
+
+  /* ── 玻璃态 ── */
+  --glass-bg: color-mix(in srgb, var(--bg-secondary) 75%, transparent);
+  --glass-bg-strong: color-mix(in srgb, var(--bg-tertiary) 80%, transparent);
+  --glass-border: color-mix(in srgb, var(--border-strong) 75%, transparent);
+  --glass-highlight: color-mix(in srgb, var(--accent-light) 15%, transparent);
+  --glass-blur: 20px;
+
+  /* ── 发光 ── */
+  --glow-accent: 0 0 20px rgba(6,182,212,0.15), 0 0 60px rgba(6,182,212,0.05);
+  --glow-accent-strong: 0 0 30px rgba(6,182,212,0.25), 0 0 80px rgba(6,182,212,0.10);
+
+  /* ── 工具调用令牌 ── */
+  --tool-text: var(--text-muted);
+  --tool-text-hover: var(--text-secondary);
+  --tool-name: var(--text-secondary);
+  --tool-target: var(--accent-light);
+  --tool-separator: var(--text-disabled);
+  --tool-hover-bg: var(--accent-glow);
+  --tool-detail-border: var(--border-default);
+  --tool-toggle: var(--text-muted);
+
+  /* ── 工具类型语义色 (Holographic Console) ── */
+  --tool-type-edit: #f59e0b;        /* 琥珀 - 修改 */
+  --tool-type-write: #10b981;       /* 翠绿 - 创建 */
+  --tool-type-read: #38bdf8;        /* 青蓝 - 读取 */
+  --tool-type-bash: #84cc16;        /* 黄绿 - 命令 */
+  --tool-type-search: #8b5cf6;      /* 紫罗兰 - 搜索 */
+  --tool-type-grep: #a855f7;        /* 紫 - 查找 */
+  --tool-type-glob: #c084fc;        /* 浅紫 - 文件匹配 */
+  --tool-type-browser: #06b6d4;     /* 青 - 浏览器 */
+  --tool-type-image: #ec4899;       /* 粉 - 图片 */
+  --tool-type-vision: #f472b6;      /* 粉红 - 视觉 */
+  --tool-type-folder: #14b8a6;      /* 蓝绿 - 目录 */
+  --tool-type-list: #2dd4bf;        /* 亮蓝绿 - 列表 */
+  --tool-type-step: #64748b;        /* 石板 - 步骤 */
+  --tool-type-music: #f97316;       /* 橙 - 音乐 */
+  --tool-type-video: #ef4444;       /* 红 - 视频 */
+  --tool-type-excel: #16a34a;       /* 深绿 - 表格 */
+  --tool-type-ppt: #dc2626;         /* 深红 - 演示 */
+  --tool-type-error: #ef4444;       /* 赤 - 错误 */
+
+  /* ── 工具状态色 ── */
+  --tool-status-pending: var(--accent-primary);
+  --tool-status-success: var(--success);
+  --tool-status-error: var(--error);
+  --tool-status-warning: var(--warning);
+
+  /* ── 工具玻璃态 ── */
+  --tool-glass-bg: color-mix(in srgb, var(--bg-tertiary) 65%, transparent);
+  --tool-glass-border: color-mix(in srgb, var(--border-strong) 60%, transparent);
+  --tool-glass-hover: color-mix(in srgb, var(--accent-primary) 8%, transparent);
+  --tool-glow: 0 0 20px color-mix(in srgb, var(--accent-primary) 15%, transparent);
+
+  /* ── 工具等宽字体 ── */
+  --tool-mono-font: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+
+  /* ── 折叠报告 ── */
+  --folded-report-bg: rgba(255,255,255,0.03);
+  --folded-report-border: var(--border-default);
+  --folded-report-hover-bg: var(--accent-glow);
+  --folded-report-text: var(--text-secondary);
+  --folded-report-title: var(--text-primary);
+
+  /* ── 技能面板 ── */
+  --skill-page-bg: var(--bg-primary);
+  --skill-item-bg: transparent;
+  --skill-item-hover-bg: rgba(255,255,255,0.035);
+  --skill-item-border: transparent;
+  --skill-item-hover-border: var(--border-subtle);
+  --skill-icon-bg: rgba(255,255,255,0.035);
+  --skill-icon-color: var(--accent-light);
+  --skill-check-color: var(--success);
+  --skill-muted: var(--text-muted);
+
+  /* ── 方案面板 ── */
+  --plan-page-bg: var(--bg-primary);
+  --plan-item-bg: transparent;
+  --plan-item-hover-bg: rgba(255,255,255,0.035);
+  --plan-item-border: transparent;
+  --plan-item-hover-border: var(--border-subtle);
+  --plan-icon-bg: rgba(245,158,11,0.12);
+  --plan-icon-color: var(--warning);
+  --plan-muted: var(--text-muted);
+
+  /* ── 设置面板玻璃态 ── */
+  --settings-glass-bg: color-mix(in srgb, var(--bg-secondary) 78%, transparent);
+  --settings-glass-bg-strong: color-mix(in srgb, var(--bg-tertiary) 82%, transparent);
+  --settings-glass-hover: color-mix(in srgb, var(--bg-hover) 72%, transparent);
+  --settings-glass-border: color-mix(in srgb, var(--border-strong) 78%, transparent);
+  --settings-glass-highlight: color-mix(in srgb, var(--accent-light) 18%, transparent);
+  --settings-glass-shadow: 0 16px 48px color-mix(in srgb, var(--bg-base) 62%, transparent);
+
+  /* ── 侧边栏 ── */
+  --sidebar-bg: var(--bg-primary);
+  --sidebar-hover-bg: var(--bg-hover);
+  --sidebar-active-bg: var(--bg-active);
+
+  /* ── 聊天 ── */
+  --chat-bg: var(--bg-base);
+  --chat-input-bg: var(--bg-primary);
+  --chat-input-border: var(--border-default);
+  --user-message-bg: rgba(148, 163, 184, 0.08);
+  --user-message-text: var(--text-secondary);
+  --user-message-border: rgba(148, 163, 184, 0.1);
+  --ai-message-bg: rgba(241, 245, 249, 0.04);
+  --ai-message-text: var(--text-primary);
+  --ai-message-border: rgba(148, 163, 184, 0.08);
+
+  /* ── 阴影系统 ── */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.35);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.45);
+  --shadow-xl: 0 24px 64px rgba(0,0,0,0.5);
+  --shadow-focus: 0 0 0 2px var(--bg-base), 0 0 0 4px var(--accent-primary);
+  --shadow-inset: inset 0 1px 0 rgba(255,255,255,0.06);
+
+  /* ── 圆角 ── */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 999px;
+
+  /* ── 间距 (4px 基准) ── */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── 字号阶梯 (Major Third 1.25) ── */
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 26px;
+  --text-3xl: 32px;
+
+  /* ── 行高 ── */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* ── 字间距 ── */
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+
+  /* ── 动画缓动 ── */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── 动画时长 ── */
+  --dur-instant: 80ms;
+  --dur-fast: 120ms;
+  --dur-normal: 200ms;
+  --dur-slow: 350ms;
+  --dur-cinematic: 500ms;
+
+  /* ================================================================
+     Mineradio 视觉语言全局令牌（适配系统主题配色）
+     颜色全部走主题变量，不写死色值
+     ================================================================ */
+  --accent-gold: #f4d28a;
+  --accent-gold-deep: #9a6f2c;
+  --accent-gold-rgb: 244, 210, 138;
+
+  /* 玻璃底色：基于主题 bgSecondary 的半透明渐变 */
+  --glass-bg: linear-gradient(112deg,
+    color-mix(in srgb, var(--bg-secondary) 62%, transparent),
+    color-mix(in srgb, var(--bg-tertiary) 70%, transparent) 48%,
+    color-mix(in srgb, var(--bg-base) 74%, transparent));
+  --glass-bg-strong: linear-gradient(112deg,
+    color-mix(in srgb, var(--bg-secondary) 68%, transparent),
+    color-mix(in srgb, var(--bg-tertiary) 76%, transparent) 50%,
+    color-mix(in srgb, var(--bg-base) 82%, transparent));
+  --glass-border: color-mix(in srgb, var(--accent-primary) 30%, transparent);
+  --glass-blur: 34px;
+
+  /* 多层玻璃阴影：外投影 + 主题色辉光 + 内高光 + 内底阴影 */
+  --glass-shadow: 0 22px 64px rgba(0,0,0,.18),
+    0 0 34px color-mix(in srgb, var(--accent-primary) 5%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -24px 58px rgba(0,0,0,.08);
+  --glass-shadow-focus: 0 24px 72px rgba(0,0,0,.22),
+    0 0 0 1px color-mix(in srgb, var(--accent-primary) 13%, transparent),
+    0 0 42px color-mix(in srgb, var(--accent-primary) 8%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.16);
+
+  /* 窗口级大圆角（浮动面板/弹窗/命令台） */
+  --radius-window: 22px;
+  --radius-shell: 34px;
+
+  /* hover 三件套：上浮 + 发光 + 边框点亮 */
+  --hover-lift: translateY(-1px);
+  --hover-glow: 0 12px 34px color-mix(in srgb, var(--accent-primary) 14%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.08);
+
+  /* 命令台浮动阴影 */
+  --shadow-command-deck: 0 24px 80px rgba(0,0,0,.22);
+
+  /* 主题色辉光 */
+  --glow-accent: 0 0 20px color-mix(in srgb, var(--accent-primary) 22%, transparent),
+    0 0 60px color-mix(in srgb, var(--accent-primary) 8%, transparent);
+  --glow-accent-strong: 0 0 30px color-mix(in srgb, var(--accent-primary) 32%, transparent),
+    0 0 80px color-mix(in srgb, var(--accent-primary) 12%, transparent);
+
+  --settings-glass-shadow: var(--glass-shadow);
+}
+
+/* 主题切换时临时禁用所有 transition，避免颜色渐变动画 */
+.theme-transitioning,
+.theme-transitioning * {
+  transition: none !important;
+}
+
+/* 布局切换时临时禁用过渡动画，避免几百条消息全量连续重排 */
+.layout-switching .sidebar,
+.layout-switching .center,
+.layout-switching .webview-panel,
+.layout-switching .divider,
+.layout-switching .chat-messages,
+.layout-switching .chat-input-area,
+.layout-switching .message,
+.layout-switching .message * {
+  transition: none !important;
+}
+
+.layout-switching .message {
+  animation: none !important;
+}
+

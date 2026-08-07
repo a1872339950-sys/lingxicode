@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<script>
+(function(){
+'use strict';
+var canvas=document.getElementById('scene');
+var gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false});
+if(!gl)return;
+var vs='attribute vec2 a_position;attribute float a_path;attribute float a_phase;uniform float u_time;uniform float u_progress;uniform float u_mode;varying float v_path;varying float v_phase;varying float v_energy;void main(){float breathe=1.0+sin(u_time*1.35)*.018;float build=smoothstep(0.0,.82,u_progress);vec2 p=a_position*breathe;float drift=(1.0-build)*.018*sin(u_time*1.7+a_phase*18.0);p+=normalize(p+vec2(.001))*drift;if(u_mode>1.5)p=mix(p,normalize(p+vec2(.001))*(1.15+a_phase*.42),clamp((u_progress-.72)*3.6,0.0,1.0));gl_Position=vec4(p,0.0,1.0);gl_PointSize=4.4+2.8*sin(a_phase*6.283+u_time*2.0)*.5+2.0*build;v_path=a_path;v_phase=a_phase;v_energy=.62+.38*build;}';
+var fs='precision mediump float;uniform float u_time;uniform float u_mode;varying float v_path;varying float v_phase;varying float v_energy;void main(){vec2 q=gl_PointCoord-.5;float d=length(q);if(d>.5)discard;float rim=1.0-smoothstep(.14,.5,d);float runner=pow(max(0.0,cos((v_phase-u_time*.075)*6.283)),34.0);vec3 silver=mix(vec3(.55,.67,.86),vec3(1.0,.99,.98),rim);vec3 cool=mix(vec3(.18,.62,.94),vec3(.36,.94,.92),v_path*.48);vec3 color=mix(silver,cool,.18+runner*.66);if(u_mode>2.5)color=mix(color,vec3(1.0,.26,.28),.78);if(u_mode>1.5&&u_mode<2.5)color=mix(color,vec3(.38,1.0,.78),.48);gl_FragColor=vec4(color,rim*(.72+runner*.28)*v_energy);}';
+function shader(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+var program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vs));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);gl.useProgram(program);
+var paths=[
+ [[-.66,.34],[.18,.69],[.58,.42],[.67,-.64],[.13,-.18],[-.66,.34]],
+ [[-.56,-.14],[-.08,.08],[.36,.58],[.58,.42],[.12,-.67],[-.56,-.14]],
+ [[-.56,-.14],[-.04,-.56],[.12,-.67],[.67,-.64],[.13,-.18],[-.56,-.14]]
+];
+function samplePath(points,pathIndex,out){var perSegment=74;for(var s=0;s<points.length-1;s++){var a=points[s],b=points[s+1];for(var i=0;i<perSegment;i++){var t=i/perSegment;var x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t;var dx=b[0]-a[0],dy=b[1]-a[1],len=Math.sqrt(dx*dx+dy*dy)||1;var nx=-dy/len,ny=dx/len;for(var lane=-1;lane<=1;lane++){var offset=lane*.013;out.push(x+nx*offset,y+ny*offset,pathIndex,(s+t)/(points.length-1));}}}}
+var values=[];for(var p=0;p<paths.length;p++)samplePath(paths[p],p/2,values);var data=new Float32Array(values);var count=data.length/4;
+var buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);
+var position=gl.getAttribLocation(program,'a_position'),path=gl.getAttribLocation(program,'a_path'),phase=gl.getAttribLocation(program,'a_phase');gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,16,0);gl.enableVertexAttribArray(path);gl.vertexAttribPointer(path,1,gl.FLOAT,false,16,8);gl.enableVertexAttribArray(phase);gl.vertexAttribPointer(phase,1,gl.FLOAT,false,16,12);
+var uTime=gl.getUniformLocation(program,'u_time'),uProgress=gl.getUniformLocation(program,'u_progress'),uMode=gl.getUniformLocation(program,'u_mode');var target=0,current=0,mode=0,start=Date.now();
+window.setInstallerState=function(progress,state){target=Math.max(0,Math.min(1,Number(progress)||0));mode=state==='complete'?2:(state==='error'?3:(state==='uninstall'?1:0));};
+function resize(){var dpr=Math.min(window.devicePixelRatio||1,2),w=Math.max(1,canvas.clientWidth*dpr),h=Math.max(1,canvas.clientHeight*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h);}}
+function frame(){resize();current+=(target-current)*.045;gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform1f(uTime,(Date.now()-start)/1000);gl.uniform1f(uProgress,current);gl.uniform1f(uMode,mode);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.drawArrays(gl.POINTS,0,count);requestAnimationFrame(frame);}frame();
+})();
+</script>
+</body>
+</html>

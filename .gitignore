@@ -1,0 +1,50 @@
+node_modules/
+dist/
+build-output/
+.installer-build/
+installer/payload/
+installer/dist/
+coverage/
+
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+config/*.json
+!config/*.example.json
+
+# Runtime data: never commit conversations, projects, usage or permissions
+data/
+.lingxi/
+.lingxi-temp-diagnostics/
+.tmp-real-scenarios/
+change-sessions/
+generated-images/
+output/
+cache/
+temp/
+tmp/
+
+# Logs and packaged artifacts
+*.log
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+*.bz2
+*.xz
+*.exe
+*.msi
+*.dmg
+*.pkg
+*.apk
+*.blockmap
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+

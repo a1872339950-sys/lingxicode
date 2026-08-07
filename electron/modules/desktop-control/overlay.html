@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>灵犀桌面操控</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent;
+      font-family: "Segoe UI", "Microsoft YaHei UI", system-ui, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .edge {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+    body.visible .edge { opacity: 1; }
+
+    .edge-t, .edge-b {
+      left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--accent, #6366f1) 18%,
+        #a5b4fc 50%,
+        var(--accent, #6366f1) 82%,
+        transparent 100%);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--accent, #6366f1) 70%, transparent);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    .edge-t { top: 0; }
+    .edge-b { bottom: 0; }
+
+    .edge-l, .edge-r {
+      top: 0; bottom: 0; width: 4px;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        var(--accent, #6366f1) 18%,
+        #a5b4fc 50%,
+        var(--accent, #6366f1) 82%,
+        transparent 100%);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--accent, #6366f1) 70%, transparent);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    .edge-l { left: 0; }
+    .edge-r { right: 0; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.55; filter: brightness(0.95); }
+      50% { opacity: 1; filter: brightness(1.25); }
+    }
+
+    .pill-wrap {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-12px);
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+    body.visible .pill-wrap {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(15, 17, 23, 0.86);
+      border: 1px solid color-mix(in srgb, var(--accent, #6366f1) 55%, rgba(255,255,255,0.12));
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 0 24px color-mix(in srgb, var(--accent, #6366f1) 35%, transparent);
+      color: #f8fafc;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      max-width: min(92vw, 560px);
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent, #6366f1);
+      box-shadow: 0 0 10px var(--accent, #6366f1);
+      animation: blink 1.1s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0.55; transform: scale(0.92); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+    body.phase-completed .dot { background: #22c55e; box-shadow: 0 0 10px #22c55e; animation: none; }
+    body.phase-error .dot,
+    body.phase-interrupted .dot { background: #ef4444; box-shadow: 0 0 10px #ef4444; animation: none; }
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sub {
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.72);
+      white-space: nowrap;
+    }
+    .sep {
+      width: 1px;
+      height: 22px;
+      background: rgba(255,255,255,0.12);
+      flex-shrink: 0;
+    }
+    .esc {
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.88);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .esc kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      margin-right: 4px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      font-family: inherit;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="edge edge-t"></div>
+  <div class="edge edge-b"></div>
+  <div class="edge edge-l"></div>
+  <div class="edge edge-r"></div>
+  <div class="pill-wrap">
+    <div class="pill" role="status" aria-live="polite">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="text">
+        <div class="title" id="titleText">灵犀正在使用你的电脑</div>
+        <div class="sub" id="subText" hidden></div>
+      </div>
+      <span class="sep" aria-hidden="true"></span>
+      <div class="esc" id="escText"><kbd>Esc</kbd>取消</div>
+    </div>
+  </div>
+  <script>
+    function apply(payload = {}) {
+      const accent = payload.accentColor || '#6366f1'
+      document.documentElement.style.setProperty('--accent', accent)
+      const title = document.getElementById('titleText')
+      const sub = document.getElementById('subText')
+      const esc = document.getElementById('escText')
+      const phase = payload.phase || 'working'
+      const actionLabel = payload.actionLabel || ''
+      if (title) {
+        if (phase === 'completed') title.textContent = '桌面操作完成'
+        else if (phase === 'error') title.textContent = '桌面操作失败'
+        else if (phase === 'interrupted') title.textContent = '桌面操控已停止'
+        else title.textContent = actionLabel || payload.usingComputer || '灵犀正在使用你的电脑'
+      }
+      if (sub) {
+        const label = payload.targetLabel || ''
+        if (label) {
+          sub.hidden = false
+          sub.textContent = label
+        } else {
+          sub.hidden = true
+          sub.textContent = ''
+        }
+      }
+      if (esc) {
+        const showEsc = payload.escToCancel !== false
+        esc.style.display = showEsc ? '' : 'none'
+        const escLabel = payload.escLabel || '取消'
+        esc.innerHTML = '<kbd>Esc</kbd>' + escLabel.replace(/^Esc\s*/i, '')
+      }
+      document.body.classList.toggle('visible', payload.visible !== false)
+      document.body.classList.toggle('phase-completed', phase === 'completed')
+      document.body.classList.toggle('phase-error', phase === 'error')
+      document.body.classList.toggle('phase-interrupted', phase === 'interrupted')
+    }
+    window.applyOverlayState = apply
+    window.addEventListener('DOMContentLoaded', () => apply({ visible: false }))
+  </script>
+</body>
+</html>

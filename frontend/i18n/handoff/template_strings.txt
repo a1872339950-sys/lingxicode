@@ -1,0 +1,119 @@
+frontend/scripts/app.js:1278
+  if (thinkingText) thinkingText.textContent = `正在执行工具 (${currentOpCount}个)...`
+
+frontend/scripts/app.js:2407
+  if (statsEl) statsEl.textContent = `${currentToolCount}个工具调用，${currentOpCount}条操作消息`
+
+frontend/scripts/app.js:2965
+  if (thinkingText) thinkingText.textContent = `正在执行工具 (${data.count || currentOpCount}个)...`
+
+frontend/scripts/app.js:4183
+  fileParts.push(`【文件】${fileName}\n路径: ${filePath}`)
+
+frontend/scripts/app.js:4185
+  fileParts.push(`【图片:${fileName}】已作为图片附件上传，等待视觉模型分析。`)
+
+frontend/scripts/app.js:4192
+  fileParts.push(`【文件:${fileName}】读取失败`)
+
+frontend/scripts/app.js:4233
+  addThinking(`当前模型「${modelConfig.modelName || effectiveModelId}」具备视觉理解，图片将直接发送给当前模型分析。`, { isProgressNarration: true })
+
+frontend/scripts/app.js:4244
+  const approved = window.confirm(`当前模型「${modelConfig.modelName || effectiveModelId}」未标注视觉理解能力。\n\n是否调用视觉模型「${visionModel.modelName || visionModel.modelId}」先分析图片，再把分析结果交给当前模型？`)
+
+frontend/scripts/app.js:4252
+  showToast(`将先调用视觉模型「${visionModel.modelName || visionModel.modelId}」分析图片`, 'info')
+
+frontend/scripts/app.js:4253
+  addThinking(`正在调用视觉模型「${visionModel.modelName || visionModel.modelId}」分析 ${imageRefs.length} 张图片...`, { isProgressNarration: true })
+
+frontend/scripts/app.js:4269
+  ? `正在编码 ${browserImageCount} 张粘贴图片附件...`
+
+frontend/scripts/app.js:4270
+  : `已获取 ${imageRefs.length} 张图片路径，准备发送给模型...`, { isProgressNarration: true })
+
+frontend/scripts/app.js:4284
+  addThinking(`图片「${image.name}」大小 ${sizeText}，超过 ${limitText}，已跳过视觉读取。`, { isProgressNarration: true })
+
+frontend/scripts/app.js:4285
+  msgForAIExtra += `\n\n【图片读取失败】${image.name} 大小 ${sizeText}，超过 ${limitText}，未发送给视觉模型。`
+
+frontend/scripts/app.js:4297
+  addThinking(`图片「${image.name}」读取失败，已降级为元数据。`, { isProgressNarration: true })
+
+frontend/scripts/app.js:4298
+  msgForAIExtra += `\n\n【图片读取失败】${image.name} 读取失败，未发送给视觉模型。`
+
+frontend/scripts/core/file-utils.js:19
+  reject(new Error(`读取超时（${Math.round(timeoutMs / 1000)}秒）`))
+
+frontend/scripts/features/ai-message-ui.js:198
+  return minutes > 0 ? `${minutes}分${rest}秒` : `${rest}秒`
+
+frontend/scripts/features/ai-tool-renderer.js:48
+  if (files.length > maxItems) rows.push(`...还有 ${files.length - maxItems} 项`)
+
+frontend/scripts/features/ai-tool-renderer.js:264
+  : `<div class="op-diff"><div class="op-diff-section op-diff-add"><div class="op-diff-label">新增内容</div><pre>${escapeHtml(clipText(newStr, 800))}</pre></div><div class="op-diff-section op-diff-remove"><
+
+frontend/scripts/features/ai-tool-renderer.js:274
+  : asPre(formatFileList(result.files, type === 'list' ? 80 : 50) || result.message || `共 ${result.count || 0} 项`)
+
+frontend/scripts/features/ai-tool-renderer.js:531
+  return `<span class="op-file">${escapeHtml(fileName)}</span> <span class="op-pending">正在创建... (${lineCount}行)</span>`
+
+frontend/scripts/features/change-session-actions.js:140
+  const force = window.confirm(`有文件在 AI 修改后又发生了变化，不能直接覆盖。\n\n${conflictText}\n\n仍然强制回退吗？`)
+
+frontend/scripts/features/change-session-actions.js:155
+  setStatus(button, `已回退 ${count} 个文件`, 'success')
+
+frontend/scripts/features/change-session-actions.js:156
+  showToast(`已回退 ${count} 个文件`, 'success')
+
+frontend/scripts/features/chat-renderer.js:114
+  if (files.length > maxItems) rows.push(`...还有 ${files.length - maxItems} 项`)
+
+frontend/scripts/features/chat-renderer.js:291
+  return minutes > 0 ? `${minutes}分${seconds}秒` : `${seconds}秒`
+
+frontend/scripts/features/chat-renderer.js:626
+  detailContent = `<div class="op-diff"><div class="op-diff-section op-diff-add"><div class="op-diff-label">新增内容</div><pre>${escapeHtml(clipText(newStr, 800))}</pre></div><div class="op-diff-section op-
+
+frontend/scripts/features/chat-renderer.js:633
+  detailContent = `<pre>${escapeHtml(formatFileList(result.files, type === 'list' ? 80 : 50) || result.message || `共 ${result.count || 0} 项`)}</pre>`
+
+frontend/scripts/features/context-compression-status.js:22
+  return `${m}分${rs}秒`
+
+frontend/scripts/features/context-visibility.js:80
+  以上 ${startIndex} 条对话AI已不可见，可通过记忆查询找回
+
+frontend/scripts/features/context-visibility.js:125
+  showToast(`找到 ${result.count} 条相关记录`, 'success')
+
+frontend/scripts/features/git-panel.js:257
+  if (ahead && behind) return `领先 ${ahead} / 落后 ${behind}`
+
+frontend/scripts/features/plans.js:61
+  return { key: `${date.getFullYear()}-${date.getMonth() + 1}`, title: `${date.getFullYear()}年${date.getMonth() + 1}月`, order: 4 }
+
+frontend/scripts/features/quick-model-settings.js:250
+  html += `<div class="model-option model-option-with-reasoning ${selected}" data-value="${index}"><span class="model-option-name">${escapeHtml(model.modelName || '未命名模型')}</span><span class="model-opti
+
+frontend/scripts/features/quick-model-settings.js:320
+  html += `<div class="model-option model-option-with-reasoning ${selected}" data-value="${index}"><span class="model-option-name">${escapeHtml(model.modelName || '未命名模型')}</span><span class="model-opti
+
+frontend/scripts/features/storage-settings.js:76
+  els.trashStatus.textContent = `当前 ${count} 项，占用 ${formatBytes(status.size)}；超过 ${status.retentionDays || 15} 天会自动清理。路径：${trashPath}`
+
+frontend/scripts/features/storage-settings.js:181
+  showToast(`已清理 ${result.removedCount || 0} 项过期内容`, 'success')
+
+frontend/scripts/features/storage-settings.js:193
+  showToast(`已清空回收区，删除 ${result.removedCount || 0} 项`, 'success')
+
+frontend/scripts/message-copy.js:366
+  ? `确定需要把这 ${count} 条消息从上下文和记忆中删除掉吗？`

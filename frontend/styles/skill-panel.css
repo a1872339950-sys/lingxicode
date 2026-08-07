@@ -1,0 +1,910 @@
+/* ================================================================
+   灵犀 LingXi — 技能面板 (Skill Panel)
+   Teal/Cyan 渐变 · 玻璃态 · 现代动画
+   ================================================================ */
+
+/* ── 面板容器 ── */
+.skill-panel {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--skill-page-bg);
+  z-index: 100;
+  flex-direction: column;
+}
+.skill-panel.show { display: flex; }
+
+/* ── 头部 ── */
+.skill-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-8) var(--space-4);
+  border-bottom: 0;
+}
+
+.skill-panel-title {
+  font-size: 28px;
+  line-height: var(--leading-tight);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.skill-panel-subtitle {
+  margin-top: var(--space-2);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--skill-muted);
+}
+
+/* ── 返回按钮 ── */
+.skill-panel-back {
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--dur-normal) var(--ease),
+              background var(--dur-normal) var(--ease),
+              box-shadow var(--dur-normal) var(--ease);
+}
+.skill-panel-back:hover {
+  color: var(--accent-light);
+  background: var(--accent-glow);
+  box-shadow: var(--glow-accent);
+}
+.skill-panel-back svg {
+  transition: transform var(--dur-normal) var(--ease);
+}
+.skill-panel-back:hover svg {
+  transform: translateX(-3px);
+}
+
+/* ── 面板主体 ── */
+.skill-panel-body {
+  flex: 1;
+  padding: 0 var(--space-8) var(--space-8);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ── 能力首页：Skill / 插件 入口卡片 ── */
+.capability-home {
+  padding: 4px 0 12px;
+}
+.capability-home[hidden],
+.capability-section[hidden] {
+  display: none !important;
+}
+.capability-entry-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .capability-entry-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.capability-entry-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  padding: 16px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.capability-entry-card:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  background: rgba(6, 182, 212, 0.08);
+  transform: translateY(-1px);
+}
+.capability-entry-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.capability-entry-body {
+  flex: 1;
+  min-width: 0;
+}
+.capability-entry-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.capability-entry-desc {
+  font-size: var(--text-sm);
+  color: var(--skill-muted);
+  line-height: 1.45;
+}
+.capability-entry-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.capability-entry-arrow {
+  color: var(--text-muted);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Skill / 插件 子界面主栏 ── */
+.skill-capability-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+/* 二级筛选仅「已安装」使用；[hidden] 必须压过 flex */
+.skill-category-tabs[hidden] {
+  display: none !important;
+}
+.skill-capability-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease);
+}
+.skill-capability-tab:hover {
+  color: var(--text-secondary);
+  background: var(--skill-item-hover-bg);
+}
+.skill-capability-tab.active {
+  color: var(--text-primary);
+  border-color: rgba(6, 182, 212, 0.45);
+  background: rgba(6, 182, 212, 0.12);
+}
+.skill-primary-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 0 5px;
+  height: 16px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #a5f3fc;
+  background: rgba(6, 182, 212, 0.22);
+  vertical-align: middle;
+}
+.skill-marketplace-placeholder {
+  padding: 28px 18px;
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.02);
+  text-align: left;
+}
+.skill-marketplace-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.skill-marketplace-desc,
+.skill-marketplace-hint {
+  font-size: var(--text-sm);
+  color: var(--skill-muted);
+  line-height: 1.6;
+}
+.skill-marketplace-hint { margin-top: 12px; }
+.plugin-market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.plugin-market-card {
+  position: relative;
+  display: flex;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  min-height: 148px;
+}
+.plugin-market-card-accent {
+  width: 4px;
+  flex-shrink: 0;
+  background: #a78bfa;
+}
+.plugin-market-card-body {
+  flex: 1;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.plugin-market-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.plugin-market-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.plugin-market-card-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: #c4b5fd;
+  background: rgba(167, 139, 250, 0.16);
+  border: 1px solid rgba(167, 139, 250, 0.28);
+}
+.plugin-market-card-desc {
+  font-size: var(--text-sm);
+  color: var(--skill-muted);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.plugin-market-card-meta {
+  font-size: 12px;
+  color: var(--text-tertiary, #8b92a5);
+}
+.plugin-market-card-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+.plugin-market-btn {
+  appearance: none;
+  border: 1px solid rgba(167, 139, 250, 0.45);
+  background: rgba(167, 139, 250, 0.16);
+  color: #ddd6fe;
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  font-size: var(--text-sm);
+  font-family: inherit;
+  cursor: pointer;
+}
+.plugin-market-btn:hover:not(:disabled):not(.is-disabled) {
+  background: rgba(167, 139, 250, 0.28);
+}
+.plugin-market-btn:disabled,
+.plugin-market-btn.is-disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.plugin-market-btn.danger {
+  border-color: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+  color: #fecaca;
+}
+.plugin-market-btn.danger:hover {
+  background: rgba(248, 113, 113, 0.22);
+}
+.skill-detail-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-family: inherit;
+}
+.skill-detail-action:hover {
+  background: var(--skill-item-hover-bg);
+  color: var(--text-primary);
+}
+
+/* ── 工具栏 ── */
+.skill-panel-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.skill-refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 7px var(--space-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--skill-muted);
+  cursor: pointer;
+  font-size: var(--text-base);
+  font-family: inherit;
+  transition: all var(--dur-fast) var(--ease);
+}
+.skill-refresh-btn:hover {
+  color: var(--text-secondary);
+  background: var(--skill-item-hover-bg);
+  border-color: var(--skill-item-hover-border);
+}
+.skill-refresh-btn svg { opacity: 0.75; }
+
+/* ── 搜索框 ── */
+.skill-search-wrap {
+  width: min(220px, 100%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 var(--space-3);
+  height: 34px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition: border-color var(--dur-normal) var(--ease),
+              box-shadow var(--dur-normal) var(--ease),
+              color var(--dur-normal) var(--ease);
+}
+.skill-search-wrap:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-accent);
+  color: var(--accent-light);
+}
+
+.skill-search-input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  outline: none;
+}
+.skill-search-input::placeholder { color: var(--text-placeholder); }
+
+/* ── 上传按钮 (accent-gradient) ── */
+.skill-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 7px var(--space-3);
+  min-height: 34px;
+  background: var(--accent-gradient);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  color: #fff;
+  cursor: pointer;
+  font-size: var(--text-base);
+  font-weight: 600;
+  transition: transform var(--dur-fast) var(--ease),
+              filter var(--dur-fast) var(--ease),
+              box-shadow var(--dur-normal) var(--ease);
+}
+.skill-upload-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: var(--glow-accent);
+}
+.skill-upload-btn svg {
+  transition: transform var(--dur-normal) var(--ease);
+}
+.skill-upload-btn:hover svg { transform: scale(1.12); }
+
+/* ── 分类标签 (底部滑动指示器) ── */
+.skill-category-tabs {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+  padding: var(--space-1);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  width: fit-content;
+  max-width: 100%;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.skill-category-tab {
+  position: relative;
+  padding: 6px var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: color var(--dur-normal) var(--ease),
+              background var(--dur-normal) var(--ease);
+  white-space: nowrap;
+}
+.skill-category-tab::after {
+  content: '';
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent-gradient);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--dur-normal) var(--ease-spring);
+}
+.skill-category-tab:hover {
+  background: var(--skill-item-hover-bg);
+  color: var(--text-secondary);
+}
+.skill-category-tab.active {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-primary);
+}
+.skill-category-tab.active::after {
+  transform: scaleX(1);
+}
+
+.skill-category-count {
+  font-size: var(--text-xs);
+  color: var(--text-disabled);
+  margin-left: var(--space-1);
+}
+.skill-category-tab.active .skill-category-count { color: var(--text-secondary); }
+
+/* ── 技能列表 ── */
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.skill-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.skill-list-section-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.skill-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--space-6);
+  row-gap: var(--space-2);
+}
+
+/* ── 技能卡片 ── */
+.skill-list-item {
+  min-height: 66px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--skill-item-bg);
+  border: 1px solid var(--skill-item-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background var(--dur-normal) var(--ease),
+              border-color var(--dur-normal) var(--ease),
+              transform var(--dur-normal) var(--ease),
+              box-shadow var(--dur-normal) var(--ease);
+}
+.skill-list-item:hover {
+  background: var(--skill-item-hover-bg);
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.skill-list-item.enabled .skill-list-title { color: var(--text-primary); }
+
+/* ── 图标 ── */
+.skill-list-icon {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--skill-icon-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--skill-icon-color);
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: border-color var(--dur-normal) var(--ease),
+              box-shadow var(--dur-normal) var(--ease);
+}
+.skill-list-icon svg { width: 19px; height: 19px; }
+
+.skill-list-icon-code        { color: var(--info);       background: var(--info-muted); }
+.skill-list-icon-diagnose    { color: var(--accent-light); background: var(--accent-glow); }
+.skill-list-icon-docs        { color: var(--success);    background: var(--success-muted); }
+.skill-list-icon-image       { color: var(--warning);    background: var(--warning-muted); }
+.skill-list-icon-architecture { color: #60a5fa; background: rgba(96,165,250,0.12); }
+.skill-list-icon-testing     { color: #f472b6; background: rgba(244,114,182,0.12); }
+.skill-list-icon-plugin      { color: #a78bfa; background: rgba(167,139,250,0.12); }
+.skill-list-icon-planning    { color: #fb923c; background: rgba(251,146,60,0.12); }
+.skill-list-icon-agent       { color: #2dd4bf; background: rgba(45,212,191,0.12); }
+
+.skill-list-item:hover .skill-list-icon {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 12px rgba(6,182,212,0.10);
+}
+
+/* ── 文本区 ── */
+.skill-list-info { min-width: 0; }
+
+.skill-list-title {
+  font-size: var(--text-md);
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skill-list-desc {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--skill-muted);
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 元信息 ── */
+.skill-list-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 24px;
+  justify-content: flex-end;
+}
+
+.skill-list-check { color: var(--skill-check-color); opacity: 0.9; }
+
+.skill-list-type {
+  font-size: var(--text-xs);
+  color: var(--text-disabled);
+  padding: 2px 7px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.skill-list-delete {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--dur-fast) var(--ease);
+}
+.skill-list-item:hover .skill-list-delete { opacity: 0.75; }
+.skill-list-delete:hover {
+  opacity: 1;
+  color: var(--error);
+  background: var(--error-muted);
+}
+
+/* ── 技能详情模态 ── */
+.skill-detail-modal {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 200;
+  align-items: stretch;
+  justify-content: flex-end;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.skill-detail-modal.show { display: flex; }
+
+.skill-detail-content {
+  position: relative;
+  width: min(420px, 92%);
+  height: 100%;
+  background: var(--bg-elevated);
+  border-left: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  animation: skillDetailSlideIn var(--dur-slow) var(--ease-smooth);
+}
+/* 顶部强调色渐变线 */
+.skill-detail-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent-gradient);
+  z-index: 1;
+}
+
+@keyframes skillDetailSlideIn {
+  from { transform: translateX(24px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ── 详情头部 ── */
+.skill-detail-header {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.skill-detail-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  color: var(--accent-light);
+  background: var(--accent-glow);
+  flex-shrink: 0;
+}
+.skill-detail-icon svg { width: 21px; height: 21px; }
+
+.skill-detail-title-area { min-width: 0; }
+
+.skill-detail-title {
+  font-size: 17px;
+  color: var(--text-primary);
+  font-weight: 650;
+  line-height: var(--leading-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skill-detail-desc {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+  line-height: var(--leading-normal);
+}
+
+.skill-detail-close {
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 7px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  transition: all var(--dur-normal) var(--ease);
+}
+.skill-detail-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* ── 状态栏 ── */
+.skill-detail-status-bar {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5) var(--space-3);
+  background: transparent;
+}
+
+.skill-detail-status {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  padding: var(--space-1) 9px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  transition: all var(--dur-normal) var(--ease);
+}
+.skill-detail-status.enabled {
+  color: var(--success);
+  background: var(--success-muted);
+  border-color: rgba(16,185,129,0.25);
+}
+
+.skill-detail-type {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  padding: var(--space-1) 9px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+}
+.skill-detail-type.builtin {
+  color: var(--info);
+  background: var(--info-muted);
+  border-color: rgba(6,182,212,0.25);
+}
+
+/* ── 元数据 ── */
+.skill-detail-meta {
+  margin: var(--space-1) var(--space-5) var(--space-3);
+  padding: var(--space-3);
+  display: grid;
+  gap: var(--space-3);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.skill-detail-meta-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.skill-detail-meta-label { color: var(--text-muted); }
+
+.skill-detail-meta-value {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 详情主体 ── */
+.skill-detail-body {
+  flex: 1;
+  padding: 0 var(--space-5) var(--space-4);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.skill-detail-section { margin-bottom: var(--space-4); }
+
+.skill-detail-section-title {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.skill-detail-section-title::before {
+  content: '';
+  width: 3px;
+  height: 12px;
+  background: var(--accent-gradient);
+  border-radius: 2px;
+}
+
+.skill-detail-content-text {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.65;
+  white-space: pre-wrap;
+  background: var(--glass-bg);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  max-height: none;
+  overflow-y: visible;
+  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+}
+
+/* ── 详情底部 ── */
+.skill-detail-footer {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(0,0,0,0.10);
+}
+
+.skill-detail-toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 9px var(--space-3);
+  background: var(--accent-gradient);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  color: #fff;
+  cursor: pointer;
+  font-size: var(--text-base);
+  font-weight: 600;
+  transition: all var(--dur-normal) var(--ease);
+}
+.skill-detail-toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glow-accent);
+}
+.skill-detail-toggle-btn.enabled {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  color: var(--text-secondary);
+}
+.skill-detail-toggle-btn.enabled:hover {
+  background: var(--bg-hover);
+  box-shadow: none;
+}
+
+.skill-detail-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 9px var(--space-3);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-base);
+  transition: all var(--dur-normal) var(--ease);
+}
+.skill-detail-delete-btn:hover {
+  background: var(--error-muted);
+  border-color: var(--error);
+  color: var(--error);
+}
+.skill-detail-delete-btn.hidden { display: none; }
+
+/* ── 空状态 ── */
+.skill-empty {
+  text-align: center;
+  padding: var(--space-10) var(--space-5);
+  color: var(--text-muted);
+  font-size: var(--text-base);
+}

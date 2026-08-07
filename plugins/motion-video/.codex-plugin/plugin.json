@@ -1,0 +1,39 @@
+{
+  "name": "motion-video",
+  "version": "1.0.0",
+  "description": "程序化短视频与动效：用 React 时间线做片头、字幕、数据动画、配音合成；也可对接文生视频能力。",
+  "author": {
+    "name": "Lingxi"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "video",
+    "motion",
+    "remotion",
+    "caption",
+    "短视频",
+    "动效",
+    "字幕"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "程序化短视频",
+    "shortDescription": "用代码做片头、字幕、图表动画与可导出视频",
+    "longDescription": "程序化视频能力包：规划分镜与时长、Remotion（React）脚手架与时间线、字幕、音频节奏、数据动效、导出检查。适合频道包装、产品演示、教学短片。一次性 AI 出片用系统「视频生成」；要可改可版本管理用本包。",
+    "developerName": "灵犀",
+    "category": "Creativity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "用程序化方式做一个 15 秒产品介绍片头",
+      "给这段口播加字幕和简单动态背景",
+      "做一组柱状图增长的数据短视频"
+    ],
+    "logo": "./assets/logo.svg",
+    "brandColor": "#0EA5E9",
+    "screenshots": []
+  }
+}

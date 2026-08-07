@@ -1,0 +1,7 @@
+{
+  "name": "engineering-workflow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lingxi plugin: engineering delivery workflow (plan, implement, debug, TDD, verify, handoff).",
+  "license": "Apache-2.0"
+}

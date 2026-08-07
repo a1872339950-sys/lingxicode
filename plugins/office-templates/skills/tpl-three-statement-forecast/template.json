@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "three-statement-forecast",
+  "kind": "spreadsheet",
+  "title": "三表预测",
+  "reference": "../../templates/three-statement-forecast.xlsx",
+  "defaultOutput": "assets/office/three-statement-forecast"
+}

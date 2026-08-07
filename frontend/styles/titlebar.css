@@ -1,0 +1,231 @@
+/* ================================================================
+   灵犀 LingXi — 标题栏 (Titlebar)
+   36px 高度 · 渐变品牌名 · 玻璃态下拉
+   ================================================================ */
+.titlebar {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  background: var(--sidebar-bg);
+  user-select: none;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+}
+
+.titlebar-sidebar-toggle {
+  width: 30px;
+  height: 30px;
+  margin-left: 9px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast), background var(--dur-fast);
+  -webkit-app-region: no-drag;
+}
+.titlebar-sidebar-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+.titlebar-sidebar-toggle:focus,
+.titlebar-sidebar-toggle:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.titlebar-sidebar-toggle svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.95;
+}
+.titlebar-sidebar-toggle.is-collapsed svg {
+  transform: scaleX(-1);
+}
+
+/* ── 品牌区 ── */
+.titlebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 2px;
+  font-size: 13.5px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+  position: relative;
+  -webkit-app-region: no-drag;
+}
+.titlebar-brand:hover { background: var(--accent-glow); }
+.titlebar-brand-name {
+  font-weight: 600;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.titlebar-brand-arrow { width: 12px; height: 12px; }
+.titlebar-brand-arrow svg { width: 12px; height: 12px; stroke: var(--accent-light); stroke-width: 1.5; fill: none; }
+
+/* ── 下拉菜单 (玻璃态) ── */
+.titlebar-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  min-width: 160px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--glass-border);
+  z-index: 1000;
+  -webkit-app-region: no-drag;
+}
+.titlebar-dropdown.show { display: block; }
+.titlebar-dropdown-item {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all 0.15s;
+  position: relative;
+}
+.titlebar-dropdown-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.titlebar-dropdown-item:hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--accent-primary);
+  border-radius: 1px;
+}
+.titlebar-dropdown-item.danger:hover { background: var(--error-muted); color: var(--error); }
+.titlebar-dropdown-item.danger:hover::before { background: var(--error); }
+
+/* ── 菜单项 ── */
+.titlebar-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 16px;
+  -webkit-app-region: no-drag;
+}
+.titlebar-menu-item {
+  padding: 6px 11px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+  position: relative;
+  -webkit-app-region: no-drag;
+}
+.titlebar-menu-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+/* ── 窗口控制按钮 ── */
+.titlebar-controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  height: 42px;
+  -webkit-app-region: no-drag;
+}
+.titlebar-view-toggle {
+  width: 34px;
+  height: 30px;
+  margin-right: 6px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast);
+}
+.titlebar-view-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+.titlebar-view-toggle:disabled {
+  opacity: 0.36;
+  cursor: default;
+}
+.titlebar-view-toggle:disabled:hover {
+  color: var(--text-muted);
+  background: transparent;
+}
+.titlebar-view-toggle.is-hidden svg {
+  transform: scaleX(-1);
+}
+.titlebar-view-toggle svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+/* 右侧视图隐藏时的标签页数量角标 */
+.right-view-badge {
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--primary, #6366f1);
+  color: var(--primary-foreground, #fff);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+.titlebar-view-toggle {
+  position: relative;
+}
+.titlebar-ctrl {
+  width: 56px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+.titlebar-ctrl:hover { background: var(--bg-hover); }
+.titlebar-ctrl svg {
+  width: 17px;
+  height: 17px;
+  stroke: var(--text-secondary);
+  stroke-width: 1.75;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  shape-rendering: geometricPrecision;
+}
+.titlebar-ctrl.maximize.is-maximized svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.65;
+}
+.titlebar-ctrl.maximize:hover svg { stroke: var(--text-primary); }
+.titlebar-ctrl.close:hover { background: var(--error); }
+.titlebar-ctrl.close:hover svg { stroke: var(--text-primary); transform: scale(1.05); }

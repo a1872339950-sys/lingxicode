@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "project-tracker",
+  "kind": "spreadsheet",
+  "title": "项目跟踪",
+  "reference": "../../templates/project-tracker.xlsx",
+  "defaultOutput": "assets/office/project-tracker"
+}

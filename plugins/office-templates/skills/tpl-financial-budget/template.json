@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "financial-budget",
+  "kind": "spreadsheet",
+  "title": "财务预算",
+  "reference": "../../templates/financial-budget.xlsx",
+  "defaultOutput": "assets/office/financial-budget"
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lingxi Three Game</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0c10; color: #e5e7eb; font-family: system-ui, sans-serif; }
+      #hud {
+        position: fixed; left: 12px; top: 12px; z-index: 10;
+        background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.12);
+        border-radius: 10px; padding: 8px 12px; font-size: 13px; line-height: 1.45;
+      }
+      canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="hud">拖拽旋转视角 · 滚轮缩放 · 空格重置相机</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
