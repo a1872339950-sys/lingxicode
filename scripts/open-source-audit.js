@@ -53,6 +53,25 @@ for (const required of ['LICENSE', 'README.md', 'SECURITY.md', 'CONTRIBUTING.md'
   if (!fs.existsSync(path.join(root, required))) fail(`缺少开源文件: ${required}`)
 }
 
+const attributionFiles = [
+  'skills/web-design/LICENSE',
+  'skills/MATTPOCOCK_SKILLS_LICENSE.txt',
+  'plugins/character-animation/NOTICE.md',
+  'plugins/character-animation/skills/character-animation/LICENSE.txt'
+]
+
+for (const required of attributionFiles) {
+  if (!fs.existsSync(path.join(root, required))) fail(`缺少第三方来源或许可证文件: ${required}`)
+}
+
+const thirdPartyNoticesPath = path.join(root, 'THIRD_PARTY_NOTICES.md')
+if (fs.existsSync(thirdPartyNoticesPath)) {
+  const thirdPartyNotices = fs.readFileSync(thirdPartyNoticesPath, 'utf8')
+  for (const marker of ['xiaopu-ai/web-design', 'mattpocock/skills', 'openai/skills · hatch-pet']) {
+    if (!thirdPartyNotices.includes(marker)) fail(`第三方声明缺少来源: ${marker}`)
+  }
+}
+
 const launcherPath = path.join(root, '一键启动开发版.bat')
 if (fs.existsSync(launcherPath)) {
   const launcher = fs.readFileSync(launcherPath)
